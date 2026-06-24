@@ -608,6 +608,7 @@ export default function WorkspacePage() {
     l.status_id !== '22222222-0000-0000-0000-000000000009' && 
     l.status_id !== '22222222-0000-0000-0000-000000000012' &&
     l.status_id !== '22222222-0000-0000-0000-000000000007' &&
+    !l.sales_representative_text &&
     (
       l.next_contact_at 
         ? (isToday(l.next_contact_at) || isPast(l.next_contact_at))
@@ -627,7 +628,7 @@ export default function WorkspacePage() {
     if (isWhatsAppLead(l)) {
       return l.next_contact_at !== null || l.callback_status === 'pending' || (l.calls && l.calls.length > 0);
     }
-    return l.last_contact_at !== null || (l.legacy_source_file !== null && l.conversation_completed !== null);
+    return l.last_contact_at !== null || (l.legacy_source_file !== null && l.conversation_completed !== null) || !!l.sales_representative_text;
   })
 
   // 4. Toplam Ulaşan: all leads that have been converted/registered (excluding raw WhatsApp chats)
@@ -641,7 +642,8 @@ export default function WorkspacePage() {
     l.status_id !== '22222222-0000-0000-0000-000000000009' && 
     l.status_id !== '22222222-0000-0000-0000-000000000012' &&
     l.status_id !== '22222222-0000-0000-0000-000000000007' &&
-    (l.last_contact_at === null || !l.calls || l.calls.length === 0)
+    (l.last_contact_at === null || !l.calls || l.calls.length === 0) &&
+    !l.sales_representative_text
   )
 
   // Overdue callbacks filter logic
@@ -1358,7 +1360,7 @@ export default function WorkspacePage() {
                       <tr key={lead.id} className={`hover:bg-muted/30 transition-colors font-medium border-l-4 ${
                         activeTab === 'calledToday' && lead.status_id === '22222222-0000-0000-0000-000000000005'
                           ? 'border-l-rose-500 bg-rose-500/[0.02]'
-                          : (!lead.last_contact_at && (!lead.calls || lead.calls.length === 0))
+                          : (!lead.last_contact_at && (!lead.calls || lead.calls.length === 0) && !lead.sales_representative_text)
                             ? 'border-l-violet-500 bg-violet-500/[0.02]'
                             : lead.priorityGroup === 1 ? 'border-l-red-500 bg-red-500/[0.01]' :
                               lead.priorityGroup === 2 ? 'border-l-amber-500 bg-amber-500/[0.01]' :
@@ -1367,7 +1369,7 @@ export default function WorkspacePage() {
                         <td className="p-3.5 font-mono text-[10px] text-muted-foreground whitespace-nowrap">{formatLeadId(lead.legacy_lead_id || lead.lead_number)}</td>
                         <td className="p-3.5 whitespace-nowrap" title={`${lead.first_name} ${lead.last_name}`}>
                           <div className="font-bold text-foreground truncate max-w-[150px]">{lead.first_name} {lead.last_name}</div>
-                          {!lead.last_contact_at && (!lead.calls || lead.calls.length === 0) && (
+                          {!lead.last_contact_at && (!lead.calls || lead.calls.length === 0) && !lead.sales_representative_text && (
                             <div className="mt-1">
                               <span className="inline-flex items-center gap-1 text-[9px] font-black bg-violet-500/10 text-violet-600 px-2 py-0.5 rounded-full select-none">
                                 ✨ HİÇ ARANMADI
@@ -1485,7 +1487,7 @@ export default function WorkspacePage() {
                     }
 
                     if (activeTab === 'toCall') {
-                      const isUncalled = !lead.last_contact_at && (!lead.calls || lead.calls.length === 0);
+                      const isUncalled = !lead.last_contact_at && (!lead.calls || lead.calls.length === 0) && !lead.sales_representative_text;
                       return (
                         <div 
                           key={lead.id} 
