@@ -33,6 +33,7 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
 
   const menuItems = [
     { name: 'İstatistikler', href: '/dashboard/statistics', icon: BarChart3 },
+    { name: 'Script Müşteriler', href: '/dashboard/script-leads', icon: Database },
     { name: 'Görevler', href: '/dashboard/tasks', icon: CheckSquare },
     { name: 'Kullanıcılar', href: '/dashboard/users', icon: UserCog },
     { name: 'Ayarlar', href: '/dashboard/settings', icon: Settings },

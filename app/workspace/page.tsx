@@ -1368,7 +1368,14 @@ export default function WorkspacePage() {
                       }`}>
                         <td className="p-3.5 font-mono text-[10px] text-muted-foreground whitespace-nowrap">{formatLeadId(lead.legacy_lead_id || lead.lead_number)}</td>
                         <td className="p-3.5 whitespace-nowrap" title={`${lead.first_name} ${lead.last_name}`}>
-                          <div className="font-bold text-foreground truncate max-w-[150px]">{lead.first_name} {lead.last_name}</div>
+                          <div className="flex items-center gap-1.5 truncate max-w-[250px]">
+                            <span className="font-bold text-foreground truncate">{lead.first_name} {lead.last_name}</span>
+                            {(lead.lead_sources?.code === 'APIFY' || lead.source_id === '11111111-0000-0000-0000-000000000015') && (
+                              <span className="inline-flex items-center text-[8px] font-black bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/25 px-1.5 py-0.5 rounded select-none uppercase tracking-wide shrink-0">
+                                Script Müşterisi
+                              </span>
+                            )}
+                          </div>
                           {!lead.last_contact_at && (!lead.calls || lead.calls.length === 0) && !lead.sales_representative_text && (
                             <div className="mt-1">
                               <span className="inline-flex items-center gap-1 text-[9px] font-black bg-violet-500/10 text-violet-600 px-2 py-0.5 rounded-full select-none">
@@ -1439,7 +1446,14 @@ export default function WorkspacePage() {
                         >
                           <div className="space-y-2.5">
                             <div className="flex justify-between items-start">
-                              <span className="text-[9px] font-bold text-muted-foreground font-mono">{formatLeadId(lead.legacy_lead_id || lead.lead_number)}</span>
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-[9px] font-bold text-muted-foreground font-mono">{formatLeadId(lead.legacy_lead_id || lead.lead_number)}</span>
+                                {(lead.lead_sources?.code === 'APIFY' || lead.source_id === '11111111-0000-0000-0000-000000000015') && (
+                                  <span className="inline-flex items-center text-[8px] font-black bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/25 px-1 rounded select-none uppercase tracking-wide">
+                                    Script Müşterisi
+                                  </span>
+                                )}
+                              </div>
                               <span className="inline-flex items-center gap-0.5 text-[8px] font-bold bg-violet-500/10 text-violet-600 px-1.5 py-0.5 rounded-full select-none uppercase tracking-wider">
                                 ✨ HİÇ ARANMADI
                               </span>
@@ -1502,7 +1516,14 @@ export default function WorkspacePage() {
                         >
                           <div className="space-y-2.5">
                             <div className="flex justify-between items-start">
-                              <span className="text-[9px] font-bold text-muted-foreground font-mono">{formatLeadId(lead.legacy_lead_id || lead.lead_number)}</span>
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-[9px] font-bold text-muted-foreground font-mono">{formatLeadId(lead.legacy_lead_id || lead.lead_number)}</span>
+                                {(lead.lead_sources?.code === 'APIFY' || lead.source_id === '11111111-0000-0000-0000-000000000015') && (
+                                  <span className="inline-flex items-center text-[8px] font-black bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/25 px-1 rounded select-none uppercase tracking-wide">
+                                    Script Müşterisi
+                                  </span>
+                                )}
+                              </div>
                               {isUncalled ? (
                                 <span className="inline-flex items-center gap-0.5 text-[8px] font-bold bg-violet-500/10 text-violet-600 px-1.5 py-0.5 rounded-full select-none uppercase tracking-wider">
                                   ✨ HİÇ ARANMADI
@@ -1566,7 +1587,14 @@ export default function WorkspacePage() {
                         >
                           <div className="space-y-2.5">
                             <div className="flex justify-between items-start">
-                              <span className="text-[9px] font-bold text-muted-foreground font-mono">{formatLeadId(lead.legacy_lead_id || lead.lead_number)}</span>
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-[9px] font-bold text-muted-foreground font-mono">{formatLeadId(lead.legacy_lead_id || lead.lead_number)}</span>
+                                {(lead.lead_sources?.code === 'APIFY' || lead.source_id === '11111111-0000-0000-0000-000000000015') && (
+                                  <span className="inline-flex items-center text-[8px] font-black bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/25 px-1 rounded select-none uppercase tracking-wide">
+                                    Script Müşterisi
+                                  </span>
+                                )}
+                              </div>
                               {isUnreachable ? (
                                 <span className="inline-flex items-center gap-0.5 text-[8px] font-bold bg-rose-500/10 text-rose-600 px-1.5 py-0.5 rounded-full select-none animate-pulse">
                                   🔇 Ulaşılamadı ({(lead.calls?.length || 0)} Arama)
@@ -1632,7 +1660,14 @@ export default function WorkspacePage() {
                         >
                           <div className="space-y-2.5">
                             <div className="flex justify-between items-start">
-                              <span className="text-[9px] font-bold text-muted-foreground font-mono">{formatLeadId(lead.legacy_lead_id || lead.lead_number)}</span>
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-[9px] font-bold text-muted-foreground font-mono">{formatLeadId(lead.legacy_lead_id || lead.lead_number)}</span>
+                                {(lead.lead_sources?.code === 'APIFY' || lead.source_id === '11111111-0000-0000-0000-000000000015') && (
+                                  <span className="inline-flex items-center text-[8px] font-black bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/25 px-1 rounded select-none uppercase tracking-wide">
+                                    Script Müşterisi
+                                  </span>
+                                )}
+                              </div>
                               <div className="flex items-center gap-1.5">
                                 <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded" style={{
                                   backgroundColor: lead.lead_statuses?.color + '15' || '#eaeaea',
@@ -1761,9 +1796,16 @@ export default function WorkspacePage() {
                             >
                               <div className="space-y-2.5">
                                 <div className="flex justify-between items-start">
-                                  <span className="text-[9px] font-bold text-muted-foreground font-mono">
-                                    {formatLeadId(lead.legacy_lead_id || lead.lead_number)}
-                                  </span>
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="text-[9px] font-bold text-muted-foreground font-mono">
+                                      {formatLeadId(lead.legacy_lead_id || lead.lead_number)}
+                                    </span>
+                                    {(lead.lead_sources?.code === 'APIFY' || lead.source_id === '11111111-0000-0000-0000-000000000015') && (
+                                      <span className="inline-flex items-center text-[8px] font-black bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/25 px-1 rounded select-none uppercase tracking-wide">
+                                        Script Müşterisi
+                                      </span>
+                                    )}
+                                  </div>
                                   <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full flex items-center gap-1 ${
                                     isOverdue 
                                       ? 'bg-rose-500/10 text-rose-600 animate-pulse' 
@@ -1844,9 +1886,16 @@ export default function WorkspacePage() {
                             >
                               <div className="space-y-2.5">
                                 <div className="flex justify-between items-start">
-                                  <span className="text-[9px] font-bold text-muted-foreground font-mono">
-                                    {formatLeadId(lead.legacy_lead_id || lead.lead_number)}
-                                  </span>
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="text-[9px] font-bold text-muted-foreground font-mono">
+                                      {formatLeadId(lead.legacy_lead_id || lead.lead_number)}
+                                    </span>
+                                    {(lead.lead_sources?.code === 'APIFY' || lead.source_id === '11111111-0000-0000-0000-000000000015') && (
+                                      <span className="inline-flex items-center text-[8px] font-black bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/25 px-1 rounded select-none uppercase tracking-wide">
+                                        Script Müşterisi
+                                      </span>
+                                    )}
+                                  </div>
                                   <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full flex items-center gap-1 ${
                                     isOverdue 
                                       ? 'bg-rose-500/10 text-rose-600 animate-pulse' 
@@ -2519,11 +2568,28 @@ export default function WorkspacePage() {
             
             {selectedLeadDetail && (
               <div className="space-y-4 text-xs">
-                <div className="p-3 bg-muted rounded-lg space-y-1">
+                <div className="p-3 bg-muted rounded-lg space-y-1 relative">
                   <span className="text-[8px] font-bold text-muted-foreground uppercase font-mono">{formatLeadId(selectedLeadDetail.legacy_lead_id || selectedLeadDetail.lead_number)}</span>
                   <h4 className="font-bold text-foreground text-sm">{selectedLeadDetail.first_name} {selectedLeadDetail.last_name}</h4>
                   <p className="text-muted-foreground">{selectedLeadDetail.company_name || 'Şahıs Firması'}</p>
+                  {(selectedLeadDetail.lead_sources?.code === 'APIFY' || selectedLeadDetail.source_id === '11111111-0000-0000-0000-000000000015') && (
+                    <span className="absolute top-3 right-3 inline-flex items-center text-[9px] font-black bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/25 px-2 py-0.5 rounded uppercase tracking-wide select-none">
+                      Script Müşterisi
+                    </span>
+                  )}
                 </div>
+
+                {/* Script Müşterisi Özel Bilgilendirme Notu */}
+                {(selectedLeadDetail.lead_sources?.code === 'APIFY' || selectedLeadDetail.source_id === '11111111-0000-0000-0000-000000000015') && (
+                  <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-700 dark:text-amber-300 space-y-1 select-text">
+                    <span className="font-black uppercase text-[9px] tracking-wide flex items-center gap-1 select-none">
+                      ⚠️ Script Müşterisi Bilgilendirmesi
+                    </span>
+                    <p className="text-[10px] font-semibold leading-relaxed">
+                      Bu kayıt Apify Google Maps üzerinden çekilmiştir. Arama esnasında müşteriye mutlaka **Lazer Kesim veya Abkant Büküm makinesine ihtiyacı olup olmadığı** sorulmalıdır.
+                    </p>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -2551,6 +2617,15 @@ export default function WorkspacePage() {
                     <span className="text-foreground block mt-0.5">{selectedLeadDetail.priority || 'Normal'}</span>
                   </div>
                 </div>
+
+                {selectedLeadDetail.message && (
+                  <div className="pt-2 border-t border-border">
+                    <span className="block text-[9px] font-bold text-muted-foreground uppercase mb-1">Müşteri Açıklaması / Talep Detayı</span>
+                    <div className="p-3 bg-muted/50 rounded-lg text-slate-600 dark:text-slate-300 text-[11px] leading-relaxed whitespace-pre-line select-text font-medium max-h-36 overflow-y-auto scrollbar-thin">
+                      {selectedLeadDetail.message}
+                    </div>
+                  </div>
+                )}
 
                  {selectedLeadDetail.extra_notes && (
                   <div className="pt-2 border-t border-border">
