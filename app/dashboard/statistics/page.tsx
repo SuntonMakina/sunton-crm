@@ -564,7 +564,7 @@ function computeWhatsAppStats(
 
     if (isConverted) {
       newLeadsCount++;
-      const hasBeenCalled = resolvedLead.conversation_completed === true || (resolvedLead.calls && resolvedLead.calls.length > 0);
+      const hasBeenCalled = resolvedLead.conversation_completed === true || (resolvedLead.calls && resolvedLead.calls.length > 0) || !!resolvedLead.sales_representative_text || !!resolvedLead.legacy_sales_specialist_name;
       if (hasBeenCalled) {
         contactedLeadsCount++;
       } else {
@@ -1011,7 +1011,7 @@ export default function StatisticsPage() {
 
       if (x.isConverted) {
         agentStats.addedToCrm++
-        const hasBeenCalled = resolvedLead.conversation_completed === true || (resolvedLead.calls && resolvedLead.calls.length > 0)
+        const hasBeenCalled = resolvedLead.conversation_completed === true || (resolvedLead.calls && resolvedLead.calls.length > 0) || !!resolvedLead.sales_representative_text || !!resolvedLead.legacy_sales_specialist_name
         if (hasBeenCalled) {
           agentStats.calledLeads++
         }
@@ -1489,12 +1489,12 @@ export default function StatisticsPage() {
         } else if (activeMetric === 'manager_contacted_leads') {
           filteredLeads = stats.resolvedLeadsList.filter(x => 
             x.isConverted && 
-            (x.lead.conversation_completed === true || (x.lead.calls && x.lead.calls.length > 0))
+            (x.lead.conversation_completed === true || (x.lead.calls && x.lead.calls.length > 0) || !!x.lead.sales_representative_text || !!x.lead.legacy_sales_specialist_name)
           )
         } else if (activeMetric === 'manager_uncontacted_leads') {
           filteredLeads = stats.resolvedLeadsList.filter(x => 
             x.isConverted && 
-            !(x.lead.conversation_completed === true || (x.lead.calls && x.lead.calls.length > 0))
+            !(x.lead.conversation_completed === true || (x.lead.calls && x.lead.calls.length > 0) || !!x.lead.sales_representative_text || !!x.lead.legacy_sales_specialist_name)
           )
         }
 
