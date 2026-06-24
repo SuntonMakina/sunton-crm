@@ -1,0 +1,2537 @@
+[
+  {
+    "normalized_phone": "08006061069",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "1(6).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "08006061069",
+      "raw_ocr_digits": "08006061069",
+      "normalized_phone": "08006061069",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "0534590837",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "1(6).png",
+      "source_panel_index": 3,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "0534590837",
+      "raw_ocr_digits": "0534590837",
+      "normalized_phone": "0534590837",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "298050807676",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "1(6).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": ". 2980508076-76-",
+      "raw_ocr_digits": "298050807676",
+      "normalized_phone": "298050807676",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "208345908870",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "1(6).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "20834.590.8870.",
+      "raw_ocr_digits": "208345908870",
+      "normalized_phone": "208345908870",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "02827642568",
+    "confidence": 0.8,
+    "item": {
+      "source_image": "1(6).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "2827642568",
+      "raw_ocr_digits": "2827642568",
+      "normalized_phone": "02827642568",
+      "confidence": 0.8,
+      "manual_review_required": true,
+      "review_reason": "Başındaki 0 OCR tarafından atlanmış olabilir"
+    }
+  },
+  {
+    "normalized_phone": "2906356113288",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "1(6).png",
+      "source_panel_index": 9,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "2 +906356113288",
+      "raw_ocr_digits": "2906356113288",
+      "normalized_phone": "2906356113288",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "083264350702",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "1(6).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "08326435070(2",
+      "raw_ocr_digits": "083264350702",
+      "normalized_phone": "083264350702",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "083230270893",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "1(6).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "083230270.89(3)",
+      "raw_ocr_digits": "083230270893",
+      "normalized_phone": "083230270893",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "279080728055615",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "1(6).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "2) 79080728055615",
+      "raw_ocr_digits": "279080728055615",
+      "normalized_phone": "279080728055615",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08414138118",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "0841413.8118",
+      "raw_ocr_digits": "08414138118",
+      "normalized_phone": "08414138118",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "71274200",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "7 +1274200",
+      "raw_ocr_digits": "71274200",
+      "normalized_phone": "71274200",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "90530078647",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 7,
+      "raw_ocr_text": "+90530078647",
+      "raw_ocr_digits": "90530078647",
+      "normalized_phone": "90530078647",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "27111531",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 8,
+      "raw_ocr_text": "2 7+111531",
+      "raw_ocr_digits": "27111531",
+      "normalized_phone": "27111531",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "27121426",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 3,
+      "ocr_candidate_index": 8,
+      "raw_ocr_text": "2 7+121426.",
+      "raw_ocr_digits": "27121426",
+      "normalized_phone": "27121426",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "95414139118",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": ".9541.4139118",
+      "raw_ocr_digits": "95414139118",
+      "normalized_phone": "95414139118",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08386186890",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 7,
+      "raw_ocr_text": "(0838.61868.90",
+      "raw_ocr_digits": "08386186890",
+      "normalized_phone": "08386186890",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "25457818522",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 5,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "2 545781852(2)",
+      "raw_ocr_digits": "25457818522",
+      "normalized_phone": "25457818522",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "2790538509807",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "2790538509807",
+      "raw_ocr_digits": "2790538509807",
+      "normalized_phone": "2790538509807",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "208517471047",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "208517471047",
+      "raw_ocr_digits": "208517471047",
+      "normalized_phone": "208517471047",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "21315202",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "2 +13.15202",
+      "raw_ocr_digits": "21315202",
+      "normalized_phone": "21315202",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "063425683412",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "063425683.41(2)",
+      "raw_ocr_digits": "063425683412",
+      "normalized_phone": "063425683412",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "0655110477152",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "065511047715(2)",
+      "raw_ocr_digits": "0655110477152",
+      "normalized_phone": "0655110477152",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "21314229",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "2 1314229",
+      "raw_ocr_digits": "21314229",
+      "normalized_phone": "21314229",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "584932332082",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 8,
+      "raw_ocr_text": "58493233.208(2)",
+      "raw_ocr_digits": "584932332082",
+      "normalized_phone": "584932332082",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "208904872975",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "208904872975.",
+      "raw_ocr_digits": "208904872975",
+      "normalized_phone": "208904872975",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "208544870859",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "208544870859",
+      "raw_ocr_digits": "208544870859",
+      "normalized_phone": "208544870859",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "41409240",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 9,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "4 -1409240",
+      "raw_ocr_digits": "41409240",
+      "normalized_phone": "41409240",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "0532399732",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 9,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "0532399732",
+      "raw_ocr_digits": "0532399732",
+      "normalized_phone": "0532399732",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "31409751",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "2(3).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "3) 1409751",
+      "raw_ocr_digits": "31409751",
+      "normalized_phone": "31409751",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "27141157",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "3(2).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "2 7+141157",
+      "raw_ocr_digits": "27141157",
+      "normalized_phone": "27141157",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "20312640137",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "3(2).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "2 (0312)640137",
+      "raw_ocr_digits": "20312640137",
+      "normalized_phone": "20312640137",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "031244260",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "3(2).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "031244260",
+      "raw_ocr_digits": "031244260",
+      "normalized_phone": "031244260",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08421067146",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "3(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "08421067146",
+      "raw_ocr_digits": "08421067146",
+      "normalized_phone": "08421067146",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "95013489205",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "3(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "95013489205",
+      "raw_ocr_digits": "95013489205",
+      "normalized_phone": "95013489205",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "21416286",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "3(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "2()+14-16286",
+      "raw_ocr_digits": "21416286",
+      "normalized_phone": "21416286",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "22806277",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "3(2).png",
+      "source_panel_index": 5,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "22806277",
+      "raw_ocr_digits": "22806277",
+      "normalized_phone": "22806277",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "2190544781667",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "3(2).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "2190544781667",
+      "raw_ocr_digits": "2190544781667",
+      "normalized_phone": "2190544781667",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "20312394640",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "3(2).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "2 0312394640",
+      "raw_ocr_digits": "20312394640",
+      "normalized_phone": "20312394640",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "014181103",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "3(2).png",
+      "source_panel_index": 9,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "014 181103",
+      "raw_ocr_digits": "014181103",
+      "normalized_phone": "014181103",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "021841547",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "3(2).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "021841547",
+      "raw_ocr_digits": "021841547",
+      "normalized_phone": "021841547",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "0216364577",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "3(2).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "0216364577",
+      "raw_ocr_digits": "0216364577",
+      "normalized_phone": "0216364577",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "14018207",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "3(2).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "140 +18207",
+      "raw_ocr_digits": "14018207",
+      "normalized_phone": "14018207",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "0212672320",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "0212672320",
+      "raw_ocr_digits": "0212672320",
+      "normalized_phone": "0212672320",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "21812308",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "2 1812308",
+      "raw_ocr_digits": "21812308",
+      "normalized_phone": "21812308",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "23181129",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "23 +181129",
+      "raw_ocr_digits": "23181129",
+      "normalized_phone": "23181129",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08803401314",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "08803401314",
+      "raw_ocr_digits": "08803401314",
+      "normalized_phone": "08803401314",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08373819579",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "0837-3819579",
+      "raw_ocr_digits": "08373819579",
+      "normalized_phone": "08373819579",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "05373380675",
+    "confidence": 0.8,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "5373380675",
+      "raw_ocr_digits": "5373380675",
+      "normalized_phone": "05373380675",
+      "confidence": 0.8,
+      "manual_review_required": true,
+      "review_reason": "Başındaki 0 OCR tarafından atlanmış olabilir"
+    }
+  },
+  {
+    "normalized_phone": "0522267198",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "0522 267198",
+      "raw_ocr_digits": "0522267198",
+      "normalized_phone": "0522267198",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08418638172",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "08418638172",
+      "raw_ocr_digits": "08418638172",
+      "normalized_phone": "08418638172",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "90532734244",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 3,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "+905327342)44",
+      "raw_ocr_digits": "90532734244",
+      "normalized_phone": "90532734244",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "21815357",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 3,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "2. +.1815357 .",
+      "raw_ocr_digits": "21815357",
+      "normalized_phone": "21815357",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "21815350",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 3,
+      "ocr_candidate_index": 7,
+      "raw_ocr_text": "2 -1815350",
+      "raw_ocr_digits": "21815350",
+      "normalized_phone": "21815350",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "1995365052208",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "1995365052208",
+      "raw_ocr_digits": "1995365052208",
+      "normalized_phone": "1995365052208",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08915808989",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "08915808989",
+      "raw_ocr_digits": "08915808989",
+      "normalized_phone": "08915808989",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "208926786890",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "208926786890",
+      "raw_ocr_digits": "208926786890",
+      "normalized_phone": "208926786890",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "208907744014",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": ") 208907744014",
+      "raw_ocr_digits": "208907744014",
+      "normalized_phone": "208907744014",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "22014292",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 5,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "2 2014292",
+      "raw_ocr_digits": "22014292",
+      "normalized_phone": "22014292",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "208437108961",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "208437108961",
+      "raw_ocr_digits": "208437108961",
+      "normalized_phone": "208437108961",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08447120368",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "08447120368",
+      "raw_ocr_digits": "08447120368",
+      "normalized_phone": "08447120368",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "083046857042",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "083046857.04(2)",
+      "raw_ocr_digits": "083046857042",
+      "normalized_phone": "083046857042",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "208418638178",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "2(0841863.8178",
+      "raw_ocr_digits": "208418638178",
+      "normalized_phone": "208418638178",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08527342144",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "08527342144",
+      "raw_ocr_digits": "08527342144",
+      "normalized_phone": "08527342144",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "20832341070",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "2 0832341070",
+      "raw_ocr_digits": "20832341070",
+      "normalized_phone": "20832341070",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08436192303",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 7,
+      "raw_ocr_text": "08436192303",
+      "raw_ocr_digits": "08436192303",
+      "normalized_phone": "08436192303",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "22114226",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 9,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "2 2114226",
+      "raw_ocr_digits": "22114226",
+      "normalized_phone": "22114226",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08345039284",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "4(3).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "08345039284",
+      "raw_ocr_digits": "08345039284",
+      "normalized_phone": "08345039284",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "06814517177",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "06814517177",
+      "raw_ocr_digits": "06814517177",
+      "normalized_phone": "06814517177",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "42210040",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "-4 +22-10040",
+      "raw_ocr_digits": "42210040",
+      "normalized_phone": "42210040",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "90542772522",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "+9054277252(2)",
+      "raw_ocr_digits": "90542772522",
+      "normalized_phone": "90542772522",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08323111115",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "0832.3111115",
+      "raw_ocr_digits": "08323111115",
+      "normalized_phone": "08323111115",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "0554184160",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 3,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "0554-184-160",
+      "raw_ocr_digits": "0554184160",
+      "normalized_phone": "0554184160",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "253038741512",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "2 5303874151(2)",
+      "raw_ocr_digits": "253038741512",
+      "normalized_phone": "253038741512",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "908322156886",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "+908322156886",
+      "raw_ocr_digits": "908322156886",
+      "normalized_phone": "908322156886",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "083832545652",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "0838-3254565(2)",
+      "raw_ocr_digits": "083832545652",
+      "normalized_phone": "083832545652",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "25050296259",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 5,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "2 5050296259",
+      "raw_ocr_digits": "25050296259",
+      "normalized_phone": "25050296259",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "20582543764",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 5,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "20582543764",
+      "raw_ocr_digits": "20582543764",
+      "normalized_phone": "20582543764",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "1908363338833",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "190836.33388.33",
+      "raw_ocr_digits": "1908363338833",
+      "normalized_phone": "1908363338833",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "02536977744",
+    "confidence": 0.8,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "2 536977744",
+      "raw_ocr_digits": "2536977744",
+      "normalized_phone": "02536977744",
+      "confidence": 0.8,
+      "manual_review_required": true,
+      "review_reason": "Başındaki 0 OCR tarafından atlanmış olabilir"
+    }
+  },
+  {
+    "normalized_phone": "208009594681",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "208009594681.",
+      "raw_ocr_digits": "208009594681",
+      "normalized_phone": "208009594681",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08368198002",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "08368198002",
+      "raw_ocr_digits": "08368198002",
+      "normalized_phone": "08368198002",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "208543998550",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "208543998550.",
+      "raw_ocr_digits": "208543998550",
+      "normalized_phone": "208543998550",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "10920100",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": ")1092.010-0",
+      "raw_ocr_digits": "10920100",
+      "normalized_phone": "10920100",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "080828836733",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "080828836733",
+      "raw_ocr_digits": "080828836733",
+      "normalized_phone": "080828836733",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "2088276180228",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 9,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "2088276180228",
+      "raw_ocr_digits": "2088276180228",
+      "normalized_phone": "2088276180228",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "0539346033",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 9,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "0539346033",
+      "raw_ocr_digits": "0539346033",
+      "normalized_phone": "0539346033",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "1208378030826",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "1208378030826.",
+      "raw_ocr_digits": "1208378030826",
+      "normalized_phone": "1208378030826",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08331223038",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "0833-1223038",
+      "raw_ocr_digits": "08331223038",
+      "normalized_phone": "08331223038",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "089489392922",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "5(2).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "0894.893.92.92-(2",
+      "raw_ocr_digits": "089489392922",
+      "normalized_phone": "089489392922",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "90435962811",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "+90.435962811",
+      "raw_ocr_digits": "90435962811",
+      "normalized_phone": "90435962811",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "06342934313",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "0634293.4313",
+      "raw_ocr_digits": "06342934313",
+      "normalized_phone": "06342934313",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "06323549142",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 7,
+      "raw_ocr_text": "06323549142",
+      "raw_ocr_digits": "06323549142",
+      "normalized_phone": "06323549142",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08011324204",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "08011324204",
+      "raw_ocr_digits": "08011324204",
+      "normalized_phone": "08011324204",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "09434854463",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 3,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "0943-4854463",
+      "raw_ocr_digits": "09434854463",
+      "normalized_phone": "09434854463",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "23211212",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 3,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "2 +3211212",
+      "raw_ocr_digits": "23211212",
+      "normalized_phone": "23211212",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "0856484233",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "(0856484233.",
+      "raw_ocr_digits": "0856484233",
+      "normalized_phone": "0856484233",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "7055157300",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 5,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "-7055157300",
+      "raw_ocr_digits": "7055157300",
+      "normalized_phone": "7055157300",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "995077547050",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "+995077547050",
+      "raw_ocr_digits": "995077547050",
+      "normalized_phone": "995077547050",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "995077547050",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "+995077547050",
+      "raw_ocr_digits": "995077547050",
+      "normalized_phone": "995077547050",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "20505258524",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "2 0505258524",
+      "raw_ocr_digits": "20505258524",
+      "normalized_phone": "20505258524",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "02133903191",
+    "confidence": 0.8,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "2133903191",
+      "raw_ocr_digits": "2133903191",
+      "normalized_phone": "02133903191",
+      "confidence": 0.8,
+      "manual_review_required": true,
+      "review_reason": "Başındaki 0 OCR tarafından atlanmış olabilir"
+    }
+  },
+  {
+    "normalized_phone": "208828555518",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "208828555518",
+      "raw_ocr_digits": "208828555518",
+      "normalized_phone": "208828555518",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "2085852845653",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "208585284565.3",
+      "raw_ocr_digits": "2085852845653",
+      "normalized_phone": "2085852845653",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "0537326455",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "0537326455",
+      "raw_ocr_digits": "0537326455",
+      "normalized_phone": "0537326455",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "20543235277",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 9,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "2 0543235277",
+      "raw_ocr_digits": "20543235277",
+      "normalized_phone": "20543235277",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "02020663654",
+    "confidence": 0.8,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 9,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "2020663654",
+      "raw_ocr_digits": "2020663654",
+      "normalized_phone": "02020663654",
+      "confidence": 0.8,
+      "manual_review_required": true,
+      "review_reason": "Başındaki 0 OCR tarafından atlanmış olabilir"
+    }
+  },
+  {
+    "normalized_phone": "408379437263",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "4 0837-9437263",
+      "raw_ocr_digits": "408379437263",
+      "normalized_phone": "408379437263",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "95303702772",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "6(2).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": ".95303702772",
+      "raw_ocr_digits": "95303702772",
+      "normalized_phone": "95303702772",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "06342883633",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "06342883633",
+      "raw_ocr_digits": "06342883633",
+      "normalized_phone": "06342883633",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "063554495120",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "0635544-95120",
+      "raw_ocr_digits": "063554495120",
+      "normalized_phone": "063554495120",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08343771122",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "08343771122",
+      "raw_ocr_digits": "08343771122",
+      "normalized_phone": "08343771122",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08519659192",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "0851965.9192-",
+      "raw_ocr_digits": "08519659192",
+      "normalized_phone": "08519659192",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08396588650",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 7,
+      "raw_ocr_text": "08396588650",
+      "raw_ocr_digits": "08396588650",
+      "normalized_phone": "08396588650",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "09325694497",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 3,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "0932.569.4497-",
+      "raw_ocr_digits": "09325694497",
+      "normalized_phone": "09325694497",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "2083238242562",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 3,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "2 0832 3824256 (2)",
+      "raw_ocr_digits": "2083238242562",
+      "normalized_phone": "2083238242562",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "05070441466",
+    "confidence": 0.8,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "5070441466",
+      "raw_ocr_digits": "5070441466",
+      "normalized_phone": "05070441466",
+      "confidence": 0.8,
+      "manual_review_required": true,
+      "review_reason": "Başındaki 0 OCR tarafından atlanmış olabilir"
+    }
+  },
+  {
+    "normalized_phone": "20822090701",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "20822090701",
+      "raw_ocr_digits": "20822090701",
+      "normalized_phone": "20822090701",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "200739771216",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "2 00739771216",
+      "raw_ocr_digits": "200739771216",
+      "normalized_phone": "200739771216",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "208525813670",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "2 08525813670",
+      "raw_ocr_digits": "208525813670",
+      "normalized_phone": "208525813670",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "0852581367",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "0852581367",
+      "raw_ocr_digits": "0852581367",
+      "normalized_phone": "0852581367",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "05075833626",
+    "confidence": 0.8,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 5,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "5075833626-",
+      "raw_ocr_digits": "5075833626",
+      "normalized_phone": "05075833626",
+      "confidence": 0.8,
+      "manual_review_required": true,
+      "review_reason": "Başındaki 0 OCR tarafından atlanmış olabilir"
+    }
+  },
+  {
+    "normalized_phone": "21018512",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "2+10-18512",
+      "raw_ocr_digits": "21018512",
+      "normalized_phone": "21018512",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "1708922199692",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "1708922199692",
+      "raw_ocr_digits": "1708922199692",
+      "normalized_phone": "1708922199692",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "21908358717615",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "21908358717615",
+      "raw_ocr_digits": "21908358717615",
+      "normalized_phone": "21908358717615",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08559623800",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 7,
+      "raw_ocr_text": "08559623800",
+      "raw_ocr_digits": "08559623800",
+      "normalized_phone": "08559623800",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08305126634",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "08305126634.",
+      "raw_ocr_digits": "08305126634",
+      "normalized_phone": "08305126634",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "1909445463516",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "1909445463516",
+      "raw_ocr_digits": "1909445463516",
+      "normalized_phone": "1909445463516",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "2088230612115",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "2088230612115",
+      "raw_ocr_digits": "2088230612115",
+      "normalized_phone": "2088230612115",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "208874813117",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 9,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "208874813117",
+      "raw_ocr_digits": "208874813117",
+      "normalized_phone": "208874813117",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "1908445463516",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 9,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "190844-546.3516-",
+      "raw_ocr_digits": "1908445463516",
+      "normalized_phone": "1908445463516",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "1708378030328",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "1708378030328",
+      "raw_ocr_digits": "1708378030328",
+      "normalized_phone": "1708378030328",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "219083750200288",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "219083750200288",
+      "raw_ocr_digits": "219083750200288",
+      "normalized_phone": "219083750200288",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08072381308",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "08072381308",
+      "raw_ocr_digits": "08072381308",
+      "normalized_phone": "08072381308",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08414982092",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "7(2).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 7,
+      "raw_ocr_text": "08414982092",
+      "raw_ocr_digits": "08414982092",
+      "normalized_phone": "08414982092",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "06074997255",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "06074997255",
+      "raw_ocr_digits": "06074997255",
+      "normalized_phone": "06074997255",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "271271546",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 1,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "2 7+1271546",
+      "raw_ocr_digits": "271271546",
+      "normalized_phone": "271271546",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "21216229",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 3,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "2 1216229",
+      "raw_ocr_digits": "21216229",
+      "normalized_phone": "21216229",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "059748576",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "(059748576",
+      "raw_ocr_digits": "059748576",
+      "normalized_phone": "059748576",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "069242404",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "(069242404",
+      "raw_ocr_digits": "069242404",
+      "normalized_phone": "069242404",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "208324195003",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "208324195003",
+      "raw_ocr_digits": "208324195003",
+      "normalized_phone": "208324195003",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08887751567",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": ". (08887751567",
+      "raw_ocr_digits": "08887751567",
+      "normalized_phone": "08887751567",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "190832565672",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 7,
+      "raw_ocr_text": "190832565672",
+      "raw_ocr_digits": "190832565672",
+      "normalized_phone": "190832565672",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "065422988525",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 5,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "065422988525",
+      "raw_ocr_digits": "065422988525",
+      "normalized_phone": "065422988525",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "21516205",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 5,
+      "ocr_candidate_index": 2,
+      "raw_ocr_text": "2 +15-16205",
+      "raw_ocr_digits": "21516205",
+      "normalized_phone": "21516205",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "21516306",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 5,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "2 +1516306",
+      "raw_ocr_digits": "21516306",
+      "normalized_phone": "21516306",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "05472482535",
+    "confidence": 0.8,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 5,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "547248-2535",
+      "raw_ocr_digits": "5472482535",
+      "normalized_phone": "05472482535",
+      "confidence": 0.8,
+      "manual_review_required": true,
+      "review_reason": "Başındaki 0 OCR tarafından atlanmış olabilir"
+    }
+  },
+  {
+    "normalized_phone": "0545228347",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 5,
+      "ocr_candidate_index": 7,
+      "raw_ocr_text": "0545228347",
+      "raw_ocr_digits": "0545228347",
+      "normalized_phone": "0545228347",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "9954522834172",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "+995452283417(2)",
+      "raw_ocr_digits": "9954522834172",
+      "normalized_phone": "9954522834172",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "21614237",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "2 +1614237",
+      "raw_ocr_digits": "21614237",
+      "normalized_phone": "21614237",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "995519657615",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "+995519657615",
+      "raw_ocr_digits": "995519657615",
+      "normalized_phone": "995519657615",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "995519657615",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "+995519657615",
+      "raw_ocr_digits": "995519657615",
+      "normalized_phone": "995519657615",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08326472498",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 8,
+      "raw_ocr_text": "08326472498-",
+      "raw_ocr_digits": "08326472498",
+      "normalized_phone": "08326472498",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "254159846825",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "254159846825",
+      "raw_ocr_digits": "254159846825",
+      "normalized_phone": "254159846825",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "25305426634",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 7,
+      "raw_ocr_text": "25305426634",
+      "raw_ocr_digits": "25305426634",
+      "normalized_phone": "25305426634",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "250581583102",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "2 5058158310(2)",
+      "raw_ocr_digits": "250581583102",
+      "normalized_phone": "250581583102",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "2084618326262",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "20846-183.26.26(2)",
+      "raw_ocr_digits": "2084618326262",
+      "normalized_phone": "2084618326262",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "080504704",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 8,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "080504704",
+      "raw_ocr_digits": "080504704",
+      "normalized_phone": "080504704",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "9525030030",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "9525030030",
+      "raw_ocr_digits": "9525030030",
+      "normalized_phone": "9525030030",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08343137688",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "8(2).png",
+      "source_panel_index": 10,
+      "ocr_candidate_index": 6,
+      "raw_ocr_text": "08343137688",
+      "raw_ocr_digits": "08343137688",
+      "normalized_phone": "08343137688",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08461532626",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "9(1).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "08461532626",
+      "raw_ocr_digits": "08461532626",
+      "normalized_phone": "08461532626",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "064237344702",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "9(1).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "0642373-4470(2)",
+      "raw_ocr_digits": "064237344702",
+      "normalized_phone": "064237344702",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08452112400",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "9(1).png",
+      "source_panel_index": 2,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "08452112400",
+      "raw_ocr_digits": "08452112400",
+      "normalized_phone": "08452112400",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "0534068149",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "9(1).png",
+      "source_panel_index": 4,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "0534068149",
+      "raw_ocr_digits": "0534068149",
+      "normalized_phone": "0534068149",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "25074127087",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "9(1).png",
+      "source_panel_index": 5,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "25074127087",
+      "raw_ocr_digits": "25074127087",
+      "normalized_phone": "25074127087",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "08529222121",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "9(1).png",
+      "source_panel_index": 6,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "(08529222121",
+      "raw_ocr_digits": "08529222121",
+      "normalized_phone": "08529222121",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "24155603033",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "9(1).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 1,
+      "raw_ocr_text": "24155603033",
+      "raw_ocr_digits": "24155603033",
+      "normalized_phone": "24155603033",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "208824365251",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "9(1).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 3,
+      "raw_ocr_text": "208824365251",
+      "raw_ocr_digits": "208824365251",
+      "normalized_phone": "208824365251",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "295459202538",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "9(1).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 4,
+      "raw_ocr_text": "29545.9202538",
+      "raw_ocr_digits": "295459202538",
+      "normalized_phone": "295459202538",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  },
+  {
+    "normalized_phone": "2093479026208",
+    "confidence": 0.35,
+    "item": {
+      "source_image": "9(1).png",
+      "source_panel_index": 7,
+      "ocr_candidate_index": 5,
+      "raw_ocr_text": "2093479026208",
+      "raw_ocr_digits": "2093479026208",
+      "normalized_phone": "2093479026208",
+      "confidence": 0.35,
+      "manual_review_required": true,
+      "review_reason": "Numara biçimi otomatik olarak güvenle doğrulanamadı"
+    }
+  }
+]

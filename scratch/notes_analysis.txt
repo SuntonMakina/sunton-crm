@@ -1,0 +1,1217 @@
+Row 3 | ID L-0001 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Markalama makinası talep ediyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 4 | ID L-0002 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Yalnızca bilgi talep etti. 'Metal tüp mu  ve kaç tane yansitma aynasi var'
+  Summary: None
+--------------------------------------------------------------------------------
+Row 5 | ID L-0003 | Status: None | Rep: Yunus Emre | Call: Evet | Olumlu: None
+  Note: 10 mm'e kadar kesim. 2x6, tek tabla, açık kabin fiber lazer kesim makinası.
+  Summary: İletişime geçtim haber vereceğim
+--------------------------------------------------------------------------------
+Row 6 | ID L-0004 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Telefona dönüş yapmadı, tekrar aranacak. Cevap vermiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 7 | ID L-0005 | Status: None | Rep: Anıl | Call: Evet | Olumlu: None
+  Note: 3-6 kw, 1,5x3 çift tabla fiber lazer kesim makinası hakkında bilgi talep ediyor.
+  Summary: Atıldı,fiyat teklifleri haber bekleniyor
+--------------------------------------------------------------------------------
+Row 8 | ID L-0006 | Status: Olumsuz | Rep: Kaan | Call: Evet | Olumlu: Hayır
+  Note: 3 kw açık kabin fiber lazer kesim makinası hakkında bilgi talep ediyor.
+  Summary: Görüştüm şimdi çıktım yanlarından, o kadar bütçeleri yok ama teklif ileticem
+--------------------------------------------------------------------------------
+Row 9 | ID L-0007 | Status: None | Rep: Batucan | Call: Evet | Olumlu: None
+  Note: Bu müşteri hâlihazırda iletişimde olduğumuz bir firmadır. Daha önce HSG tarafından iletişime geçilmişti şimdiyse Sunton sosyal medya kanalları üzerinden tekrar tarafımıza ulaşmıştır. 06.05 tarihinde D90 1.5kW ve Z3015 3kW modelleri için nihai fiyat talep etmişlerdi. Şirket Senfeng'i kullanıyor. Şu an ise en uygun fiyatlı profil lazer makinemizin fabrika teslim fiyatını öğrenmek istiyor
+  Summary:  o kadar bütçeleri yok ama teklif ileticem 
+3.06 Batucan:  en son çindeyken görüşmüştük. Bugün aradığımda ulaşamadım
+--------------------------------------------------------------------------------
+Row 10 | ID L-0008 | Status: None | Rep: Osman | Call: Evet | Olumlu: None
+  Note: Daha önce bizlerle iletişime geçmiş. Osman Bey'e tekrar ilettim.
+  Summary: Fiyat verdim Bilal beye
+--------------------------------------------------------------------------------
+Row 11 | ID L-0009 | Status: None | Rep: Anıl | Call: Evet | Olumlu: None
+  Note: 160 mm çap işleme kapasitesine sahip 3 kW boru lazer kesim makinası talep etmektedir. Makinede full otomatik yükleme sistemi, Raycus rezonatör, Bochu BLT421 kesim kafası ve Schneider marka elektrik komponentleri bulunması istenmektedir.
+  Summary: Makina satıyorlarmış onlar daKendilerini bizim fiyatımızın üzerine rakam koyup satmayı teklif ettiler R2 V3.0 modeli için fiyat teklifi verildi
+--------------------------------------------------------------------------------
+Row 12 | ID L-0010 | Status: None | Rep: Mustafa | Call: Evet | Olumlu: None
+  Note: 20-25 mm'e kadar kesim yapacak. 1,5x3 veya 1,5x6 3 kw fiber lazer kesim makinası talep ediyor.
+  Summary: G3015X - G6025X 6kw ve 12kw teklifler verildi. Maksimum 25mm siyah sac kesiyorlar. Ortaklarıyla görüşecek sonrasında Proforma göndersinler
+--------------------------------------------------------------------------------
+Row 13 | ID L-0011 | Status: None | Rep: Emre | Call: None | Olumlu: None
+  Note: Müşterinin numarası servis dışı 
+  Summary: None
+--------------------------------------------------------------------------------
+Row 14 | ID L-0012 | Status: None | Rep: Osman | Call: Evet | Olumlu: None
+  Note: 6 kw 1,5x3 fiber lazer kesim makinası için fiyat teklifi talep ediyor.
+  Summary: Görüştüm firma ile lazer makinesi istemiyor
+--------------------------------------------------------------------------------
+Row 15 | ID L-0013 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Telefona dönüş yapmadı, tekrar aranacak.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 16 | ID L-0014 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 17 | ID L-0015 | Status: None | Rep: Anıl | Call: Evet | Olumlu: None
+  Note: 15 mm'e kadar kesim yapacak, şu anda plazma kullanıyor fibere geçmek istiyor.  1,5x3 fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: Fiyat ile makina arıyor teklif ve teknik detay paylaşıyorum yüz yüze görüşmeye gidicem G3015X 6kW istiyor fakat tamamen fiyat odaklı.O sebepten en ucuz satan kişi ile ticaret yapıcak sunduğumuz fiyat çok yüksek geldi. 
+--------------------------------------------------------------------------------
+Row 18 | ID L-0015 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 19 | ID L-0016 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Telefona dönüş yapmadı, tekrar aranacak.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 20 | ID L-0017 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 21 | ID L-0018 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 22 | ID L-0019 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 23 | ID L-0020 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 24 | ID L-0021 | Status: None | Rep: Osman | Call: Evet | Olumlu: None
+  Note: 3 kw 1,5x3 fiber lazer kesim makinası hakkında bilgi talep ediyor. 
+  Summary: Dün aradım kendisini bakmadı ziyaret edemedim buğün tekrar arıyacağım
+--------------------------------------------------------------------------------
+Row 25 | ID L-0022 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: müsait değil, daha sonra arayacak. Tekrar arandı, kendisi arayacağını belirtti.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 26 | ID L-0023 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: Daha önce bizlerle iletişime geçmiş. Yunus Emre'nin iletişimini ilettim.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 27 | ID L-0024 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 28 | ID L-0025 | Status: None | Rep: Osman | Call: Evet | Olumlu: None
+  Note: 6000x2000 6kw çift ve tek tabla fiber lazer kesim makinası hakkında fiyat bilgisi talep ediyor.
+  Summary: Gelecek hafta ziyaret edeceğim firmayı
+3.06 Osman: Dün aradım kendisini bakmadı ziyaret edemedim buğün tekrar arıyacağım
+--------------------------------------------------------------------------------
+Row 29 | ID L-0026 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Telefona dönüş yapmadı, tekrar aranacak.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 30 | ID L-0027 | Status: İlk Cevap Verildi | Rep: Emre | Call: Evet | Olumlu: Evet
+  Note: max. 25 mm'e kadar kesim yapacak. 2x4 açık kabin, tek ve çift tabla için fiyat bilgisi talep ediyor.
+  Summary: Firma ile görüşüldü z3015 3 kw için fiyat söylendi ortakları ile görüşüp dönüş yapıcak
+--------------------------------------------------------------------------------
+Row 31 | ID L-0028 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Telefona dönüş yapmadı, tekrar aranacak.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 32 | ID L-0029 | Status: None | Rep: Mustafa | Call: Evet | Olumlu: None
+  Note: 6 kw fiber lazer kesim makinası hakkında bilgi talep ediyor. Yeni bir iş kuracak.
+  Summary: Onur bey G3015T ve GX modeli için görüşüldü, 6kW ve 12kw bilgi fiyat verildi, dönüş sonrası, ziyaret yapılacak
+--------------------------------------------------------------------------------
+Row 33 | ID L-0030 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 34 | ID L-0031 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 35 | ID L-0032 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Babasıyla görüşüp dönüş yapacak.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 36 | ID L-0033 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 37 | ID L-0034 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 38 | ID L-0035 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 39 | ID L-0036 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 40 | ID L-0037 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: 3 metre 135 ton büküm makinası ve 1,5x3 3 kw çift tabla fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 41 | ID L-0038 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Telefona dönüş yapmadı, tekrar aranacak. Tekrar arandı, müsait olmadığını söyledi
+  Summary: None
+--------------------------------------------------------------------------------
+Row 42 | ID L-0039 | Status: None | Rep: Anıl | Call: Evet | Olumlu: None
+  Note: 3 kw tek tabla fiber lazer kesim makinası için fiyat bilgisi talep ediyor.
+  Summary:  teklifi paylaşıldı takip ediliyor
+--------------------------------------------------------------------------------
+Row 43 | ID L-0040 | Status: None | Rep: Kaan | Call: Evet | Olumlu: None
+  Note: 6 kw, 1,5x3 fiber lazer kesim makinası talep ediyor.
+  Summary: Hem gx hem gt tekliflerini hazırladım attım maillerini yarın Eskişehir dönüşü görüşeceğiz 
+--------------------------------------------------------------------------------
+Row 44 | ID L-0041 | Status: None | Rep: Osman | Call: Evet | Olumlu: None
+  Note: 6 kw fiber lazer kesim makinası talep ediyor.
+  Summary: WhatsApp dan mesaj attım Cengiz beye
+--------------------------------------------------------------------------------
+Row 45 | ID L-0042 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Telefona dönüş yapmadı, tekrar aranacak. 
+  Summary: None
+--------------------------------------------------------------------------------
+Row 46 | ID L-0043 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Telefona dönüş yapmadı, tekrar aranacak. 
+  Summary: None
+--------------------------------------------------------------------------------
+Row 47 | ID L-0044 | Status: None | Rep: Yunus Emre | Call: Hayır | Olumlu: None
+  Note: 10 mm'e kadar kesim yapacak kapalı kabin, hem tek hem çift tabla için fiyat talep ediyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 48 | ID L-0045 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 49 | ID L-0046 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ulaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 50 | ID L-0047 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ulaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 51 | ID L-0048 | Status: None | Rep: Emre | Call: Evet | Olumlu: None
+  Note: 10 mm'e kadar kesim yapacak, fiber lazer kesim makinası hakkında bilgi talep ediyor.
+  Summary: Z3015 3 kw için teklif ileticez
+--------------------------------------------------------------------------------
+Row 52 | ID L-0049 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Telefona dönüş yapmadı, tekrar aranacak. 
+  Summary: None
+--------------------------------------------------------------------------------
+Row 53 | ID L-0050 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 54 | ID L-0051 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 55 | ID L-0052 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 56 | ID L-0054 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: Eski müşteri 2. ayda başvuru yapmıştı. Tekrar iletişime geçti.5 mm'e kadar kesim yapacak, 2x6 ebatında, tek tabla, kabinli veya kabinsiz fiyat talep ediyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 57 | ID L-0055 | Status: None | Rep: Osman | Call: Hayır | Olumlu: None
+  Note: 3 kw fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: Aradım 2 defa hep meşgul e attı
+--------------------------------------------------------------------------------
+Row 58 | ID L-0056 | Status: None | Rep: Kerem | Call: Evet | Olumlu: None
+  Note: 3 kw 3015 tek tabla fiber lazer kesim makinası hakkında bilgi talep ediyor.
+  Summary: Teklifi vermiştim.Çorumds makine ssttigim firma sahiplerini tanıyor. Bayram sonrası ilk seyahat  Çorum.
+--------------------------------------------------------------------------------
+Row 59 | ID L-0057 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı sünger kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 60 | ID L-0058 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 61 | ID L-0059 | Status: None | Rep: Berke | Call: Evet | Olumlu: None
+  Note: max 10 mm'e kadar kesim yapacak. X3015 fiber lazer kesim makinasıyla ilgileniyor.
+  Summary: Okul için z3015 3kW düşünüyorlar. Yatırım destek alabilmeleri için proforma hazırlandı iletildi.
+--------------------------------------------------------------------------------
+Row 62 | ID L-0060 | Status: None | Rep: Anıl | Call: Evet | Olumlu: None
+  Note: max 20 mm'e kadar kesim yapacak. 1,5x3 kapalı kabin çift tabla fiber lazer kesim makinesıyle ilgileniyor.
+  Summary: Görüşme sağlandı pazartesi randevu alındı. Z6020 12kW yatırımına karar kılındı.Teklif ve teknik detaylı video paylaşıldı. Alan problemi olduğu için çift tabla alamıyor. 
+--------------------------------------------------------------------------------
+Row 63 | ID L-0061 | Status: None | Rep: Osman | Call: Evet | Olumlu: None
+  Note: 350x350 kare profil kesimi yapacak şu an elinde makina var bir tane daha almak istiyor.
+  Summary: Tanıyorum firmayı görüşürüm Konya ya dönünce
+--------------------------------------------------------------------------------
+Row 64 | ID L-0062 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: k kw fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 65 | ID L-0063 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 66 | ID L-0064 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı bant kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 67 | ID L-0065 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Telefona dönüş yapmadı, tekrar aranacak. 
+Tekrar arandı, trafikte kendisi daha sonra arayacak
+  Summary: None
+--------------------------------------------------------------------------------
+Row 68 | ID L-0066 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ulaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 69 | ID L-0067 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 70 | ID L-0068 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ulaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 71 | ID L-0069 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ulaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 72 | ID L-0070 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ulaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 73 | ID L-0071 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Sandıkçılar firmasından alım yapmaya karar vermişler.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 74 | ID L-0072 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 75 | ID L-0073 | Status: None | Rep: Emre | Call: Evet | Olumlu: None
+  Note:  0.50 - 10 mm arası saç kesimi yapacak. Fiber lazer kesim makinaları hakkında bilgi almak istiyor. 
+  Summary: MEHMET BEY İLE GÖRÜŞÜLDÜ 1 ADET LAZER YATIRIMI 
+PLANLIYORLAR HAVALANDIRMA İŞLERİ YAPIYORLAR FABRİKALARI MARDİNDEYMİŞ MAKİNEYİ ORAYA GÖNDERECEĞİZ Z3015 3 KW İÇİN TEKLİFLERİ İLETİCEZ 2 AY İÇİND EALMAYI BEKLEDİKLERİ PROJELER VARMIŞ 
+ONAYLANIRSA SATIN ALIMI TAMAMLAYACAKLAR
+--------------------------------------------------------------------------------
+Row 76 | ID L-0074 | Status: None | Rep: Mustafa | Call: Evet | Olumlu: None
+  Note: 20 mm'e kadar paslanmaz sac kesimi yapacak, 12 kw düşünüyor. Fiber lazer kesim makinaları hakkında bilgi almak istiyor.
+  Summary: 20mm kalınlığına kadar paslanmaz kesecek, 12kw önerildi, fiyat araştırması yapıyor. Projesi için makine alımı kesinleşince alım yapacak.
+--------------------------------------------------------------------------------
+Row 77 | ID L-0074 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 78 | ID L-0076 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: müsait değil, kendisi daha sonra arayacak
+tekrar arandı ulaşılamıyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 79 | ID L-0077 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 80 | ID L-0078 | Status: None | Rep: Sefa | Call: Evet | Olumlu: None
+  Note: max 12 mm'e kadar kesecek, fiber lazer kesim makinaları hakkında bilgi almak istiyor. 
+  Summary: GÖRÜŞME GERÇEKLEŞTİ 12MM MAX KESİMLERİ VAR YERLERİ OLMADIĞI İÇİN AÇIK TABLA DÜŞÜNÜYOR FİYAT TEKLİFİ İLETİLDİ.
+--------------------------------------------------------------------------------
+Row 81 | ID L-0079 | Status: None | Rep: Anıl | Call: None | Olumlu: None
+  Note: 12 kw fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 82 | ID L-0080 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 83 | ID L-0081 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 84 | ID L-0082 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ulaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 85 | ID L-0083 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ulaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 86 | ID L-0084 | Status: None | Rep: Yunus Emre | Call: Evet | Olumlu: None
+  Note: 2x6 açık tabla 6 kw fiber lazer kesim makinasıyla ilgileniyor.
+  Summary: Z6020 6 kW Müşteriye proforma iletildi. Son teklifimizi verdik nakit tutarını ayarlayıp bize dönüş sağlayacaklar. 
+--------------------------------------------------------------------------------
+Row 87 | ID L-0085 | Status: None | Rep: Mustafa | Call: Evet | Olumlu: None
+  Note: 1-5 mm kalınlığında saç kesmek için fiber lazer kesim makinası talep ediyor.
+  Summary: 1mm – 6mm kalınlıklarında paslanmaz kesimi yapacaklar. Tek table düşünüyorlar. 3kw ve 6kw teklifleri verildi. Planlayacaklar
+--------------------------------------------------------------------------------
+Row 88 | ID L-0086 | Status: None | Rep: Sefa | Call: Evet | Olumlu: None
+  Note: 3 kw fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: FİYAT TEKLİFİ İLETİLDİ. GÖRÜŞME TALEP ETTİM BAYRAM SONRASINDA MÜSAİT OLDUĞUNU BELİRTTİ.
+
+--------------------------------------------------------------------------------
+Row 89 | ID L-0087 | Status: None | Rep: Anıl | Call: Evet | Olumlu: None
+  Note: 3 kw fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: otel grup bu leasing ile alıcaz dediler teklif gönderdim.
+--------------------------------------------------------------------------------
+Row 90 | ID L-0088 | Status: None | Rep: Emre | Call: None | Olumlu: None
+  Note: 6 kw çift tabla fiber lazer kesim makinası için fiyat bilgisi talep ediyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 91 | ID L-0089 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Görüşme sırasında sert ve uygunsuz üslup kullanmıştı
+  Summary: None
+--------------------------------------------------------------------------------
+Row 92 | ID L-0090 | Status: None | Rep: Emre | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 93 | ID L-0091 | Status: None | Rep: Yunus Emre | Call: Evet | Olumlu: None
+  Note: 6 kW 1500/6000 çift tabla fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: firması yok başka yerde calışıyor kendim yapsam kaca mal olur diye fiyat araştırması yapıyormuş sözlü fiyat verdim potansiyel değil
+--------------------------------------------------------------------------------
+Row 94 | ID L-0092 | Status: None | Rep: Mustafa | Call: Evet | Olumlu: None
+  Note: 260 çap 10 mm et kalınlığında profil kesimi yapacak. Ayrıca sac kesimi de yapacak karbonda 2-50 mm arası, paslanmazda 10 mm. Sac ve boru lazer kesim makinaları hakkında fiyat bilgisi talep ediyor.
+  Summary: Maksimum 200 çaplara kadar iş yapıyormuş ama 260 olsun istedi, R2 ve R3 bilgi verildi, teklif verildi bayram sonrası ziyaret yapılacak.
+--------------------------------------------------------------------------------
+Row 95 | ID L-0093 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: mermer kesimi yapacak
+  Summary: None
+--------------------------------------------------------------------------------
+Row 96 | ID L-0094 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 97 | ID L-0095 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 98 | ID L-0096 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ulaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 99 | ID L-0097 | Status: None | Rep: Osman | Call: Hayır | Olumlu: None
+  Note: 3 kw açık kabin tek tabla fiber lazer kesim makinaları hakkında bilgi almak istiyor.
+  Summary: Antalya dayım şuan ziyaret için aradım ama sürekli meşgul çalıyor
+--------------------------------------------------------------------------------
+Row 100 | ID L-0098 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ulaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 101 | ID L-0099 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Müşteri reklama yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 102 | ID L-0100 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ilgilenmiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 103 | ID L-0101 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ilgilenmiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 104 | ID L-0102 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ulaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 105 | ID L-0103 | Status: None | Rep: Osman | Call: Evet | Olumlu: None
+  Note: Fiber lazer makinalarımızla ilgileniyorlar ancak sahibi Türk değil. Türkçe ve İngilizce bilmiyor, sadece Ukraynaca biliyor. Çalışma arkadaşı biraz Türkçe biliyor ama wp üzerinden devam etmek istiyor.
+  Summary: Makine Ukrayna ya kurulacaktı. Teklif istemişti attım.Aradım değerlendiriyoruz size dönüş yapacağız dedi.
+--------------------------------------------------------------------------------
+Row 106 | ID L-0104 | Status: None | Rep: Black Sea | Call: Evet | Olumlu: None
+  Note: 3 kw 1,5x3 tek tabla fiber lazer kesim makinası için fiyat bilgisi talep ediyor.
+  Summary: tek tabla teklifi iletmiştim ama fiyatlarımızı yüksek bulmuştu
+--------------------------------------------------------------------------------
+Row 107 | ID L-0105 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ilgilenmiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 108 | ID L-0106 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: 3 ve 6 kw açık kabin fiber lazer kesim makinaları için fiyat bilgisi talep ediyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 109 | ID L-0107 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: telefona cevap vermedi, tekrar aranacak
+  Summary: None
+--------------------------------------------------------------------------------
+Row 110 | ID L-0108 | Status: None | Rep: Emre | Call: None | Olumlu: None
+  Note: 3 kw 1,5x3 tek tabla fiber lazer kesim makinası için fiyat bilgisi talep ediyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 111 | ID L-0109 | Status: None | Rep: Sefa | Call: None | Olumlu: None
+  Note: 3 ve 20 kw fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 112 | ID L-0110 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: 1,5x3 12 kW fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 113 | ID L-0111 | Status: None | Rep: Yunus Emre | Call: Evet | Olumlu: None
+  Note: 2500x6000 açık kabin 6 kW fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: Müşteri ile görüştüm, Z6025 6kW ve 12kW için teklif iletiyorum. Kınacı metali yakınen tanıyor. Senfeng ile de görüşme halinde
+--------------------------------------------------------------------------------
+Row 114 | ID L-0112 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: 10 mm'e kadar sac kesimi yapacaklar, fiber lazer kesim makinaları hakkında bilgi almak istiyor. 
+  Summary: None
+--------------------------------------------------------------------------------
+Row 115 | ID L-0113 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: Ulaşılamıyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 116 | ID L-0114 | Status: None | Rep: Sefa | Call: Hayır | Olumlu: None
+  Note: Daha önce gönderilen müşteri. Satış temsilcisine iletilecek.
+  Summary:  öğleden sonra gideceğim
+--------------------------------------------------------------------------------
+Row 117 | ID L-0115 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 118 | ID L-0116 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: şu anda müsait değil
+  Summary: None
+--------------------------------------------------------------------------------
+Row 119 | ID L-0117 | Status: None | Rep: Emre | Call: None | Olumlu: None
+  Note: 20 mm'e kadar sac kesimi ve 300 çapa kadar boru profil kesimi yapacak. Oto. yükl. bşlt. - bevel opsiyonlu boru profil kesim ve sac kesim makinası talep istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 120 | ID L-0118 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: İş planlarını iptal etmişler
+  Summary: None
+--------------------------------------------------------------------------------
+Row 121 | ID L-0119 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı mermer kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 122 | ID L-0120 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: UlaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 123 | ID L-0121 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 124 | ID L-0122 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: UlaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 125 | ID L-0123 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı forklift makinesine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 126 | ID L-0124 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Fiber lazer kesim makinası alımını durdurmuş, başka bir firmadan abkant makinası satın almış. Daha sonrasında lazer kesim için bizlerle iletişime geçecek.,
+  Summary: None
+--------------------------------------------------------------------------------
+Row 127 | ID L-0125 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 128 | ID L-0126 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 129 | ID L-0127 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı kumaş kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 130 | ID L-0128 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 131 | ID L-0129 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ilgilenmiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 132 | ID L-0130 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: UlaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 133 | ID L-0131 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 134 | ID L-0132 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 135 | ID L-0133 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Takas düşünüyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 136 | ID L-0134 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Şu anda yurtıdışında, daha sonra kendileri iletişime geçecek
+  Summary: None
+--------------------------------------------------------------------------------
+Row 137 | ID L-0135 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 138 | ID L-0136 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 139 | ID L-0137 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 140 | ID L-0138 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 141 | ID L-0139 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: 15-20 mm'e kadar kesim yapacak. Kepçe üretimi yapıyorlar. Fiber lazer kesim makinaları hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 142 | ID L-0140 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: UlaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 143 | ID L-0141 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 144 | ID L-0142 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: uygunsuz üslup
+  Summary: None
+--------------------------------------------------------------------------------
+Row 145 | ID L-0143 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı kömür makinesine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 146 | ID L-0144 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Müşteri, kendisi wp üzerinden dönüş yapacağını söyledi.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 147 | ID L-0145 | Status: None | Rep: Mustafa | Call: None | Olumlu: None
+  Note: Arkadaşı için fiyat araştırıyor, 1,5x3 3 kw açık kabin fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: Rıdvan bey ile görüştüm kendisi Abant metale yönlendirdi
+--------------------------------------------------------------------------------
+Row 148 | ID L-0146 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 149 | ID L-0147 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 150 | ID L-0148 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 151 | ID L-0149 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Perşembe 9-10 gibi ara
+tekrar arandı ulaşılamıyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 152 | ID L-0150 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı cam kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 153 | ID L-0151 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 154 | ID L-0152 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 155 | ID L-0153 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: başka firmadan alım yapmışlar.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 156 | ID L-0154 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 157 | ID L-0155 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: UlaşılamıyorX2
+  Summary: None
+--------------------------------------------------------------------------------
+Row 158 | ID L-0156 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 159 | ID L-0157 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: Ses sıkıntı yaşandı, tekrar aranacak.
+4.06: Tekrar arandı, 6 kw3x6 fiber lazer kesim makinaları hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 160 | ID L-0158 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Yurt dışı
+  Summary: None
+--------------------------------------------------------------------------------
+Row 161 | ID L-0159 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 162 | ID L-0160 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Müsait değil, ilgilenmiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 163 | ID L-0161 | Status: None | Rep: Sefa | Call: Evet | Olumlu: None
+  Note: 10 mm'e kadar kesim yapacak, 1,5x3 ya da 1,5x6 tek tabla açık kabin fiber lazer kesim makinası hakkında fiyat bilgisi talep ediyor.
+  Summary: MAKİNASIYLA İLGİLİ KONUŞMA GERÇEKLEŞTİ ZİYARET EDİLEBİLİR. FİYAT TEKLİFİ İLETECEK.
+--------------------------------------------------------------------------------
+Row 164 | ID L-0162 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Yüzüme kapattı.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 165 | ID L-0163 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: G3015B fiber lazer kesim makinasıyla ilgileniyorlar.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 166 | ID L-0164 | Status: None | Rep: Anıl ve Onur | Call: Evet | Olumlu: None
+  Note: 1,5x3 6 kw çift tabla, kapalı kabin fiber lazer kesim makinası, 8 mm kalınlığında çelik kaynak yapıyorlar bunun için 3 kw kaynak makinası, 130 tonx3 metre 4+1 eksen abkant ve 16 bar kompresör hakkında bilgi almak istiyor. Yatırım teşvik belgesiyle alım yapmayı düşünüyor.
+  Summary: Onur: teklifini hazırladım anıl beye ilettim.
+--------------------------------------------------------------------------------
+Row 167 | ID L-0165 | Status: None | Rep: Batucan | Call: Evet | Olumlu: None
+  Note: 12kW ve 2x6 fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: İsrafil Bey piyasaya çalışmak için yeni bir işletme açmayı planlıyor. Sadece fiyat araştırıyor şu an için. Referans listemiz ile teklif ilettim.
+--------------------------------------------------------------------------------
+Row 168 | ID L-0166 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Müsait değil, kendisi daha sonra arayacak
+  Summary: None
+--------------------------------------------------------------------------------
+Row 169 | ID L-0167 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 170 | ID L-0168 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Müsait değil, kendisi daha sonra arayacak
+  Summary: None
+--------------------------------------------------------------------------------
+Row 171 | ID L-0169 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 172 | ID L-0170 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 173 | ID L-0171 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Küçük ebatlarda makina arıyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 174 | ID L-0172 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: 3 kw fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 175 | ID L-0173 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Müsait değil, kendisi daha sonra arayacak
+  Summary: None
+--------------------------------------------------------------------------------
+Row 176 | ID L-0174 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Müsait değil, kendisi daha sonra arayacak
+  Summary: None
+--------------------------------------------------------------------------------
+Row 177 | ID L-0175 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: Müsait değil, kendisi daha sonra arayacak.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 178 | ID L-0176 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 179 | ID L-0177 | Status: None | Rep: Kaan | Call: Evet | Olumlu: None
+  Note: 3 mm'e kadar kesim yapacak, 1,5x3 fiber lazer kesim makinası talep ediyor.
+  Summary: Hem boru hem saç istiyorlar görüştüm Pazartesi Eskişehir'e gideceğim
+--------------------------------------------------------------------------------
+Row 180 | ID L-0178 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: 8-12 mm arası kesim yapacak 1,5x3 fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 181 | ID L-0179 | Status: None | Rep: Sefa | Call: None | Olumlu: None
+  Note: 12 kw 3x6 açık kabin fiber lazer kesim makinası hakkında bilgi almak istiyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 182 | ID L-0180 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 183 | ID L-0181 | Status: None | Rep: Emre | Call: Evet | Olumlu: None
+  Note: 6 metre 19 mm boru kesimi yapıyor, çift tabla fiber lazer kesim makinası talep ediyor.
+  Summary: teklif gönderildi.
+--------------------------------------------------------------------------------
+Row 184 | ID L-0182 | Status: None | Rep: Sefa | Call: Hayır | Olumlu: None
+  Note: 6 kW fiber lazer kesim kesim makinası hakkında bilgi almak istiyor.
+  Summary: TELEFONU AÇMADI
+--------------------------------------------------------------------------------
+Row 185 | ID L-0183 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: 6 kW fiber lazer kesim kesim makinası hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 186 | ID L-0184 | Status: None | Rep: Osman | Call: Evet | Olumlu: None
+  Note: 20 kW fiber lazer kesim kesim makinası hakkında bilgi almak istiyor.
+  Summary: Mehmet Bey ile görüştüm 20 kw için fiyat verince şok oldu 12 kw düşürdü 12 kw fiyat verince de bana 6 kw fiyatı verir misiniz dedi bir araştırma yapacakmış parası olmadığı için alım süreci Yıl sonuna kaldı
+--------------------------------------------------------------------------------
+Row 187 | ID L-0185 | Status: None | Rep: Batucan | Call: Evet | Olumlu: None
+  Note: 1,5x3 6 kw çift tabla ya da tek tabla 2x4 fiber lazer kesim makinaları hakkında bilgi almak istiyor.
+  Summary: Şimdi görüştüm müşteri ile, G3015X 6kw ve Z4020 6kw tekliflerini iletiyorum. Kınacı metal firma sahibi tanıdıklarıymış. Ali Eren Bey kardeşi için ulaşmış kendisi lazere uzak.
+--------------------------------------------------------------------------------
+Row 188 | ID L-0186 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: Müşteri hastanede olduğunu belirtti. Daha sonra aranacak
+  Summary: None
+--------------------------------------------------------------------------------
+Row 189 | ID L-0187 | Status: None | Rep: Sefa | Call: None | Olumlu: None
+  Note: 0.50-3 mm arası kesim yapacak. 1,5X6 fiber lazer kesim makinalarıyla ilgili bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 190 | ID L-0188 | Status: None | Rep: Osman | Call: Evet | Olumlu: None
+  Note: 1,5x3 6 kw fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: bu firmayı aradım sözlü fiyat verdim cok yüksek dedi 30 bin dolar a makine arıyor
+--------------------------------------------------------------------------------
+Row 191 | ID L-0189 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı perde kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 192 | ID L-0190 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 193 | ID L-0191 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 194 | ID L-0192 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 195 | ID L-0193 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ulaşılamıyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 196 | ID L-0194 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: ihtiyacı perde kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 197 | ID L-0195 | Status: None | Rep: - | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 198 | ID L-0196 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: NVA Kalibrasyon sordu, Leyla'ya yönlendirildi.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 199 | ID L-0197 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 200 | ID L-0198 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 201 | ID L-0199 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: Hat meşgul
+  Summary: None
+--------------------------------------------------------------------------------
+Row 202 | ID L-0200 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı kumaş kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 203 | ID L-0201 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 204 | ID L-0202 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 205 | ID L-0203 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: istemiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 206 | ID L-0204 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 207 | ID L-0205 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 208 | ID L-0206 | Status: None | Rep: Batucan | Call: Evet | Olumlu: None
+  Note: 20 mm'e kadar kesim yapacak, 6 kw 2x4 tek tabla, açık kabin fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: Muhammed Bey şu an da bir firmadan plazma makinasının operatörü. İlerleyen zamanlarda kendine bir yer açıp dışarıya lazer kesim hizmeti vermek istiyor. Z3015 6kW ve Z4020 6kW için teklifleri iletilecek.
+--------------------------------------------------------------------------------
+Row 209 | ID L-0207 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 210 | ID L-0208 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: Katalog gönderildi, daha sonra iletişime geçilecek.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 211 | ID L-0209 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 212 | ID L-0210 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 213 | ID L-0211 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: numara kullanılmamaktadır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 214 | ID L-0212 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 215 | ID L-0213 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 216 | ID L-0214 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 217 | ID L-0215 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ilgilenmiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 218 | ID L-0216 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 219 | ID L-0217 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 220 | ID L-0218 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 221 | ID L-0219 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 222 | ID L-0220 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 223 | ID L-0221 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: 1,5-12 mm hem tek hem çift sac kesim, 48-60-89-114 çaplarında oto. yükl. boşlt. opsiyonlu boru profil kesim makinası talep ediyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 224 | ID L-0222 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 225 | ID L-0223 | Status: None | Rep: Batucan | Call: Evet | Olumlu: None
+  Note: 12 kw 2,5x6-8 tek tabla fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: müşteri maksimum 30mm kadar kesim yapmayı planlıyor. Tarım makinaları üzerine çalışacak. Badıllı ve karamustafa tarımı yakından tanıyor. G6025X 12kW ve Z6020 12kW teklifleri iletilecek.
+--------------------------------------------------------------------------------
+Row 226 | ID L-0224 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 227 | ID L-0225 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 228 | ID L-0226 | Status: None | Rep: Berke | Call: Evet | Olumlu: None
+  Note: 1,5X3 6kw tek tabla ve çift tabla için fiyat bilgisi talep ediyor. 
+  Summary: Rakip bodor 30.000$ ddp+ kdv olarak fiyatı verdiler. Firmagı önceden tanıyordum önümüzdeki hafta peşinatı alacağım
+--------------------------------------------------------------------------------
+Row 229 | ID L-0227 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı markalama makinesine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 230 | ID L-0228 | Status: None | Rep: Batucan | Call: Evet | Olumlu: None
+  Note: 2-3 mm'e kadar kesim yapacak, fiber lazer kesim makinaları hakkında bilgi almak istiyor.
+  Summary: Sebahattin Bey firma ismi Şahinoğlu Gayrimenkul. Demir doğrama işi yapıyorlar. Şu an dışarıda kesim yaptırıyorlarmış bünyelerine küçük bir lazer almak isterler. Z3015 3kW için teklif iletiliyor.
+--------------------------------------------------------------------------------
+Row 231 | ID L-0229 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: 6 kW 1,5x3 çift tabla sac kesim makinası, 240x240 boru profil kesimi yapacak aynı zamanda boru profil kesim makinası hakkında bilgi almak istiyor. 
+  Summary: None
+--------------------------------------------------------------------------------
+Row 232 | ID L-0230 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 233 | ID L-0231 | Status: None | Rep: Anıl | Call: Evet | Olumlu: None
+  Note: 6 kw çift tabla kapalı kabin fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: Yerli makina yatırımı düşünüyordu manisadaki referanslarımızı tanıyor onları gezicek teklif gönderildi
+--------------------------------------------------------------------------------
+Row 234 | ID L-0232 | Status: None | Rep: Batucan | Call: Evet | Olumlu: None
+  Note: 1,5x3 6 kw açık/kapalı fiber lazer kesim makinaları hakkında bilgi almak istiyor.
+  Summary: kendisi yeni bir işletme açmayı planlıyor. G3015X 6kW makina teklifi ve makina görselleri paylaşıldı
+--------------------------------------------------------------------------------
+Row 235 | ID L-0233 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: 2. demir çelik imalathanesini kuracak3-6 kw fiber lazer kesim makinesi hakkında teknik ve fiyat bilgisi talep ediyor, 
+  Summary: None
+--------------------------------------------------------------------------------
+Row 236 | ID L-0234 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 237 | ID L-0235 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 238 | ID L-0236 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 239 | ID L-0237 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 240 | ID L-0238 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: Yüzüme kapattı.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 241 | ID L-0239 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 242 | ID L-0240 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 243 | ID L-0241 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 244 | ID L-0242 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 245 | ID L-0243 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 246 | ID L-0244 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 247 | ID L-0245 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 248 | ID L-0246 | Status: None | Rep: Emre | Call: Evet | Olumlu: None
+  Note: 0.5 mm boyali galvaniz saç kesimi yapacak, 3 kw fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: Firma fuara gelecek
+--------------------------------------------------------------------------------
+Row 249 | ID L-0247 | Status: None | Rep: Osman | Call: Evet | Olumlu: None
+  Note: 3 kW açık kabin tek tabla fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: daha önce görüştüğüm firma idi aradım tekrardan fiyatlar düştü mü diye sordu
+--------------------------------------------------------------------------------
+Row 250 | ID L-0248 | Status: None | Rep: Kerem | Call: Evet | Olumlu: None
+  Note: Metal Sac Kesimi yapacak, fiber lazer kesim makinaları hakkında teknik bilgi almak istiyor.
+  Summary: 3 kw tek tabla ve 6 kw GX teklifleri vereceğiz. Haftaya fabrikası ziyaret edilecek.  Çorum.
+--------------------------------------------------------------------------------
+Row 251 | ID L-0249 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 252 | ID L-0250 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 253 | ID L-0251 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 254 | ID L-0252 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 255 | ID L-0253 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 256 | ID L-0254 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 257 | ID L-0255 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı zımpara makinasına yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 258 | ID L-0256 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 259 | ID L-0257 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 260 | ID L-0258 | Status: None | Rep: Kaan | Call: Evet | Olumlu: None
+  Note: 3-4 mm sac kesimi yapacak, 1,5x3 tek tabla açık kabin fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: Z3015 3 kw için görüşüldü değerlendirip bizlere bilgi verecekler şirket yeni
+--------------------------------------------------------------------------------
+Row 261 | ID L-0259 | Status: None | Rep: Emre | Call: None | Olumlu: None
+  Note: 1,5x3 6 ve 12 kw H ve T serisi için fiyat teklifi talep ediyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 262 | ID L-0260 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: 0.40-15 mm arası kesim yapacak. 3 kW 1,5x3 çift tabla fiber lazer kesim makinası hakkında fiyat bilgisi talep ediyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 263 | ID L-0261 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: Müsait değil daha sonra aranacak
+  Summary: None
+--------------------------------------------------------------------------------
+Row 264 | ID L-0262 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: Daha sonra kendisi dönüş yapacak
+  Summary: None
+--------------------------------------------------------------------------------
+Row 265 | ID L-0263 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 266 | ID L-0264 | Status: None | Rep: Yunus Emre | Call: Evet | Olumlu: None
+  Note: 3x1,5 kapalı kabin çift tabla 12 kw raycus rfl c12000 Fscut8000 hypcut Bochu blt643h ya da blt840h fiber lazer kesim makinesı talep ediyor.
+  Summary: Kendisiyle görüşüyorum
+--------------------------------------------------------------------------------
+Row 267 | ID L-0265 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: Müsait değil daha sonra aranacak. Tekrar arandı müsasit değil kendisi arayacak
+  Summary: None
+--------------------------------------------------------------------------------
+Row 268 | ID L-0266 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 269 | ID L-0267 | Status: None | Rep: Berke | Call: None | Olumlu: None
+  Note: 1,5x3 3 kw fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 270 | ID L-0268 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: Hat meşgul. Tekrar arandı yine meşgul
+  Summary: None
+--------------------------------------------------------------------------------
+Row 271 | ID L-0269 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 272 | ID L-0270 | Status: None | Rep: Kerem | Call: None | Olumlu: None
+  Note: 1-30 mm. kesim yapacak, 6 ya da 12 kw fiber lazer kesim makinaları hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 273 | ID L-0271 | Status: None | Rep: Berke | Call: None | Olumlu: None
+  Note: 6 kw 1,5x3 fiber lazer kesim makinası hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 274 | ID L-0272 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: bütçe sebebiyle vazgeçmiş
+  Summary: None
+--------------------------------------------------------------------------------
+Row 275 | ID L-0273 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı masa tipi lazere yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 276 | ID L-0274 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 277 | ID L-0275 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: 3 kw ve 6 kw 1,5x3 açık kabin fiber lazer kesim makinası hakkında bilgi almak istiyor. numara kullanılmamaktadır diyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 278 | ID L-0276 | Status: None | Rep: Anıl | Call: Evet | Olumlu: None
+  Note: 10-12 mm paslanmaz kesimi yapacak. Tek tabla 1,5x3 fiber lazer kesim makinaları hakkında bilgi almak istiyor.
+  Summary: Z3015 3kW ve G3015X 6kW makinamızın teknik ve teklif detaylarını görmek istediler,Paylaşıldı.
+--------------------------------------------------------------------------------
+Row 279 | ID L-0277 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı lazer kazıma makinasına yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 280 | ID L-0278 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 281 | ID L-0279 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 282 | ID L-0280 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: müsait değil, daha sonra aranacak.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 283 | ID L-0281 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: toplantıda, kendisi daha sonra arayacak.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 284 | ID L-0282 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 285 | ID L-0283 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 286 | ID L-0284 | Status: None | Rep: Kaan | Call: None | Olumlu: None
+  Note: 6-12-20 kw 2,5x6 -2x6 - 2x12 fiber lazer kesim makinaları hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 287 | ID L-0285 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: 6 kw fiber lazer kesim makinaları hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 288 | ID L-0286 | Status: None | Rep: Yunus Emre | Call: None | Olumlu: None
+  Note: 12 kw 2,5x6 fiber lazer kesim makinaları hakkında bilgi almak istiyor.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 289 | ID L-0287 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ulaşılamıyor
+  Summary: None
+--------------------------------------------------------------------------------
+Row 290 | ID L-0288 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ses sıkıntı yaşandı, tekrar aranacak.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 291 | ID L-0289 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 292 | ID L-0290 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: yanlışlıkla tıklamıştır.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 293 | ID L-0291 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı cam kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 294 | ID L-0292 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: None
+  Summary: None
+--------------------------------------------------------------------------------
+Row 295 | ID L-0293 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: None
+  Summary: None
+--------------------------------------------------------------------------------
+Row 296 | ID L-0294 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: None
+  Summary: None
+--------------------------------------------------------------------------------
+Row 297 | ID L-0295 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: None
+  Summary: None
+--------------------------------------------------------------------------------
+Row 298 | ID L-0296 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: None
+  Summary: None
+--------------------------------------------------------------------------------
+Row 299 | ID L-0297 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: None
+  Summary: None
+--------------------------------------------------------------------------------
+Row 300 | ID L-0298 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: None
+  Summary: None
+--------------------------------------------------------------------------------
+Row 301 | ID L-0299 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: ihtiyacı ahşap kesimine yöneliktir.
+  Summary: None
+--------------------------------------------------------------------------------
+Row 302 | ID L-0300 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: None
+  Summary: None
+--------------------------------------------------------------------------------
+Row 303 | ID L-0301 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: None
+  Summary: None
+--------------------------------------------------------------------------------
+Row 304 | ID L-0302 | Status: None | Rep: None | Call: None | Olumlu: None
+  Note: None
+  Summary: None
+--------------------------------------------------------------------------------

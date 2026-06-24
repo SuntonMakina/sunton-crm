@@ -1,0 +1,131 @@
+{
+  "task_name": "Sunton CRM - Telefon Arama Görsellerinden Çıkarılan Telefon Numaralarını İçe Aktar",
+  "source_images": [
+    "1(6).png",
+    "2(3).png",
+    "3(2).png",
+    "4(3).png",
+    "5(2).png",
+    "6(2).png",
+    "7(2).png",
+    "8(2).png",
+    "9(1).png"
+  ],
+  "important_notice": "Bu JSON içindeki numaralar ekran görüntülerinden OCR ile çıkarılmıştır. confidence değeri 0.85 altındaki kayıtları otomatik lead eşleştirmesine sokma; manuel kontrol kuyruğuna al. Görselde görünmeyen haneleri tahmin etme.",
+  "crm_import_rules": [
+    "normalized_phone değeri güvenilir olan kayıtları mevcut leads.phone_normalized alanıyla eşleştir.",
+    "confidence >= 0.85 ise tam telefon eşleşmesiyle otomatik bağlama yapılabilir.",
+    "confidence < 0.85 ise lead_id yazma ve manuel kontrol listesine al.",
+    "Aynı telefon farklı ekranlarda tekrar görünüyorsa unique_phone_records listesindeki occurrence_count değerini koru.",
+    "call_occurrences listesindeki her görünümü ayrı kaynak kanıtı olarak sakla.",
+    "Mevcut leadleri, notları ve görevleri silme.",
+    "Telefon numarası tek başına yeni lead oluşturmak için yeterli değilse yeni lead üretme; unmatched_call_contact olarak sakla.",
+    "Service role anahtarını frontend'e ekleme."
+  ],
+  "summary": {
+    "source_image_count": 9,
+    "ocr_phone_occurrence_count": 457,
+    "unique_candidate_count": 436,
+    "high_confidence_unique_count": 269,
+    "manual_review_unique_count": 167
+  },
+  "unique_phone_records": [
+    {
+      "normalized_phone": "02163948244",
+      "occurrence_count": 1,
+      "highest_confidence": 0.98,
+      "manual_review_required": false,
+      "sources": [
+        {
+          "image": "4(3).png",
+          "panel": 2,
+          "raw": "(0216)3948244"
+        }
+      ]
+    },
+    {
+      "normalized_phone": "02164985353",
+      "occurrence_count": 1,
+      "highest_confidence": 0.98,
+      "manual_review_required": false,
+      "sources": [
+        {
+       
+<truncated 45216 bytes>
+normalized_phone": "905392762361",
+      "occurrence_count": 1,
+      "highest_confidence": 0.9,
+      "manual_review_required": false,
+      "sources": [
+        {
+          "image": "6(2).png",
+          "panel": 7,
+          "raw": "2 +905392762361"
+        }
+      ]
+    },
+    {
+      "normalized_phone": "905395338103",
+      "occurrence_count": 1,
+      "highest_confidence": 0.9,
+      "manual_review_required": false,
+      "sources": [
+        {
+          "image": "9(1).png",
+          "panel": 2,
+          "raw": "+9053953381034"
+        }
+      ]
+    },
+    {
+      "normalized_phone": "905396906677",
+      "occurrence_count": 1,
+      "highest_confidence": 0.9,
+      "manual_review_required": false,
+      "sources": [
+        {
+          "image": "1(6).png",
+          "panel": 8,
+          "raw": "2 +90539.6906677(2)"
+        }
+      ]
+    },
+    {
+      "normalized_phone": "905413993607",
+      "occurrence_count": 1,
+      "highest_confidence": 0.9,
+      "manual_review_required": false,
+      "sources": [
+        {
+          "image": "8(2).png",
+          "panel": 1,
+          "raw": "+90.541399.36.07(3)"
+        }
+      ]
+    },
+    {
+      "normalized_phone": "905425271707",
+      "occurrence_count": 1,
+      "highest_confidence": 0.9,
+      "manual_review_required": false,
+      "sources": [
+        {
+          "image": "9(1).png",
+          "panel": 4,
+          "raw": "2 +905425271707"
+        }
+      ]
+    },
+    {
+      "normalized_phone": "905428254301",
+      "occurrence_count": 1,
+      "highest_confidence": 0.9,
+      "manual_review_required": false,
+      "sources": [
+        {
+          "image": "5(2).png",
+          "panel": 2,
+          "raw": "+905428254301(3)"
+        }
+      ]
+    }
