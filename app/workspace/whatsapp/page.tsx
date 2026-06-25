@@ -429,7 +429,7 @@ export default function WhatsAppWorkspacePage() {
     loadWpMessages()
 
     if (selectedLead && !selectedLead.avatar_url) {
-      fetch('http://localhost:3001/fetch-avatar', {
+      fetch('/api/whatsapp/fetch-avatar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: selectedLead.phone })
@@ -897,6 +897,16 @@ export default function WhatsAppWorkspacePage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <a
+            href="/api/whatsapp/gateway-redirect"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="h-9 px-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg flex items-center gap-1.5 text-xs font-bold transition-colors cursor-pointer shadow-xs"
+            title="WhatsApp Bağlantısını Yenile / QR Kodu Okut"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Bağlantıyı Tazele / QR Kod
+          </a>
           <button 
             onClick={() => profile && fetchData(profile.id)}
             className="h-9 w-9 bg-card border border-border rounded-lg flex items-center justify-center cursor-pointer transition-colors hover:bg-accent"
