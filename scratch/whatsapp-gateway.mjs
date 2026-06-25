@@ -13,8 +13,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const PORT = 3001;
-const WEBHOOK_URL = 'http://localhost:3005/api/whatsapp/webhook';
+const PORT = process.env.PORT || 3001;
+const NEXTJS_URL = process.env.NEXTJS_URL || 'http://localhost:3005';
+const WEBHOOK_URL = `${NEXTJS_URL}/api/whatsapp/webhook`;
 const SESSION_DIR = path.join(__dirname, 'whatsapp-session');
 const CONTACTS_FILE = path.join(__dirname, 'contacts.json');
 const LID_MAP_FILE = path.join(__dirname, 'lid-map.json');
@@ -22,6 +23,40 @@ const LID_MAP_FILE = path.join(__dirname, 'lid-map.json');
 const MEDIA_DIR = path.join(__dirname, '../public/whatsapp_media');
 if (!fs.existsSync(MEDIA_DIR)) {
   fs.mkdirSync(MEDIA_DIR, { recursive: true });
+}
+
+async function getNgrokUrl() {
+  try {
+    const res = await fetch('http://127.0.0.1:4040/api/tunnels');
+    if (res.ok) {
+      const data = await res.json();
+      const tunnel = data.tunnels?.find(t => t.proto === 'https');
+      if (tunnel && tunnel.public_url) {
+        return tunnel.public_url;
+      }
+    }
+  } catch (e) {
+    // ngrok is not running locally on port 4040
+  }
+  return null;
+}
+
+async function registerGatewayUrl() {
+  const ngrokUrl = await getNgrokUrl();
+  const publicUrl = process.env.GATEWAY_PUBLIC_URL || ngrokUrl || `http://localhost:${PORT}`;
+  console.log(`Registering WhatsApp Gateway URL to CRM: ${publicUrl}`);
+  try {
+    const res = await fetch(`${NEXTJS_URL}/api/whatsapp/register-gateway`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ gatewayUrl: publicUrl })
+    });
+    console.log(`Gateway registration response: ${res.status}`);
+  } catch (err) {
+    console.error('Failed to register gateway URL:', err.message);
+  }
 }
 
 function getExtensionFromMimetype(mime, defaultExt) {
@@ -253,7 +288,7 @@ async function notifyLidResolution(lid, phone) {
   if (!lid || !phone) return;
   try {
     console.log(`Notifying Next.js about LID resolution: ${lid} -> ${phone}`);
-    const res = await fetch('http://localhost:3000/api/whatsapp/resolve-lid', {
+    const res = await fetch(`${NEXTJS_URL}/api/whatsapp/resolve-lid`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -276,7 +311,7 @@ async function notifyAvatarResolution(phone, avatarUrl) {
   if (!phone || !avatarUrl) return;
   try {
     console.log(`Notifying Next.js about Avatar URL for phone ${phone}: ${avatarUrl}`);
-    const res = await fetch('http://localhost:3000/api/whatsapp/resolve-avatar', {
+    const res = await fetch(`${NEXTJS_URL}/api/whatsapp/resolve-avatar`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -495,6 +530,7 @@ async function startWhatsApp() {
       // Load contacts again to make sure everything matches
       loadContacts();
       loadLidMap();
+      registerGatewayUrl();
     }
   });
 
@@ -681,7 +717,7 @@ async function startWhatsApp() {
 
     try {
       console.log('Forwarding history sync to Next.js webhook...');
-      const res = await fetch('http://localhost:3000/api/whatsapp/sync-history', {
+      const res = await fetch(`${NEXTJS_URL}/api/whatsapp/sync-history`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -1027,4 +1063,5 @@ app.post('/reset', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`WhatsApp Gateway HTTP server running on http://localhost:${PORT}`);
+  registerGatewayUrl();
 });
