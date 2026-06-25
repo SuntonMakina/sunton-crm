@@ -203,6 +203,98 @@ let qrCodeString = null;
 let connectionStatus = 'disconnected'; // 'disconnected', 'connecting', 'connected'
 let globalContacts = {};
 let globalLidMap = {};
+let isResetting = false;
+
+async function sendStatusToCRM() {
+  if (isResetting) return;
+  
+  let currentQrDataUrl = null;
+  if (qrCodeString) {
+    try {
+      currentQrDataUrl = await qrcode.toDataURL(qrCodeString);
+    } catch (e) {
+      console.error('Failed to generate QR data URL for status:', e.message);
+    }
+  }
+
+  try {
+    const res = await fetch(`${NEXTJS_URL}/api/whatsapp/status`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        action: 'update',
+        status: connectionStatus,
+        qr: currentQrDataUrl
+      })
+    });
+    
+    if (res.ok) {
+      const data = await res.json();
+      if (data.reset_requested && !isResetting) {
+        console.log('CRITICAL: Remote reset request received from CRM database!');
+        isResetting = true;
+        
+        // Clear the reset flag immediately
+        await fetch(`${NEXTJS_URL}/api/whatsapp/status`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ action: 'clear_reset' })
+        });
+        
+        // Trigger reset
+        performLocalReset();
+      }
+    } else {
+      console.error(`Status sync to CRM failed with status: ${res.status}`);
+    }
+  } catch (err) {
+    console.error('Error syncing status to CRM:', err.message);
+  }
+}
+
+async function performLocalReset() {
+  console.log('Resetting WhatsApp session and restarting socket...');
+  try {
+    connectionStatus = 'disconnected';
+    qrCodeString = null;
+    isResetting = true;
+    
+    if (sock) {
+      try {
+        sock.end();
+      } catch (e) {
+        console.log('Error closing socket:', e.message);
+      }
+      sock = null;
+    }
+    
+    // Delete session files
+    if (fs.existsSync(SESSION_DIR)) {
+      console.log('Deleting session directory:', SESSION_DIR);
+      fs.rmSync(SESSION_DIR, { recursive: true, force: true });
+    }
+    
+    // Re-create empty session directory
+    fs.mkdirSync(SESSION_DIR, { recursive: true });
+    
+    isResetting = false;
+    // Send status update immediately
+    await sendStatusToCRM();
+    
+    // Start WhatsApp client again after a short delay
+    setTimeout(() => {
+      startWhatsApp();
+    }, 1000);
+  } catch (err) {
+    console.error('Error performing local reset:', err.message);
+    isResetting = false;
+  }
+}
+
 
 // Ensure session directory exists
 if (!fs.existsSync(SESSION_DIR)) {
@@ -495,6 +587,7 @@ async function startWhatsApp() {
       qrCodeString = qr;
       connectionStatus = 'disconnected';
       console.log('New QR code received. Open http://localhost:3001 to scan.');
+      sendStatusToCRM();
     }
     
     if (connection === 'close') {
@@ -503,6 +596,7 @@ async function startWhatsApp() {
       const shouldReconnect = !isLoggedOut;
       console.log('Connection closed due to:', lastDisconnect?.error, ', reconnecting:', shouldReconnect);
       connectionStatus = 'disconnected';
+      sendStatusToCRM();
       
       if (shouldReconnect) {
         // Wait 10 seconds for conflicts (statusCode 440) or 3 seconds for other disconnects to let things settle
@@ -531,6 +625,7 @@ async function startWhatsApp() {
       loadContacts();
       loadLidMap();
       registerGatewayUrl();
+      sendStatusToCRM();
     }
   });
 
@@ -1025,43 +1120,15 @@ app.post('/fetch-avatar', async (req, res) => {
   }
 });
 
-app.post('/reset', (req, res) => {
-  console.log('Reset request received. Deleting session and restarting socket...');
-  try {
-    connectionStatus = 'disconnected';
-    qrCodeString = null;
-    
-    if (sock) {
-      try {
-        sock.end();
-      } catch (e) {
-        console.log('Error closing socket:', e.message);
-      }
-      sock = null;
-    }
-    
-    // Delete session files
-    if (fs.existsSync(SESSION_DIR)) {
-      console.log('Deleting session directory:', SESSION_DIR);
-      fs.rmSync(SESSION_DIR, { recursive: true, force: true });
-    }
-    
-    // Re-create empty session directory
-    fs.mkdirSync(SESSION_DIR, { recursive: true });
-    
-    // Start WhatsApp client again after a short delay
-    setTimeout(() => {
-      startWhatsApp();
-    }, 1000);
-    
-    res.json({ success: true, message: 'Session reset started. Please reload page in 2-3 seconds to see the new QR code.' });
-  } catch (err) {
-    console.error('Error resetting session:', err);
-    res.status(500).json({ error: 'Failed to reset session: ' + err.message });
-  }
+app.post('/reset', async (req, res) => {
+  performLocalReset();
+  res.json({ success: true, message: 'Session reset started.' });
 });
 
 app.listen(PORT, () => {
   console.log(`WhatsApp Gateway HTTP server running on http://localhost:${PORT}`);
   registerGatewayUrl();
+  sendStatusToCRM();
+  // Sync status to CRM periodically every 10 seconds
+  setInterval(sendStatusToCRM, 10000);
 });

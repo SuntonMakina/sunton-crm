@@ -188,6 +188,71 @@ export default function WhatsAppWorkspacePage() {
   })
   const [autoOpenQueueAfterConvert, setAutoOpenQueueAfterConvert] = useState(false)
 
+  // WhatsApp Gateway Status States
+  const [showStatusModal, setShowStatusModal] = useState(false)
+  const [gatewayStatus, setGatewayStatus] = useState<any>(null)
+  const [isResettingGateway, setIsResettingGateway] = useState(false)
+
+  // Status Poller Effect
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout
+    
+    if (showStatusModal) {
+      const fetchStatus = async () => {
+        try {
+          const res = await fetch('/api/whatsapp/status')
+          if (res.ok) {
+            const data = await res.json()
+            setGatewayStatus(data)
+          }
+        } catch (err) {
+          console.error('Error fetching gateway status:', err)
+        }
+      }
+
+      fetchStatus()
+      intervalId = setInterval(fetchStatus, 3000)
+    } else {
+      setGatewayStatus(null)
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId)
+    }
+  }, [showStatusModal])
+
+  const handleResetGateway = async () => {
+    if (!confirm('WhatsApp bağlantısını sıfırlamak ve tüm geçmişi temizleyip yeni QR kod üretmek istiyor musunuz?')) return
+    setIsResettingGateway(true)
+    try {
+      const res = await fetch('/api/whatsapp/status', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ action: 'reset' })
+      })
+      if (res.ok) {
+        setGatewayStatus((prev: any) => ({
+          ...prev,
+          status: 'disconnected',
+          qr: null,
+          reset_requested: true
+        }))
+        alert('Bağlantı sıfırlama talebi veritabanına kaydedildi. Lokal ağ geçidinin sıfırlanıp yeni QR kod üretmesi birkaç saniye sürecektir.')
+      } else {
+        const errData = await res.json()
+        alert('Sıfırlama başlatılamadı: ' + (errData.error || 'Bilinmeyen hata'))
+      }
+    } catch (err: any) {
+      console.error(err)
+      alert('Sıfırlama sırasında ağ hatası oluştu.')
+    } finally {
+      setIsResettingGateway(false)
+    }
+  }
+
+
 
   const chatEndRef = useRef<HTMLDivElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
@@ -897,16 +962,14 @@ export default function WhatsAppWorkspacePage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <a
-            href="/api/whatsapp/gateway-redirect"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="h-9 px-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg flex items-center gap-1.5 text-xs font-bold transition-colors cursor-pointer shadow-xs"
+          <button
+            onClick={() => setShowStatusModal(true)}
+            className="h-9 px-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg flex items-center gap-1.5 text-xs font-bold transition-colors cursor-pointer shadow-xs border-0"
             title="WhatsApp Bağlantısını Yenile / QR Kodu Okut"
           >
             <MessageCircle className="h-4 w-4" />
             Bağlantıyı Tazele / QR Kod
-          </a>
+          </button>
           <button 
             onClick={() => profile && fetchData(profile.id)}
             className="h-9 w-9 bg-card border border-border rounded-lg flex items-center justify-center cursor-pointer transition-colors hover:bg-accent"
@@ -1335,6 +1398,90 @@ export default function WhatsAppWorkspacePage() {
                 </button>
               </div>
             </form>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+
+      {/* WhatsApp Gateway Status Modal */}
+      <Dialog.Root open={showStatusModal} onOpenChange={setShowStatusModal}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="bg-black/40 backdrop-blur-xs fixed inset-0 z-50" />
+          <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-card border border-border rounded-xl shadow-2xl p-6 w-full max-w-md z-50 animate-in fade-in zoom-in-95 duration-150 select-none">
+            <Dialog.Title className="text-sm font-bold text-foreground mb-4 uppercase tracking-wider flex items-center gap-2">
+              <MessageCircle className="h-4.5 w-4.5 text-emerald-500" />
+              WhatsApp Ağ Geçidi Durumu
+            </Dialog.Title>
+
+            <div className="space-y-4 my-2">
+              <div className="flex items-center justify-between p-3 bg-muted/5 border border-border rounded-lg">
+                <span className="text-xs font-bold text-muted-foreground">Bağlantı Durumu:</span>
+                {gatewayStatus ? (
+                  <span className={`text-xs font-extrabold uppercase px-2 py-0.5 rounded-full ${
+                    gatewayStatus.status === 'connected' 
+                      ? 'bg-emerald-500/10 text-emerald-500' 
+                      : gatewayStatus.status === 'connecting'
+                        ? 'bg-amber-500/10 text-amber-500 animate-pulse'
+                        : 'bg-red-500/10 text-red-500'
+                  }`}>
+                    {gatewayStatus.status === 'connected' ? 'Bağlı' : gatewayStatus.status === 'connecting' ? 'Bağlanıyor...' : 'Bağlantı Yok'}
+                  </span>
+                ) : (
+                  <RefreshCw className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
+                )}
+              </div>
+
+              {gatewayStatus && gatewayStatus.status !== 'connected' && (
+                <div className="flex flex-col items-center justify-center p-4 border border-border rounded-lg bg-background animate-in fade-in duration-300">
+                  {gatewayStatus.qr ? (
+                    <div className="flex flex-col items-center gap-3">
+                      <p className="text-[10px] font-bold text-muted-foreground text-center uppercase tracking-wider">
+                        Lütfen Ebru'nun telefonundan bu QR kodu okutun:
+                      </p>
+                      <img src={gatewayStatus.qr} alt="WhatsApp QR" width={220} height={220} className="border border-border p-2 rounded-lg bg-white" />
+                      <p className="text-[9px] text-muted-foreground text-center">
+                        QR Kod her 30 saniyede bir yenilenir.
+                      </p>
+                    </div>
+                  ) : gatewayStatus.reset_requested ? (
+                    <div className="flex flex-col items-center py-6 gap-2">
+                      <RefreshCw className="h-6 w-6 animate-spin text-emerald-500" />
+                      <p className="text-xs font-bold text-foreground text-center">Bağlantı sıfırlanıyor...</p>
+                      <p className="text-[10px] text-muted-foreground text-center">Lokal ağ geçidi oturumu temizliyor. Lütfen bekleyin.</p>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center py-6 gap-2">
+                      <RefreshCw className="h-5 w-5 animate-spin text-muted-foreground" />
+                      <p className="text-[10px] text-muted-foreground text-center">QR kod yükleniyor veya ağ geçidi çevrimdışı...</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {gatewayStatus && gatewayStatus.status === 'connected' && (
+                <div className="p-4 border border-emerald-500/20 bg-emerald-500/5 rounded-lg text-center animate-in fade-in duration-300">
+                  <p className="text-xs font-bold text-emerald-500">✓ WhatsApp bağlantısı aktif!</p>
+                  <p className="text-[10px] text-muted-foreground mt-1 font-medium">Ebru Şimşek hesabı bağlı. Mesajlar otomatik olarak arka planda senkronize edilmektedir.</p>
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-between items-center border-t border-border pt-4 mt-4">
+              {gatewayStatus && (
+                <button
+                  type="button"
+                  onClick={handleResetGateway}
+                  disabled={isResettingGateway || gatewayStatus.reset_requested}
+                  className="px-3 py-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white rounded-lg text-xs font-bold cursor-pointer disabled:opacity-50 transition-colors border-0"
+                >
+                  {isResettingGateway ? 'İstek Gönderiliyor...' : 'Bağlantıyı Sıfırla'}
+                </button>
+              )}
+              <Dialog.Close asChild>
+                <button type="button" className="px-4 py-2 border border-border hover:bg-accent rounded-lg text-xs font-bold cursor-pointer bg-transparent">
+                  Kapat
+                </button>
+              </Dialog.Close>
+            </div>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
