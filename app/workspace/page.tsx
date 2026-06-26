@@ -30,7 +30,7 @@ import {
   Calendar
 } from 'lucide-react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { formatLeadId, getProgressiveCallSchedule } from '@/lib/utils'
+import { formatLeadId, getProgressiveCallSchedule, getNumericPart } from '@/lib/utils'
 
 export default function WorkspacePage() {
   const supabase = createClient()
@@ -689,15 +689,25 @@ export default function WorkspacePage() {
     const sorted = [...list]
     if (sortCriteria === 'id_desc') {
       return sorted.sort((a, b) => {
-        const idA = a.legacy_lead_id || a.lead_number || ''
-        const idB = b.legacy_lead_id || b.lead_number || ''
+        const idA = formatLeadId(a.legacy_lead_id || a.lead_number || a.id || '')
+        const idB = formatLeadId(b.legacy_lead_id || b.lead_number || b.id || '')
+        const numA = getNumericPart(idA)
+        const numB = getNumericPart(idB)
+        if (numA !== numB) {
+          return numB - numA
+        }
         return idB.localeCompare(idA, undefined, { numeric: true, sensitivity: 'base' })
       })
     }
     if (sortCriteria === 'id_asc') {
       return sorted.sort((a, b) => {
-        const idA = a.legacy_lead_id || a.lead_number || ''
-        const idB = b.legacy_lead_id || b.lead_number || ''
+        const idA = formatLeadId(a.legacy_lead_id || a.lead_number || a.id || '')
+        const idB = formatLeadId(b.legacy_lead_id || b.lead_number || b.id || '')
+        const numA = getNumericPart(idA)
+        const numB = getNumericPart(idB)
+        if (numA !== numB) {
+          return numA - numB
+        }
         return idA.localeCompare(idB, undefined, { numeric: true, sensitivity: 'base' })
       })
     }

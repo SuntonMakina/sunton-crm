@@ -37,8 +37,10 @@ export async function POST(request: Request) {
       formattedPhone = '90' + cleanPhone
     }
 
-    // Call Local Baileys WhatsApp Gateway
-    const gatewayResponse = await fetch(`http://localhost:3001/send`, {
+    // Fetch dynamic gateway URL from database using RPC to bypass RLS
+    const { data: dbGatewayUrl } = await supabase.rpc('get_whatsapp_gateway_url')
+    const gatewayUrl = dbGatewayUrl || process.env.WHATSAPP_GATEWAY_URL || 'http://localhost:3001'
+    const gatewayResponse = await fetch(`${gatewayUrl}/send`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

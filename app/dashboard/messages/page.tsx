@@ -262,7 +262,7 @@ export default function MessagesPage() {
 
     const active = conversations.find(c => c.id === activeConvId)
     if (active?.leads && !active.leads.avatar_url) {
-      fetch('http://localhost:3001/fetch-avatar', {
+      fetch('/api/whatsapp/fetch-avatar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: active.leads.phone })

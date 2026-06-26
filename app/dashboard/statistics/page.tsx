@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { formatLeadId } from '@/lib/utils'
 import {
   AreaChart,
   Area,
@@ -219,12 +220,25 @@ function cleanPhoneNum(phone: string | null | undefined): string {
 }
 
 function isForwardedToSales(lead: LeadRecord): boolean {
+  const raw = lead.rawLead;
+  if (raw) {
+    if (raw.forwarded_to_sales_at) return true;
+    if (raw.assigned_sales_user_id) return true;
+  }
   const rep = (lead["Satış Uzmanı"] || '').trim().toLowerCase();
   if (!rep) return false;
   if (rep === '-' || rep === '—' || rep === 'yok' || rep === 'belirtilmemis' || rep === 'belirtilmemiş' || rep === 'atanmadi' || rep === 'atanmadı') {
     return false;
   }
   return true;
+}
+
+function getNumericPart(idStr: any): number {
+  if (!idStr) return 0;
+  const str = String(idStr);
+  if (!str.startsWith('L-')) return 0;
+  const cleaned = str.replace(/\D/g, '');
+  return cleaned ? parseInt(cleaned, 10) : 0;
 }
 
 function isLeadSold(lead: LeadRecord): boolean {
@@ -591,7 +605,7 @@ export default function StatisticsPage() {
   // Filter states (saved to localStorage for persistence across reloads)
   const [periodFilter, setPeriodFilter] = useState('tum_eski')
   const [channelFilter, setChannelFilter] = useState('all_channels')
-  const [scopeFilter, setScopeFilter] = useState('legacy_only')
+  const [scopeFilter, setScopeFilter] = useState('all_data')
   const [customStartDate, setCustomStartDate] = useState(() => {
     const today = new Date()
     const y = today.getFullYear()
@@ -691,7 +705,6 @@ export default function StatisticsPage() {
 
       if (savedPeriod) setPeriodFilter(savedPeriod)
       if (savedChannel) setChannelFilter(savedChannel)
-      if (savedScope && savedScope !== 'all_data') setScopeFilter(savedScope)
       if (savedStart) setCustomStartDate(savedStart)
       if (savedEnd) setCustomEndDate(savedEnd)
     }
@@ -1121,7 +1134,7 @@ export default function StatisticsPage() {
       // to the full dataset.
       let query = supabase
         .from('leads')
-        .select('*, communication_channels:communication_channel_id(name), lead_sources:source_id(name, code), calls(id), conversations(last_message_at, created_at), profiles:assigned_call_center_user_id(id, full_name)')
+        .select('*, communication_channels:communication_channel_id(name), lead_sources:source_id(name, code), calls(id), conversations(last_message_at, created_at), profiles:assigned_call_center_user_id(id, full_name), assigned_sales:assigned_sales_user_id(id, full_name)')
         .eq('is_active', true)
 
       const { data: rawLeads, error } = await query
@@ -1137,17 +1150,7 @@ export default function StatisticsPage() {
       }
 
       // Exclude test/internal phone numbers
-      const EXCLUDED_PHONES = new Set([
-        '905335745839',
-        '905416003432',
-        '905061122350',
-        '905452733802',
-        '905366507583',
-        '905070471333',
-        '905379527983',
-        '905345743401',
-        '905379527977'
-      ])
+      const EXCLUDED_PHONES = new Set<string>([])
 
       const cleanPhoneNum = (phone: string | null | undefined): string => {
         if (!phone) return ''
@@ -1309,7 +1312,7 @@ export default function StatisticsPage() {
         "Görüşme Özeti / Sonuç": lead.conversation_summary ?? lead.legacy_raw_data?.["Görüşme Özeti / Sonuç"],
         "Ek Notlar": lead.extra_notes ?? lead.legacy_raw_data?.["Ek Notlar"],
         "Sonraki Aksiyon": lead.next_action ?? lead.legacy_raw_data?.["Sonraki Aksiyon"],
-        "Satış Uzmanı": lead.legacy_sales_specialist_name ?? lead.sales_representative_text ?? lead.legacy_raw_data?.["Satış Uzmanı"],
+        "Satış Uzmanı": lead.assigned_sales?.full_name ?? lead.legacy_sales_specialist_name ?? lead.sales_representative_text ?? lead.legacy_raw_data?.["Satış Uzmanı"],
         rawLead: lead
       }))
 
@@ -1498,7 +1501,8 @@ export default function StatisticsPage() {
           )
         }
 
-        const mapped = filteredLeads.map(x => {
+        const registeredOnly = filteredLeads.filter(x => x.lead.legacy_lead_id || x.lead.lead_number)
+        const mapped = registeredOnly.map(x => {
           const l = x.lead
           const classifiedItem = reportData?.classifiedLeads.find(item => item.rawLead.id === l.id)
           return {
@@ -1531,10 +1535,20 @@ export default function StatisticsPage() {
             quality_classification_version: l.quality_classification_version,
             quality_reason: l.quality_reason,
             quality_manually_overridden: l.quality_manually_overridden,
-            assigned_sales: l.profiles
+            assigned_sales: l.assigned_sales
           }
         })
-        setDrawerLeads(mapped)
+        const sortedMapped = [...mapped].sort((a, b) => {
+          const idA = formatLeadId(a.legacy_lead_id || a.lead_number || a.lead_id || '');
+          const idB = formatLeadId(b.legacy_lead_id || b.lead_number || b.lead_id || '');
+          const numA = getNumericPart(idA);
+          const numB = getNumericPart(idB);
+          if (numA !== numB) {
+            return numB - numA;
+          }
+          return idB.localeCompare(idA, undefined, { numeric: true, sensitivity: 'base' });
+        });
+        setDrawerLeads(sortedMapped)
         setLoadingDrawer(false)
         return
       }
@@ -1600,7 +1614,8 @@ export default function StatisticsPage() {
         }
       }
 
-      const mapped = filtered.map(x => ({
+      const registeredOnly = filtered.filter(x => x.rawLead.legacy_lead_id || x.rawLead.lead_number)
+      const mapped = registeredOnly.map(x => ({
         lead_id: x.rawLead.id,
         legacy_lead_id: x.lead["Lead ID"],
         lead_number: x.rawLead.lead_number,
@@ -1630,10 +1645,20 @@ export default function StatisticsPage() {
         quality_classification_version: x.rawLead.quality_classification_version,
         quality_reason: x.rawLead.quality_reason,
         quality_manually_overridden: x.rawLead.quality_manually_overridden,
-        assigned_sales: x.rawLead.profiles
+        assigned_sales: x.rawLead.assigned_sales
       }))
 
-      setDrawerLeads(mapped)
+      const sortedMapped = [...mapped].sort((a, b) => {
+        const idA = formatLeadId(a.legacy_lead_id || a.lead_number || a.lead_id || '');
+        const idB = formatLeadId(b.legacy_lead_id || b.lead_number || b.lead_id || '');
+        const numA = getNumericPart(idA);
+        const numB = getNumericPart(idB);
+        if (numA !== numB) {
+          return numB - numA;
+        }
+        return idB.localeCompare(idA, undefined, { numeric: true, sensitivity: 'base' });
+      });
+      setDrawerLeads(sortedMapped)
     } catch (err) {
       console.error('Error loading drawer leads:', err)
       showToast('Kayıt detayları yüklenirken hata oluştu.', 'error')
@@ -1927,7 +1952,7 @@ export default function StatisticsPage() {
           <div className="flex items-center gap-1">
             <span className="text-[10px] text-muted-foreground font-semibold px-1 uppercase tracking-wider">Veri Kapsamı:</span>
             <span className="h-8 flex items-center text-xs bg-background border border-border/80 rounded-lg px-3 font-semibold text-foreground">
-              Geçmiş Veriler (Excel)
+              Tüm Veriler (Excel + CRM)
             </span>
           </div>
 
@@ -2986,7 +3011,7 @@ export default function StatisticsPage() {
                         <div className="space-y-1 w-[85%]">
                           <div className="flex items-center gap-2">
                             <span className="text-[10px] font-mono font-bold bg-primary/10 text-primary px-2 py-0.5 rounded">
-                              {lead.legacy_lead_id || `ID: ${lead.lead_number || lead.lead_id.slice(0,8)}`}
+                              {formatLeadId(lead.legacy_lead_id || lead.lead_number)}
                             </span>
                             <span className="text-xs font-bold text-foreground truncate max-w-[200px]" title={lead.full_name}>
                               {lead.full_name}

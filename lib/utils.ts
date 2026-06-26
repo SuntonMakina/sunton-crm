@@ -17,6 +17,14 @@ export function formatLeadId(id: string | null | undefined): string {
   return id
 }
 
+export function getNumericPart(idStr: any): number {
+  if (!idStr) return 0;
+  const str = String(idStr);
+  if (!str.startsWith('L-')) return 0;
+  const cleaned = str.replace(/\D/g, '');
+  return cleaned ? parseInt(cleaned, 10) : 0;
+}
+
 export interface ProgressiveScheduleResult {
   nextContactAt: string | null;
   callbackStatus: string;
