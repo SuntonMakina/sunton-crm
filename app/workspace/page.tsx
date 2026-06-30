@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+
 import { 
   Phone, 
   User, 
@@ -351,9 +352,7 @@ export default function WorkspacePage() {
 
       if (assignedLeads) {
         setLeads(assignedLeads)
-      }
-
-      // B. Fetch Tasks
+      }      // B. Fetch Tasks
       const { data: userTasks } = await supabase
         .from('tasks')
         .select('*')
@@ -1394,7 +1393,14 @@ export default function WorkspacePage() {
                             </div>
                           )}
                           {lead.next_contact_at && (
-                            <div className="mt-1">{getNextContactBadge(lead)}</div>
+                            <div className="mt-1 flex items-center gap-1.5 flex-wrap">
+                              {getNextContactBadge(lead)}
+                              {lead.message?.startsWith('[Ek Süre') && (
+                                <span className="inline-flex items-center gap-1 text-[9px] font-black bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/25 px-2 py-0.5 rounded-full select-none">
+                                  ⏳ {lead.message.match(/\[Ek Süre:\s*([^\]]+)\]/)?.[1] || 'Ek Süre'}
+                                </span>
+                              )}
+                            </div>
                           )}
                         </td>
                         <td className="p-3.5 whitespace-nowrap">
@@ -1827,7 +1833,14 @@ export default function WorkspacePage() {
                                 </div>
 
                                 <div>
-                                  <h5 className="font-extrabold text-foreground text-xs">{lead.first_name} {lead.last_name}</h5>
+                                  <div className="flex items-center gap-1.5 flex-wrap">
+                                    <h5 className="font-extrabold text-foreground text-xs">{lead.first_name} {lead.last_name}</h5>
+                                    {lead.message?.startsWith('[Ek Süre') && (
+                                      <span className="inline-flex items-center gap-1 text-[8px] font-black bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/25 px-1.5 py-0.5 rounded select-none">
+                                        ⏳ {lead.message.match(/\[Ek Süre:\s*([^\]]+)\]/)?.[1] || 'Ek Süre'}
+                                      </span>
+                                    )}
+                                  </div>
                                   <p className="text-[10px] font-semibold text-muted-foreground truncate">{lead.company_name || 'Şahıs Firması'}</p>
                                   {lead.requested_product && (
                                     <span className="inline-block mt-1.5 text-[9px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded">
@@ -1917,7 +1930,14 @@ export default function WorkspacePage() {
                                 </div>
 
                                 <div>
-                                  <h5 className="font-extrabold text-foreground text-xs">{lead.first_name} {lead.last_name}</h5>
+                                  <div className="flex items-center gap-1.5 flex-wrap">
+                                    <h5 className="font-extrabold text-foreground text-xs">{lead.first_name} {lead.last_name}</h5>
+                                    {lead.message?.startsWith('[Ek Süre') && (
+                                      <span className="inline-flex items-center gap-1 text-[8px] font-black bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/25 px-1.5 py-0.5 rounded select-none">
+                                        ⏳ {lead.message.match(/\[Ek Süre:\s*([^\]]+)\]/)?.[1] || 'Ek Süre'}
+                                      </span>
+                                    )}
+                                  </div>
                                   <p className="text-[10px] font-semibold text-muted-foreground truncate">{lead.company_name || 'Şahıs Firması'}</p>
                                   {lead.requested_product && (
                                     <span className="inline-block mt-1.5 text-[9px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded">

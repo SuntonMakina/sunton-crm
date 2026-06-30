@@ -193,6 +193,11 @@ export default function WhatsAppWorkspacePage() {
   const [gatewayStatus, setGatewayStatus] = useState<any>(null)
   const [isResettingGateway, setIsResettingGateway] = useState(false)
 
+  // Detect if the gateway is offline (no status update in the last 40 seconds)
+  const isGatewayOffline = gatewayStatus && gatewayStatus.updated_at && (
+    new Date().getTime() - new Date(gatewayStatus.updated_at).getTime() > 40000
+  )
+
   // Status Poller Effect
   useEffect(() => {
     let intervalId: NodeJS.Timeout
@@ -222,7 +227,7 @@ export default function WhatsAppWorkspacePage() {
   }, [showStatusModal])
 
   const handleResetGateway = async () => {
-    if (!confirm('WhatsApp bağlantısını sıfırlamak ve tüm geçmişi temizleyip yeni QR kod üretmek istiyor musunuz?')) return
+    if (!confirm('WhatsApp bağlantısını koparmak ve sıfırdan yeni bir QR kod üretmek istediğinize emin misiniz?')) return
     setIsResettingGateway(true)
     try {
       const res = await fetch('/api/whatsapp/status', {
@@ -239,14 +244,14 @@ export default function WhatsAppWorkspacePage() {
           qr: null,
           reset_requested: true
         }))
-        alert('Bağlantı sıfırlama talebi veritabanına kaydedildi. Lokal ağ geçidinin sıfırlanıp yeni QR kod üretmesi birkaç saniye sürecektir.')
+        alert('Bağlantı başarıyla koparıldı ve sıfırlandı. Yeni QR kod üretiliyor, lütfen bekleyin.')
       } else {
         const errData = await res.json()
-        alert('Sıfırlama başlatılamadı: ' + (errData.error || 'Bilinmeyen hata'))
+        alert('Bağlantı koparılamadı: ' + (errData.error || 'Bilinmeyen hata'))
       }
     } catch (err: any) {
       console.error(err)
-      alert('Sıfırlama sırasında ağ hatası oluştu.')
+      alert('İşlem sırasında ağ hatası oluştu.')
     } finally {
       setIsResettingGateway(false)
     }
@@ -1416,26 +1421,42 @@ export default function WhatsAppWorkspacePage() {
               <div className="flex items-center justify-between p-3 bg-muted/5 border border-border rounded-lg">
                 <span className="text-xs font-bold text-muted-foreground">Bağlantı Durumu:</span>
                 {gatewayStatus ? (
-                  <span className={`text-xs font-extrabold uppercase px-2 py-0.5 rounded-full ${
-                    gatewayStatus.status === 'connected' 
-                      ? 'bg-emerald-500/10 text-emerald-500' 
-                      : gatewayStatus.status === 'connecting'
-                        ? 'bg-amber-500/10 text-amber-500 animate-pulse'
-                        : 'bg-red-500/10 text-red-500'
-                  }`}>
-                    {gatewayStatus.status === 'connected' ? 'Bağlı' : gatewayStatus.status === 'connecting' ? 'Bağlanıyor...' : 'Bağlantı Yok'}
-                  </span>
+                  isGatewayOffline ? (
+                    <span className="text-xs font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 animate-pulse">
+                      Çevrimdışı (Ağ Geçidi Kapalı)
+                    </span>
+                  ) : (
+                    <span className={`text-xs font-extrabold uppercase px-2 py-0.5 rounded-full ${
+                      gatewayStatus.status === 'connected' 
+                        ? 'bg-emerald-500/10 text-emerald-500' 
+                        : gatewayStatus.status === 'connecting'
+                          ? 'bg-amber-500/10 text-amber-500 animate-pulse'
+                          : 'bg-red-500/10 text-red-500'
+                    }`}>
+                      {gatewayStatus.status === 'connected' ? 'Bağlı' : gatewayStatus.status === 'connecting' ? 'Bağlanıyor...' : 'Bağlantı Yok'}
+                    </span>
+                  )
                 ) : (
                   <RefreshCw className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
                 )}
               </div>
 
-              {gatewayStatus && gatewayStatus.status !== 'connected' && (
+              {isGatewayOffline && (
+                <div className="p-4 border border-amber-500/20 bg-amber-500/5 rounded-lg text-center animate-in fade-in duration-300">
+                  <p className="text-xs font-bold text-amber-600">⚠️ Ağ Geçidi Çevrimdışı!</p>
+                  <p className="text-[10px] text-muted-foreground mt-1 font-medium">
+                    WhatsApp entegrasyon programı (gateway) şu anda arka planda çalışmıyor. 
+                    Lütfen bilgisayarınızdan veya sunucudan programı başlatın (<code>node scratch/whatsapp-gateway.mjs</code>).
+                  </p>
+                </div>
+              )}
+
+              {gatewayStatus && !isGatewayOffline && gatewayStatus.status !== 'connected' && (
                 <div className="flex flex-col items-center justify-center p-4 border border-border rounded-lg bg-background animate-in fade-in duration-300">
                   {gatewayStatus.qr ? (
                     <div className="flex flex-col items-center gap-3">
                       <p className="text-[10px] font-bold text-muted-foreground text-center uppercase tracking-wider">
-                        Lütfen Ebru'nun telefonundan bu QR kodu okutun:
+                        Lütfen Ebru\'nun telefonundan bu QR kodu okutun:
                       </p>
                       <img src={gatewayStatus.qr} alt="WhatsApp QR" width={220} height={220} className="border border-border p-2 rounded-lg bg-white" />
                       <p className="text-[9px] text-muted-foreground text-center">
@@ -1457,7 +1478,7 @@ export default function WhatsAppWorkspacePage() {
                 </div>
               )}
 
-              {gatewayStatus && gatewayStatus.status === 'connected' && (
+              {gatewayStatus && !isGatewayOffline && gatewayStatus.status === 'connected' && (
                 <div className="p-4 border border-emerald-500/20 bg-emerald-500/5 rounded-lg text-center animate-in fade-in duration-300">
                   <p className="text-xs font-bold text-emerald-500">✓ WhatsApp bağlantısı aktif!</p>
                   <p className="text-[10px] text-muted-foreground mt-1 font-medium">Ebru Şimşek hesabı bağlı. Mesajlar otomatik olarak arka planda senkronize edilmektedir.</p>
@@ -1470,10 +1491,10 @@ export default function WhatsAppWorkspacePage() {
                 <button
                   type="button"
                   onClick={handleResetGateway}
-                  disabled={isResettingGateway || gatewayStatus.reset_requested}
+                  disabled={isResettingGateway}
                   className="px-3 py-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white rounded-lg text-xs font-bold cursor-pointer disabled:opacity-50 transition-colors border-0"
                 >
-                  {isResettingGateway ? 'İstek Gönderiliyor...' : 'Bağlantıyı Sıfırla'}
+                  {isResettingGateway ? 'İstek Gönderiliyor...' : 'Bağlantıyı Kopar'}
                 </button>
               )}
               <Dialog.Close asChild>
