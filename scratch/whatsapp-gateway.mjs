@@ -584,7 +584,7 @@ async function startWhatsApp() {
     version,
     printQRInTerminal: true, // Also prints to console for developer visibility
     syncFullHistory: true,
-    browser: Browsers.macOS('Desktop'),
+    browser: ['Mac OS', 'Chrome', '124.0.0.0'],
     shouldSyncHistoryMessage: () => true
   });
 
