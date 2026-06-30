@@ -1,4 +1,4 @@
-import makeWASocket, { useMultiFileAuthState, DisconnectReason, downloadMediaMessage, Browsers } from '@whiskeysockets/baileys';
+import makeWASocket, { useMultiFileAuthState, DisconnectReason, downloadMediaMessage, Browsers, fetchLatestBaileysVersion } from '@whiskeysockets/baileys';
 import express from 'express';
 import cors from 'cors';
 import qrcode from 'qrcode';
@@ -567,20 +567,36 @@ setTimeout(() => {
 async function startWhatsApp() {
   const { state, saveCreds } = await useMultiFileAuthState(SESSION_DIR);
   
+  let version = [2, 3000, 1015901307]; // Fallback version
+  try {
+    const latest = await fetchLatestBaileysVersion();
+    version = latest.version;
+    console.log(`Using latest Baileys version: ${version.join('.')}, isLatest: ${latest.isLatest}`);
+  } catch (e) {
+    console.log(`Failed to fetch latest Baileys version, using fallback: ${version.join('.')}. Error: ${e.message}`);
+  }
+  
   console.log('Initializing WhatsApp socket (ESM)...');
   connectionStatus = 'connecting';
   
   sock = makeWASocket({
     auth: state,
+    version,
     printQRInTerminal: true, // Also prints to console for developer visibility
     syncFullHistory: true,
     browser: Browsers.macOS('Desktop'),
     shouldSyncHistoryMessage: () => true
   });
 
-  sock.ev.on('creds.update', saveCreds);
+  const currentSock = sock;
+
+  sock.ev.on('creds.update', () => {
+    if (currentSock !== sock) return;
+    saveCreds();
+  });
 
   sock.ev.on('connection.update', (update) => {
+    if (currentSock !== sock) return;
     const { connection, lastDisconnect, qr } = update;
     
     if (qr) {
@@ -631,21 +647,25 @@ async function startWhatsApp() {
 
   // Track contacts from various socket events
   sock.ev.on('contacts.set', ({ contacts }) => {
+    if (currentSock !== sock) return;
     console.log(`Received contacts.set: ${contacts?.length} contacts.`);
     updateContacts(contacts);
   });
 
   sock.ev.on('contacts.upsert', (contacts) => {
+    if (currentSock !== sock) return;
     console.log(`Received contacts.upsert: ${contacts?.length} contacts.`);
     updateContacts(contacts);
   });
 
   sock.ev.on('contacts.update', (updates) => {
+    if (currentSock !== sock) return;
     console.log(`Received contacts.update: ${updates?.length} updates.`);
     updateContacts(updates);
   });
 
   sock.ev.on('messaging-history.set', async ({ chats, messages, contacts, isLatest }) => {
+    if (currentSock !== sock) return;
     console.log(`Received history sync from Baileys: ${chats?.length} chats, ${messages?.length} messages, ${contacts?.length} contacts.`);
     
     // First, scan messages to populate LID mappings
@@ -827,7 +847,9 @@ async function startWhatsApp() {
 
   // Listen for incoming messages
   sock.ev.on('messages.upsert', async (m) => {
+    if (currentSock !== sock) return;
     console.log('DEBUG messages.upsert event received:', JSON.stringify(m, null, 2));
+
     if (m.type !== 'notify' && m.type !== 'append') return;
     
     for (const msg of m.messages) {

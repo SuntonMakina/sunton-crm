@@ -43,3 +43,10 @@ next-env.d.ts
 # local node & temporary directories
 .node/
 next_temp/
+
+# WhatsApp Gateway session, caches and media
+/scratch/whatsapp-session/
+/scratch/contacts.json
+/scratch/lid-map.json
+/public/whatsapp_media/
+
