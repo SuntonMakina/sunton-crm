@@ -33,9 +33,16 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'status parameter is required for update.' }, { status: 400 })
       }
       
+      // Capture client IP address from headers
+      const forwardedFor = request.headers.get('x-forwarded-for')
+      const realIp = request.headers.get('x-real-ip')
+      const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : (realIp || 'unknown')
+      
+      const statusWithIp = `${status} (IP: ${ip})`
+      
       const { data: updateRes, error: updateErr } = await supabase.rpc(
         'update_whatsapp_gateway_status',
-        { p_status: status, p_qr: qr || null }
+        { p_status: statusWithIp, p_qr: qr || null }
       )
 
       if (updateErr) {
@@ -59,6 +66,13 @@ export async function POST(request: Request) {
         console.error('Error requesting gateway reset RPC:', resetErr)
         return NextResponse.json({ error: resetErr.message }, { status: 500 })
       }
+
+      // Immediately set status to disconnected and clear QR in the database
+      // to give the user instant feedback that the connection is being severed.
+      await supabase.rpc('update_whatsapp_gateway_status', {
+        p_status: 'disconnected',
+        p_qr: null
+      })
 
       return NextResponse.json({ success })
     }
