@@ -2609,6 +2609,18 @@ export default function WorkspacePage() {
                   )}
                 </div>
 
+                {/* Ek Süre Bilgilendirme Notu */}
+                {selectedLeadDetail.message?.includes('[Ek Süre:') && (
+                  <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-700 dark:text-amber-300 space-y-1 select-text">
+                    <span className="font-black uppercase text-[9px] tracking-wide flex items-center gap-1 select-none">
+                      ⏳ Yeniden Planlanan Arama (Ek Süre)
+                    </span>
+                    <p className="text-[10px] font-extrabold leading-relaxed">
+                      {selectedLeadDetail.message.match(/\[Ek Süre:\s*([^\]]+)\]/)?.[1]}
+                    </p>
+                  </div>
+                )}
+
                 {/* Script Müşterisi Özel Bilgilendirme Notu */}
                 {(selectedLeadDetail.lead_sources?.code === 'APIFY' || selectedLeadDetail.source_id === '11111111-0000-0000-0000-000000000015') && (
                   <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-700 dark:text-amber-300 space-y-1 select-text">
