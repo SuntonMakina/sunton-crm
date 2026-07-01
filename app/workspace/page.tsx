@@ -79,6 +79,7 @@ export default function WorkspacePage() {
     priority: 'normal',
     temperature: 'warm',
     note: '',
+    salesRepNote: '',
     leadQualityStatus: '',
     callbackStatus: 'none',
     callbackDate: '',
@@ -871,6 +872,7 @@ export default function WorkspacePage() {
       priority: lead.priority || 'normal',
       temperature: lead.temperature || 'warm',
       note: '',
+      salesRepNote: '',
       leadQualityStatus: lead.lead_quality_category || '',
       callbackStatus: lead.callback_status || 'none',
       callbackDate: lead.callback_date || '',
@@ -1085,6 +1087,10 @@ export default function WorkspacePage() {
       const selectedRep = salesReps.find(r => r.id === editForm.assignedSalesUserId)
 
       let finalNotes = selectedLead.extra_notes || ''
+      if (editForm.salesRepNote.trim()) {
+        const timeStr = new Date().toLocaleString('tr-TR')
+        finalNotes = `[${timeStr}] - [Satış Temsilcisi Notu] - ${editForm.salesRepNote.trim()}\n` + finalNotes
+      }
       if (editForm.note.trim()) {
         const timeStr = new Date().toLocaleString('tr-TR')
         const attemptPrefix = isRetryAttempt ? `[Yeniden Arama - ${selectedLeadCalls.length + 1}. Deneme] ` : ''
@@ -2583,6 +2589,19 @@ export default function WorkspacePage() {
                   placeholder="Görüşme detaylarını girin (Not eklenirse görüşme logu otomatik yazılır)..."
                   rows={3}
                   className="w-full p-3 bg-background border border-border rounded-lg text-xs focus:ring-1 focus:ring-primary focus:outline-none font-medium"
+                />
+              </div>
+
+              <div className="border-t border-indigo-500/10 pt-3 mt-3">
+                <label className="block text-[10px] font-bold text-indigo-600 dark:text-indigo-400 mb-1 uppercase tracking-wider">
+                  Satış Temsilcisi Notu (Geri Dönüş)
+                </label>
+                <textarea
+                  value={editForm.salesRepNote}
+                  onChange={(e) => setEditForm({ ...editForm, salesRepNote: e.target.value })}
+                  placeholder="Satış temsilcisinden gelen geri bildirim açıklamasını girin..."
+                  rows={3}
+                  className="w-full p-3 bg-background border border-indigo-500/30 dark:border-indigo-500/20 rounded-lg text-xs focus:ring-1 focus:ring-indigo-500 focus:outline-none font-medium text-indigo-900 dark:text-indigo-200"
                 />
               </div>
 
