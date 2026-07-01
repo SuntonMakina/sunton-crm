@@ -669,7 +669,12 @@ export default function WorkspacePage() {
   // For real-time WhatsApp leads, only count them if they have been added to the call queue (next_contact_at is not null or callback_status is 'pending') OR if they have logged calls.
   const toplamYapilanLeads = sortedLeads.filter(l => {
     if (isWhatsAppLead(l)) {
-      return l.next_contact_at !== null || l.callback_status === 'pending' || (l.calls && l.calls.length > 0);
+      return l.next_contact_at !== null || 
+             l.callback_status === 'pending' || 
+             (l.calls && l.calls.length > 0) ||
+             l.status_id === '22222222-0000-0000-0000-000000000009' ||
+             l.assigned_sales_user_id !== null ||
+             !!l.sales_representative_text;
     }
     return l.last_contact_at !== null || (l.legacy_source_file !== null && l.conversation_completed !== null) || !!l.sales_representative_text;
   })

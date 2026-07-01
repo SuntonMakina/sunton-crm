@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "gateway": "node scratch/whatsapp-gateway.mjs",
+    "tunnel": "npx localtunnel --port 3001 --subdomain spotty-crews-bake"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
