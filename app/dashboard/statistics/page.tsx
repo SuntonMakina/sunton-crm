@@ -171,6 +171,17 @@ function getLocalDateStringWithShift(dateStr: string | null | undefined): string
   }
 }
 
+function getLocalDateStringWithoutShift(dateStr: string | null | undefined): string | null {
+  if (!dateStr) return null
+  try {
+    const d = new Date(dateStr)
+    if (isNaN(d.getTime())) return dateStr.split('T')[0]
+    return d.toLocaleDateString('sv-SE', { timeZone: 'Europe/Istanbul' })
+  } catch (e) {
+    return dateStr.split('T')[0]
+  }
+}
+
 function getLeadDate(lead: any): string | null {
   if (lead.first_contact_date) {
     return lead.first_contact_date;
@@ -180,17 +191,10 @@ function getLeadDate(lead: any): string | null {
     return parseRawDateToIso(rawDate);
   }
   if (lead.first_contact_at) {
-    return getLocalDateStringWithShift(lead.first_contact_at);
-  }
-  if (lead.legacy_source_file === null && lead.conversations && lead.conversations.length > 0) {
-    const conv = lead.conversations[0];
-    const convDate = conv.last_message_at || conv.created_at;
-    if (convDate) {
-      return getLocalDateStringWithShift(convDate);
-    }
+    return getLocalDateStringWithoutShift(lead.first_contact_at);
   }
   if (lead.created_at) {
-    return getLocalDateStringWithShift(lead.created_at);
+    return getLocalDateStringWithoutShift(lead.created_at);
   }
   return null;
 }
@@ -1302,7 +1306,9 @@ export default function StatisticsPage() {
       }
 
       // 5. Transform to adaptedLead (Rule 7)
-      const adaptedLeads: LeadRecord[] = filteredRawLeads.map(lead => ({
+      const filteredForTotals = filteredRawLeads.filter(l => l.status_id !== '22222222-0000-0000-0000-000000000020')
+
+      const adaptedLeads: LeadRecord[] = filteredForTotals.map(lead => ({
         "Lead ID": lead.legacy_lead_id ?? lead.lead_number ?? lead.id,
         "İlk Temas Tarihi": lead.first_contact_date ?? lead.first_contact_at ?? lead.legacy_raw_data?.["İlk Temas Tarihi"],
         "Ad Soyad / Firma": lead.full_name ?? lead.company_name ?? lead.legacy_raw_data?.["Ad Soyad / Firma"],
@@ -1390,7 +1396,30 @@ export default function StatisticsPage() {
 
       const combinedCalls = [...filteredActiveCalls, ...filteredVirtualCalls, ...legacyCalls]
       setPeriodCalls(combinedCalls)
-      setCallsCount(combinedCalls.length)
+
+      const isWhatsAppLead = (l: any) => {
+        return (
+          l.source_id === '474b7a22-c53f-43ba-a8bd-75ce0977a798' || 
+          l.source_id === '11111111-0000-0000-0000-000000000005' ||
+          l.status_id === '22222222-0000-0000-0000-000000000020' ||
+          l.lead_sources?.code === 'META_WA'
+        ) && l.legacy_source_file === null;
+      };
+
+      const customCallsCount = adaptedLeads.filter(item => {
+        const l = item.rawLead;
+        if (isWhatsAppLead(l)) {
+          return l.next_contact_at !== null || 
+                 l.callback_status === 'pending' || 
+                 (l.calls && l.calls.length > 0) ||
+                 l.status_id === '22222222-0000-0000-0000-000000000009' ||
+                 l.assigned_sales_user_id !== null ||
+                 !!l.sales_representative_text;
+        }
+        return l.last_contact_at !== null || (l.legacy_source_file !== null && l.conversation_completed !== null) || !!l.sales_representative_text;
+      }).length;
+
+      setCallsCount(customCallsCount)
 
       // Set stats state so that we can render the UI without modifying existing UI bindings
       setStats({
@@ -1570,8 +1599,25 @@ export default function StatisticsPage() {
             filtered = classified
             break
           case 'total_calls':
-            const leadIdsWithCalls = new Set(periodCalls.map(c => c.lead_id).filter(Boolean))
-            filtered = classified.filter(x => leadIdsWithCalls.has(x.rawLead?.id))
+            filtered = classified.filter(item => {
+              const l = item.rawLead;
+              const isWhatsApp = (
+                l.source_id === '474b7a22-c53f-43ba-a8bd-75ce0977a798' || 
+                l.source_id === '11111111-0000-0000-0000-000000000005' ||
+                l.status_id === '22222222-0000-0000-0000-000000000020' ||
+                l.lead_sources?.code === 'META_WA'
+              ) && l.legacy_source_file === null;
+
+              if (isWhatsApp) {
+                return l.next_contact_at !== null || 
+                       l.callback_status === 'pending' || 
+                       (l.calls && l.calls.length > 0) ||
+                       l.status_id === '22222222-0000-0000-0000-000000000009' ||
+                       l.assigned_sales_user_id !== null ||
+                       !!l.sales_representative_text;
+              }
+              return l.last_contact_at !== null || (l.legacy_source_file !== null && l.conversation_completed !== null) || !!l.sales_representative_text;
+            })
             break
           case 'unrelated':
             filtered = classified.filter(x => x.qualityCategoryKey === 'unrelated')

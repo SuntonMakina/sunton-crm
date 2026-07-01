@@ -9,6 +9,24 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Load env variables from .env.local manually if it exists (without overwriting existing shell env vars)
+const envPath = path.resolve(__dirname, '../.env.local');
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf8');
+  envContent.split('\n').forEach(line => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) return;
+    const parts = trimmed.split('=');
+    if (parts.length >= 2) {
+      const key = parts[0].trim();
+      const value = parts.slice(1).join('=').trim().replace(/^['"]|['"]$/g, '');
+      if (process.env[key] === undefined) {
+        process.env[key] = value;
+      }
+    }
+  });
+}
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -275,23 +293,37 @@ async function performLocalReset() {
     // Delete session files
     if (fs.existsSync(SESSION_DIR)) {
       console.log('Deleting session directory:', SESSION_DIR);
-      fs.rmSync(SESSION_DIR, { recursive: true, force: true });
+      try {
+        fs.rmSync(SESSION_DIR, { recursive: true, force: true });
+      } catch (rmErr) {
+        console.error('Failed to delete session directory via rmSync, trying individual files:', rmErr.message);
+        try {
+          const files = fs.readdirSync(SESSION_DIR);
+          for (const file of files) {
+            fs.rmSync(path.join(SESSION_DIR, file), { recursive: true, force: true });
+          }
+        } catch (fallbackErr) {
+          console.error('Failed fallback deletion of session files:', fallbackErr.message);
+        }
+      }
     }
     
-    // Re-create empty session directory
-    fs.mkdirSync(SESSION_DIR, { recursive: true });
-    
+    // Re-create session directory if it was completely deleted
+    if (!fs.existsSync(SESSION_DIR)) {
+      fs.mkdirSync(SESSION_DIR, { recursive: true });
+    }
+  } catch (err) {
+    console.error('Error performing local reset:', err.message);
+  } finally {
     isResetting = false;
     // Send status update immediately
     await sendStatusToCRM();
     
     // Start WhatsApp client again after a short delay
+    console.log('Restarting WhatsApp client after reset...');
     setTimeout(() => {
       startWhatsApp();
     }, 1000);
-  } catch (err) {
-    console.error('Error performing local reset:', err.message);
-    isResetting = false;
   }
 }
 
