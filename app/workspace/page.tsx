@@ -35,6 +35,7 @@ import { formatLeadId, getProgressiveCallSchedule, getNumericPart } from '@/lib/
 
 export default function WorkspacePage() {
   const supabase = createClient()
+  const router = useRouter()
   const searchParams = useSearchParams()
   const tabParam = searchParams.get('tab')
   const leadIdParam = searchParams.get('id')
@@ -1242,6 +1243,16 @@ export default function WorkspacePage() {
             <option value="away">🟡 Dışarıda / Molada</option>
             <option value="inactive">🔴 Meşgul / Toplantıda</option>
           </select>
+          
+          <button 
+            onClick={() => router.push('/workspace/leads/new')}
+            className="h-9 px-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg flex items-center gap-1.5 text-xs font-bold shadow-xs transition-colors cursor-pointer"
+            title="Manuel Lead Ekle"
+          >
+            <PlusCircle className="h-4 w-4" />
+            <span>Manuel Lead Ekle</span>
+          </button>
+
           <button 
             onClick={() => profile && fetchData(profile.id, profile.role)}
             className="h-9 w-9 bg-card border border-border rounded-lg flex items-center justify-center cursor-pointer transition-colors"

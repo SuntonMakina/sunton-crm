@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { 
   Search, 
@@ -20,6 +21,7 @@ import { formatLeadId, getProgressiveCallSchedule } from '@/lib/utils'
 
 export default function WorkspaceLeadsPage() {
   const supabase = createClient()
+  const router = useRouter()
 
   // Common UI states
   const [profile, setProfile] = useState<any>(null)
@@ -579,16 +581,28 @@ export default function WorkspaceLeadsPage() {
           <p className="text-xs text-muted-foreground mt-0.5">Sadece şahsınıza atanmış olan kurşunların listesi.</p>
         </div>
 
-        {/* Search Bar */}
-        <div className="relative w-full max-w-xs">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="İsim, firma, telefon veya şehir ara..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-9 pl-9 pr-4 bg-card border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent transition-all"
-          />
+        {/* Search Bar & Actions */}
+        <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+          <div className="relative w-full max-w-xs">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="İsim, firma, telefon veya şehir ara..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full h-9 pl-9 pr-4 bg-card border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent transition-all"
+            />
+          </div>
+          
+          <button 
+            type="button"
+            onClick={() => router.push('/workspace/leads/new')}
+            className="h-9 px-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg flex items-center gap-1.5 text-xs font-bold shadow-xs transition-colors cursor-pointer shrink-0"
+            title="Manuel Lead Ekle"
+          >
+            <Plus className="h-4 w-4" />
+            <span>Manuel Lead Ekle</span>
+          </button>
         </div>
       </div>
 
