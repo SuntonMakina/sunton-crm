@@ -451,6 +451,48 @@ export default function WorkspacePage() {
     return d < now && !isToday(dateStr)
   }
 
+  const getLeadAddedDate = (lead: any) => {
+    if (lead.first_contact_date) {
+      const cleanDate = lead.first_contact_date.split('T')[0]
+      const parts = cleanDate.split('-')
+      if (parts.length === 3) {
+        return `${parts[2]}.${parts[1]}.${parts[0]}`
+      }
+      return cleanDate
+    }
+
+    const rawDate = lead.legacy_raw_data?.["İlk Temas Tarihi"]
+    if (rawDate) {
+      if (rawDate.includes('.')) return rawDate
+      const cleanDate = rawDate.split('T')[0]
+      const parts = cleanDate.split('-')
+      if (parts.length === 3) {
+        return `${parts[2]}.${parts[1]}.${parts[0]}`
+      }
+      return cleanDate
+    }
+
+    if (lead.first_contact_at) {
+      const cleanDate = lead.first_contact_at.split('T')[0]
+      const parts = cleanDate.split('-')
+      if (parts.length === 3) {
+        return `${parts[2]}.${parts[1]}.${parts[0]}`
+      }
+      return cleanDate
+    }
+
+    if (lead.created_at) {
+      const cleanDate = lead.created_at.split('T')[0]
+      const parts = cleanDate.split('-')
+      if (parts.length === 3) {
+        return `${parts[2]}.${parts[1]}.${parts[0]}`
+      }
+      return cleanDate
+    }
+
+    return '-'
+  }
+
   const getUpcomingCallbacksGrouped = () => {
     const activeCallbacks = leads.filter(l => {
       if (!l.next_contact_at) return false
@@ -1360,6 +1402,9 @@ export default function WorkspacePage() {
                       <th className="p-3.5 whitespace-nowrap">Cihaz/Ürün</th>
                       <th className="p-3.5 whitespace-nowrap">İl</th>
                       <th className="p-3.5 whitespace-nowrap">İletilen Satışçı</th>
+                      {activeTab === 'totalIncoming' && (
+                        <th className="p-3.5 whitespace-nowrap">Eklenme Tarihi</th>
+                      )}
                       <th className="p-3.5 whitespace-nowrap">Durum</th>
                       <th className="p-3.5 text-center whitespace-nowrap">İşlemler</th>
                     </tr>
@@ -1414,6 +1459,11 @@ export default function WorkspacePage() {
                         <td className="p-3.5 font-semibold text-indigo-600 dark:text-indigo-400 whitespace-nowrap">
                           {lead.sales_representative_text || '-'}
                         </td>
+                        {activeTab === 'totalIncoming' && (
+                          <td className="p-3.5 text-muted-foreground whitespace-nowrap font-medium">
+                            {getLeadAddedDate(lead)}
+                          </td>
+                        )}
                         <td className="p-3.5 whitespace-nowrap">
                           <span className="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded" style={{
                             backgroundColor: lead.lead_statuses?.color + '15' || '#eaeaea',
@@ -1698,6 +1748,11 @@ export default function WorkspacePage() {
                             <div>
                               <h5 className="font-extrabold text-foreground text-xs">{lead.first_name} {lead.last_name}</h5>
                               <p className="text-[10px] font-semibold text-muted-foreground truncate">{lead.company_name || 'Şahıs Firması'}</p>
+                              {activeTab === 'totalIncoming' && (
+                                <p className="text-[9px] font-semibold text-indigo-600 dark:text-indigo-400 mt-1">
+                                  Eklenme Tarihi: {getLeadAddedDate(lead)}
+                                </p>
+                              )}
                               {lead.requested_product && (
                                 <span className="inline-block mt-1.5 text-[9px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded">
                                   {lead.requested_product}
