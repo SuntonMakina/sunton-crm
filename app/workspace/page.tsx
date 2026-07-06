@@ -831,8 +831,9 @@ export default function WorkspacePage() {
     const location = selectedLead.city || selectedLead.province || 'Belirtilmemiş'
     const product = selectedLead.requested_product || 'Cihaz belirtilmemiş'
     const message = selectedLead.message ? ` - Açıklama: ${selectedLead.message}` : ''
+    const forwardNote = quickNotes.trim() ? ` - ${quickNotes.trim()}` : ''
     
-    const text = `${id} - ${name} - ${company} - ${phone} - ${location} - ${product} talep ediyor.${message}`
+    const text = `${id} - ${name} - ${company} - ${phone} - ${location} - ${product} talep ediyor.${message}${forwardNote}`
     
     navigator.clipboard.writeText(text)
     setCopiedForwardText(true)
@@ -842,9 +843,24 @@ export default function WorkspacePage() {
   // Edit Allowed Fields
   const handleOpenEdit = async (lead: any) => {
     setEditMode('outcome')
-    setQuickNotes('')
+    
+    // Extract last forwarding note if already forwarded
+    const isForwarded = lead.status_id === '22222222-0000-0000-0000-000000000009'
+    const extractLastForwardingNote = (extraNotes: string | null | undefined): string => {
+      if (!extraNotes) return ''
+      const lines = extraNotes.split('\n')
+      for (const line of lines) {
+        const match = line.match(/Satış Danışmanına Yönlendirildi\. Not:\s*(.*)/)
+        if (match) {
+          return match[1].trim()
+        }
+      }
+      return ''
+    }
+
+    setQuickNotes(isForwarded ? extractLastForwardingNote(lead.extra_notes) : '')
     setQuickSalesUserId(lead.assigned_sales_user_id || '')
-    setQuickStatus('reached')
+    setQuickStatus(isForwarded ? 'forward' : 'reached')
     setQuickCallbackDate('')
     setQuickCallbackTime('')
     setSelectedLead(lead)
@@ -2242,7 +2258,7 @@ export default function WorkspacePage() {
                         <div className="text-[10px] text-muted-foreground font-semibold flex-1 truncate">
                           <span className="block font-bold text-[9px] uppercase tracking-wide mb-1 text-indigo-600 dark:text-indigo-400">Kopyalanacak Metin Taslağı</span>
                           <span className="font-mono text-[9.5px] text-slate-700 dark:text-slate-300 block truncate">
-                            {formatLeadId(selectedLead.legacy_lead_id || selectedLead.lead_number)} - {selectedLead.first_name} {selectedLead.last_name} - {selectedLead.company_name || 'Şahıs Firması'} - {selectedLead.phone} - {selectedLead.city || selectedLead.province || 'Belirtilmemiş'} - {selectedLead.requested_product || 'Cihaz belirtilmemiş'} talep ediyor.{selectedLead.message ? ` - Açıklama: ${selectedLead.message}` : ''}
+                            {formatLeadId(selectedLead.legacy_lead_id || selectedLead.lead_number)} - {selectedLead.first_name} {selectedLead.last_name} - {selectedLead.company_name || 'Şahıs Firması'} - {selectedLead.phone} - {selectedLead.city || selectedLead.province || 'Belirtilmemiş'} - {selectedLead.requested_product || 'Cihaz belirtilmemiş'} talep ediyor.{selectedLead.message ? ` - Açıklama: ${selectedLead.message}` : ''}{quickNotes.trim() ? ` - ${quickNotes.trim()}` : ''}
                           </span>
                         </div>
                         <button
