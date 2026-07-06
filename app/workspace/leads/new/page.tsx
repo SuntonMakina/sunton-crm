@@ -160,6 +160,7 @@ export default function AddLeadPage() {
           province: selectedProvince || null,
           district: district || null,
           source_id: sourceId || null,
+          requested_product: requestedProduct || null,
           status_id: '22222222-0000-0000-0000-000000000001', // Yeni Lead
           assigned_call_center_user_id: profile.id, // Assign to current user (Ebru)
           created_by: profile.id,

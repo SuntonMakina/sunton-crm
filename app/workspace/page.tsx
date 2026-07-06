@@ -830,8 +830,9 @@ export default function WorkspacePage() {
     const phone = selectedLead.phone
     const location = selectedLead.city || selectedLead.province || 'Belirtilmemiş'
     const product = selectedLead.requested_product || 'Cihaz belirtilmemiş'
+    const message = selectedLead.message ? ` - Açıklama: ${selectedLead.message}` : ''
     
-    const text = `${id} - ${name} - ${company} - ${phone} - ${location} - ${product} talep ediyor.`
+    const text = `${id} - ${name} - ${company} - ${phone} - ${location} - ${product} talep ediyor.${message}`
     
     navigator.clipboard.writeText(text)
     setCopiedForwardText(true)
@@ -2241,7 +2242,7 @@ export default function WorkspacePage() {
                         <div className="text-[10px] text-muted-foreground font-semibold flex-1 truncate">
                           <span className="block font-bold text-[9px] uppercase tracking-wide mb-1 text-indigo-600 dark:text-indigo-400">Kopyalanacak Metin Taslağı</span>
                           <span className="font-mono text-[9.5px] text-slate-700 dark:text-slate-300 block truncate">
-                            {formatLeadId(selectedLead.legacy_lead_id || selectedLead.lead_number)} - {selectedLead.first_name} {selectedLead.last_name} - {selectedLead.company_name || 'Şahıs Firması'} - {selectedLead.phone} - {selectedLead.city || selectedLead.province || 'Belirtilmemiş'} - {selectedLead.requested_product || 'Cihaz belirtilmemiş'} talep ediyor.
+                            {formatLeadId(selectedLead.legacy_lead_id || selectedLead.lead_number)} - {selectedLead.first_name} {selectedLead.last_name} - {selectedLead.company_name || 'Şahıs Firması'} - {selectedLead.phone} - {selectedLead.city || selectedLead.province || 'Belirtilmemiş'} - {selectedLead.requested_product || 'Cihaz belirtilmemiş'} talep ediyor.{selectedLead.message ? ` - Açıklama: ${selectedLead.message}` : ''}
                           </span>
                         </div>
                         <button

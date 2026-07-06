@@ -613,7 +613,12 @@ export default function WhatsAppWorkspacePage() {
         .update({
           status_id: '22222222-0000-0000-0000-000000000007',
           last_contact_at: new Date().toISOString(),
-          whatsapp_step: 'called_1'
+          whatsapp_step: 'called_1',
+          ...(lead.status_id === '22222222-0000-0000-0000-000000000020' ? {
+            created_at: new Date().toISOString(),
+            created_by: profile.id,
+            updated_by: profile.id
+          } : {})
         })
         .eq('id', lead.id)
 
@@ -672,7 +677,12 @@ export default function WhatsAppWorkspacePage() {
           next_contact_at: nextContactAt,
           callback_status: callbackStatus,
           whatsapp_step: 'no_answer',
-          extra_notes: finalNotes
+          extra_notes: finalNotes,
+          ...(lead.status_id === '22222222-0000-0000-0000-000000000020' ? {
+            created_at: new Date().toISOString(),
+            created_by: profile.id,
+            updated_by: profile.id
+          } : {})
         })
         .eq('id', lead.id)
 
@@ -705,7 +715,12 @@ export default function WhatsAppWorkspacePage() {
           assigned_sales_user_id: salesRepId,
           status_id: '22222222-0000-0000-0000-000000000009', // Satış Uzmanına İletildi
           whatsapp_step: 'completed',
-          extra_notes: lead.extra_notes ? lead.extra_notes + '\n(WhatsApp Panelinden Yönlendirildi)' : 'WhatsApp üzerinden yönlendirildi.'
+          extra_notes: lead.extra_notes ? lead.extra_notes + '\n(WhatsApp Panelinden Yönlendirildi)' : 'WhatsApp üzerinden yönlendirildi.',
+          ...(lead.status_id === '22222222-0000-0000-0000-000000000020' ? {
+            created_at: new Date().toISOString(),
+            created_by: profile.id,
+            updated_by: profile.id
+          } : {})
         })
         .eq('id', lead.id)
 
@@ -830,7 +845,13 @@ export default function WhatsAppWorkspacePage() {
           requested_product: queueForm.product.trim() || selectedLead.requested_product,
           next_contact_at: nextContactAt,
           callback_status: 'pending',
-          extra_notes: finalNotes
+          extra_notes: finalNotes,
+          ...(selectedLead.status_id === '22222222-0000-0000-0000-000000000020' ? {
+            status_id: '22222222-0000-0000-0000-000000000001', // Yeni Lead
+            created_at: new Date().toISOString(),
+            created_by: profile.id,
+            updated_by: profile.id
+          } : {})
         })
         .eq('id', selectedLead.id)
 
@@ -892,7 +913,10 @@ export default function WhatsAppWorkspacePage() {
           assigned_call_center_user_id: profile.id, // Assign to Ebru
           whatsapp_step: 'viewed',
           next_contact_at: null,
-          callback_status: 'none'
+          callback_status: 'none',
+          created_at: new Date().toISOString(),
+          created_by: profile.id,
+          updated_by: profile.id
         })
         .eq('id', selectedLead.id)
 
