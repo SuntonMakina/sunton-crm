@@ -61,7 +61,7 @@ async function run() {
   const legacyOnly = leads.filter(l => l.legacy_source_file !== null)
   console.log(`Total active legacy leads in DB: ${legacyOnly.length}`)
 
-  const periods = ['tum_eski', 'bu_ay', 'gecen_ay', 'mayis_2026', 'haziran_2026']
+  const periods = ['tum_eski', 'bu_ay', 'gecen_ay', 'mayis_2026', 'haziran_2026', 'temmuz_2026']
 
   periods.forEach(periodFilter => {
     let start_date = null
@@ -84,6 +84,9 @@ async function run() {
     } else if (periodFilter === 'haziran_2026') {
       start_date = '2026-06-01'
       end_date = '2026-06-30'
+    } else if (periodFilter === 'temmuz_2026') {
+      start_date = '2026-07-01'
+      end_date = '2026-07-31'
     }
 
     let filtered = legacyOnly
