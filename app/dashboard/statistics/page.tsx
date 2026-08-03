@@ -1112,40 +1112,100 @@ export default function StatisticsPage() {
         utcEnd = `${end_date}T14:30:00.000Z`
       }
 
-      // Query calls matching active date filter
-      let callsQuery = supabase
-        .from('calls')
-        .select('*, profiles:user_id(full_name)')
-      
-      if (utcStart) {
-        callsQuery = callsQuery.gte('created_at', utcStart)
-      }
-      if (utcEnd) {
-        callsQuery = callsQuery.lte('created_at', utcEnd)
-      }
-      
-      const { data: cData, error: cErr } = await callsQuery
-      const activeCalls = (!cErr && cData) ? cData : []
+      // Query calls matching active date filter with pagination
+      let activeCalls: any[] = []
+      let fromCallIdx = 0
+      const limitCallVal = 1000
+      let hasMoreCalls = true
 
-      // Query conversations matching active date filter (for WhatsApp contacts)
-      let convQuery = supabase
-        .from('conversations')
-        .select('*, profiles:assigned_user_id(full_name)')
-        .eq('channel', 'whatsapp')
-      
-      const { data: convData, error: convErr } = await convQuery
-      const rawConversations = (!convErr && convData) ? convData : []
+      while (hasMoreCalls) {
+        let callsQuery = supabase
+          .from('calls')
+          .select('*, profiles:user_id(full_name)')
+          .order('created_at', { ascending: false })
+          .range(fromCallIdx, fromCallIdx + limitCallVal - 1)
+        
+        if (utcStart) {
+          callsQuery = callsQuery.gte('created_at', utcStart)
+        }
+        if (utcEnd) {
+          callsQuery = callsQuery.lte('created_at', utcEnd)
+        }
+        
+        const { data: cData, error: cErr } = await callsQuery
+        if (cErr) throw cErr
+        
+        if (cData && cData.length > 0) {
+          activeCalls = [...activeCalls, ...cData]
+          if (cData.length < limitCallVal) {
+            hasMoreCalls = false
+          } else {
+            fromCallIdx += limitCallVal
+          }
+        } else {
+          hasMoreCalls = false
+        }
+      }
 
-      // 1. Fetch all active leads from Supabase. We apply scopeFilter in-memory
+      // Query conversations matching active date filter (for WhatsApp contacts) with pagination
+      let rawConversations: any[] = []
+      let fromConvIdx = 0
+      const limitConvVal = 1000
+      let hasMoreConvs = true
+
+      while (hasMoreConvs) {
+        let convQuery = supabase
+          .from('conversations')
+          .select('*, profiles:assigned_user_id(full_name)')
+          .eq('channel', 'whatsapp')
+          .order('created_at', { ascending: false })
+          .range(fromConvIdx, fromConvIdx + limitConvVal - 1)
+        
+        const { data: convData, error: convErr } = await convQuery
+        if (convErr) throw convErr
+        
+        if (convData && convData.length > 0) {
+          rawConversations = [...rawConversations, ...convData]
+          if (convData.length < limitConvVal) {
+            hasMoreConvs = false
+          } else {
+            fromConvIdx += limitConvVal
+          }
+        } else {
+          hasMoreConvs = false
+        }
+      }
+
+      // 1. Fetch all active leads from Supabase with pagination. We apply scopeFilter in-memory
       // to ensure that the Manager Tracking Panel calculations and drawer lookups always have access
       // to the full dataset.
-      let query = supabase
-        .from('leads')
-        .select('*, communication_channels:communication_channel_id(name), lead_sources:source_id(name, code), calls(id), conversations(last_message_at, created_at), profiles:assigned_call_center_user_id(id, full_name), assigned_sales:assigned_sales_user_id(id, full_name)')
-        .eq('is_active', true)
+      let rawLeads: any[] = []
+      let fromLeadIdx = 0
+      const limitLeadVal = 1000
+      let hasMoreLeads = true
 
-      const { data: rawLeads, error } = await query
-      if (error) throw error
+      while (hasMoreLeads) {
+        let leadsQuery = supabase
+          .from('leads')
+          .select('*, communication_channels:communication_channel_id(name), lead_sources:source_id(name, code), calls(id), conversations(last_message_at, created_at), profiles:assigned_call_center_user_id(id, full_name), assigned_sales:assigned_sales_user_id(id, full_name)')
+          .eq('is_active', true)
+          .order('created_at', { ascending: false })
+          .range(fromLeadIdx, fromLeadIdx + limitLeadVal - 1)
+        
+        const { data: leadData, error: leadErr } = await leadsQuery
+        if (leadErr) throw leadErr
+        
+        if (leadData && leadData.length > 0) {
+          rawLeads = [...rawLeads, ...leadData]
+          if (leadData.length < limitLeadVal) {
+            hasMoreLeads = false
+          } else {
+            fromLeadIdx += limitLeadVal
+          }
+        } else {
+          hasMoreLeads = false
+        }
+      }
 
       if (!rawLeads) {
         setAllRawLeads([])
