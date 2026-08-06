@@ -9,12 +9,12 @@ RETURNS TABLE (
 BEGIN
     RETURN QUERY
     SELECT 
-        l.created_at::date as lead_date,
+        (l.created_at AT TIME ZONE 'Europe/Istanbul')::date as lead_date,
         count(*)::bigint as lead_count
     FROM public.leads l
-    WHERE l.created_at::date >= p_start_date AND l.created_at::date <= p_end_date
+    WHERE (l.created_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (l.created_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date
       AND l.is_active = true
-    GROUP BY l.created_at::date
+    GROUP BY (l.created_at AT TIME ZONE 'Europe/Istanbul')::date
     ORDER BY lead_date ASC;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
@@ -34,7 +34,7 @@ BEGIN
         max(s.color) as color
     FROM public.leads l
     JOIN public.lead_sources s ON l.source_id = s.id
-    WHERE l.created_at::date >= p_start_date AND l.created_at::date <= p_end_date
+    WHERE (l.created_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (l.created_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date
       AND l.is_active = true
     GROUP BY s.name
     ORDER BY lead_count DESC;
@@ -56,7 +56,7 @@ BEGIN
         max(s.color) as color
     FROM public.leads l
     JOIN public.lead_statuses s ON l.status_id = s.id
-    WHERE l.created_at::date >= p_start_date AND l.created_at::date <= p_end_date
+    WHERE (l.created_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (l.created_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date
       AND l.is_active = true
     GROUP BY s.name
     ORDER BY lead_count DESC;
@@ -78,7 +78,7 @@ BEGIN
         sum(coalesce(c.duration_seconds, 0))::bigint as total_duration_seconds
     FROM public.calls c
     JOIN public.profiles p ON c.user_id = p.id
-    WHERE c.started_at::date >= p_start_date AND c.started_at::date <= p_end_date
+    WHERE (c.started_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (c.started_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date
     GROUP BY p.full_name
     ORDER BY call_count DESC;
 END;
@@ -99,7 +99,7 @@ BEGIN
         max(o.color) as color
     FROM public.calls c
     JOIN public.call_outcomes o ON c.outcome_id = o.id
-    WHERE c.started_at::date >= p_start_date AND c.started_at::date <= p_end_date
+    WHERE (c.started_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (c.started_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date
     GROUP BY o.name
     ORDER BY call_count DESC;
 END;
@@ -135,15 +135,15 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT '1. Toplam Lead'::text as stage, count(l.id)::bigint as lead_count FROM public.leads l WHERE l.created_at::date >= p_start_date AND l.created_at::date <= p_end_date AND l.is_active = true
+    SELECT '1. Toplam Lead'::text as stage, count(l.id)::bigint as lead_count FROM public.leads l WHERE (l.created_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (l.created_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date AND l.is_active = true
     UNION ALL
-    SELECT '2. Görüşülen Lead'::text as stage, count(distinct l.id)::bigint as lead_count FROM public.leads l JOIN public.calls c ON c.lead_id = l.id WHERE l.created_at::date >= p_start_date AND l.created_at::date <= p_end_date AND l.is_active = true AND c.status = 'completed'
+    SELECT '2. Görüşülen Lead'::text as stage, count(distinct l.id)::bigint as lead_count FROM public.leads l JOIN public.calls c ON c.lead_id = l.id WHERE (l.created_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (l.created_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date AND l.is_active = true AND c.status = 'completed'
     UNION ALL
-    SELECT '3. Nitelikli Lead'::text as stage, count(l.id)::bigint as lead_count FROM public.leads l JOIN public.lead_statuses s ON l.status_id = s.id WHERE l.created_at::date >= p_start_date AND l.created_at::date <= p_end_date AND l.is_active = true AND s.name = 'Nitelikli Lead'
+    SELECT '3. Nitelikli Lead'::text as stage, count(l.id)::bigint as lead_count FROM public.leads l JOIN public.lead_statuses s ON l.status_id = s.id WHERE (l.created_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (l.created_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date AND l.is_active = true AND s.name = 'Nitelikli Lead'
     UNION ALL
-    SELECT '4. Satışa İletilen'::text as stage, count(l.id)::bigint as lead_count FROM public.leads l WHERE l.created_at::date >= p_start_date AND l.created_at::date <= p_end_date AND l.is_active = true AND l.forwarded_to_sales_at IS NOT NULL
+    SELECT '4. Satışa İletilen'::text as stage, count(l.id)::bigint as lead_count FROM public.leads l WHERE (l.created_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (l.created_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date AND l.is_active = true AND l.forwarded_to_sales_at IS NOT NULL
     UNION ALL
-    SELECT '5. Müşteriye Dönüşen'::text as stage, count(l.id)::bigint as lead_count FROM public.leads l WHERE l.created_at::date >= p_start_date AND l.created_at::date <= p_end_date AND l.is_active = true AND l.converted_at IS NOT NULL;
+    SELECT '5. Müşteriye Dönüşen'::text as stage, count(l.id)::bigint as lead_count FROM public.leads l WHERE (l.created_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (l.created_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date AND l.is_active = true AND l.converted_at IS NOT NULL;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
 
@@ -164,22 +164,22 @@ DECLARE
     v_conversion_rate numeric;
     v_result jsonb;
 BEGIN
-    SELECT count(*)::bigint INTO v_total_leads FROM public.leads l WHERE l.created_at::date >= p_start_date AND l.created_at::date <= p_end_date AND l.is_active = true;
+    SELECT count(*)::bigint INTO v_total_leads FROM public.leads l WHERE (l.created_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (l.created_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date AND l.is_active = true;
     
     SELECT count(*)::bigint INTO v_new_leads FROM public.leads l 
     JOIN public.lead_statuses s ON l.status_id = s.id
-    WHERE l.created_at::date >= p_start_date AND l.created_at::date <= p_end_date AND l.is_active = true AND s.name = 'Yeni Lead';
+    WHERE (l.created_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (l.created_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date AND l.is_active = true AND s.name = 'Yeni Lead';
     
     SELECT count(*)::bigint INTO v_pending_assign FROM public.leads l 
     JOIN public.lead_statuses s ON l.status_id = s.id
-    WHERE l.created_at::date >= p_start_date AND l.created_at::date <= p_end_date AND l.is_active = true AND s.name = 'Atama Bekliyor';
+    WHERE (l.created_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (l.created_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date AND l.is_active = true AND s.name = 'Atama Bekliyor';
     
     SELECT count(*)::bigint INTO v_cc_assigned FROM public.leads l 
     JOIN public.lead_statuses s ON l.status_id = s.id
-    WHERE l.created_at::date >= p_start_date AND l.created_at::date <= p_end_date AND l.is_active = true AND s.name = 'Call Center’a Atandı';
+    WHERE (l.created_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (l.created_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date AND l.is_active = true AND s.name = 'Call Center’a Atandı';
     
-    SELECT count(*)::bigint INTO v_calls_made FROM public.calls c WHERE c.started_at::date >= p_start_date AND c.started_at::date <= p_end_date;
-    SELECT sum(coalesce(c.duration_seconds, 0))::bigint INTO v_call_duration FROM public.calls c WHERE c.started_at::date >= p_start_date AND c.started_at::date <= p_end_date;
+    SELECT count(*)::bigint INTO v_calls_made FROM public.calls c WHERE (c.started_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (c.started_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date;
+    SELECT sum(coalesce(c.duration_seconds, 0))::bigint INTO v_call_duration FROM public.calls c WHERE (c.started_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (c.started_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date;
     
     SELECT count(*)::bigint INTO v_open_tasks FROM public.tasks t WHERE t.status IN ('pending', 'ongoing');
     SELECT count(*)::bigint INTO v_overdue_tasks FROM public.tasks t WHERE t.status = 'overdue' OR (t.status IN ('pending', 'ongoing') AND t.due_at < now());
@@ -189,7 +189,7 @@ BEGIN
     
     IF v_total_leads > 0 THEN
         v_conversion_rate := round((count(l.id) FILTER (WHERE l.converted_at IS NOT NULL)::numeric / v_total_leads::numeric) * 100.0, 2)
-        FROM public.leads l WHERE l.created_at::date >= p_start_date AND l.created_at::date <= p_end_date AND l.is_active = true;
+        FROM public.leads l WHERE (l.created_at AT TIME ZONE 'Europe/Istanbul')::date >= p_start_date AND (l.created_at AT TIME ZONE 'Europe/Istanbul')::date <= p_end_date AND l.is_active = true;
     ELSE
         v_conversion_rate := 0.00;
     END IF;

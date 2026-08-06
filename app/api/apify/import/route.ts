@@ -212,11 +212,10 @@ export async function POST(req: NextRequest) {
         'cnc router', 'cnc ahsap', 'cnc mobilya', 'cnc pleksi', 'fason cnc kesim', 'cnc kesim'
       ]
       
-      const hasMetalContext = ['metal', 'lazer', 'celik', 'sac', 'abkant', 'bukum'].some(kw => textToSearch.includes(kw))
       const isNonMetalOrCnc = nonMetalExcludeKeywords.some(kw => textToSearch.includes(kw))
       
-      if (isNonMetalOrCnc && !hasMetalContext) {
-        continue // Skip non-metal and non-metal CNC cutting
+      if (isNonMetalOrCnc) {
+        continue // Strictly skip all non-metal materials, wood, glass, fabric, hair, advertising etc.
       }
 
       // 5. Strict Manufacturer Filter: Must have at least one manufacturing/industrial indicator

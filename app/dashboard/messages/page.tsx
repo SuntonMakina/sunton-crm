@@ -828,7 +828,7 @@ export default function MessagesPage() {
                           )}
                           <span className="font-bold text-xs text-foreground">{clientName}</span>
                           <Link 
-                            href={`/workspace?tab=totalIncoming&id=${displayLead.id}`}
+                            href={`/dashboard/leads?id=${displayLead.id}`}
                             className="ml-2 px-2 py-0.5 text-[10px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 rounded border border-border flex items-center gap-1.5 transition-colors cursor-pointer"
                           >
                             📂 Aday Kartına Git
@@ -981,7 +981,7 @@ export default function MessagesPage() {
                 return (
                   <div className="pt-2">
                     <Link 
-                      href={`/workspace?tab=totalIncoming&id=${displayLead.id}`}
+                      href={`/dashboard/leads?id=${displayLead.id}`}
                       className="w-full h-8 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 rounded border border-border flex items-center justify-center gap-1.5 transition-colors cursor-pointer text-[10px] font-bold"
                     >
                       📂 Aday Kartına Git

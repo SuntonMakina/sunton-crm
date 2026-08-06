@@ -575,18 +575,24 @@ function computeWhatsAppStats(
     if (!resolvedLead) return;
 
     const isConverted = !!convertedLead;
+    const leadDate = getLeadDate(resolvedLead);
+    const leadCreatedInPeriod = leadDate && leadDate >= mStart && leadDate <= mEnd;
+
     resolvedLeadsList.push({
       lead: resolvedLead,
-      isConverted
+      isConverted,
+      leadCreatedInPeriod
     });
 
     if (isConverted) {
-      newLeadsCount++;
-      const hasBeenCalled = resolvedLead.conversation_completed === true || (resolvedLead.calls && resolvedLead.calls.length > 0) || !!resolvedLead.sales_representative_text || !!resolvedLead.legacy_sales_specialist_name;
-      if (hasBeenCalled) {
-        contactedLeadsCount++;
-      } else {
-        uncontactedLeadsCount++;
+      if (leadCreatedInPeriod) {
+        newLeadsCount++;
+        const hasBeenCalled = resolvedLead.conversation_completed === true || (resolvedLead.calls && resolvedLead.calls.length > 0) || !!resolvedLead.sales_representative_text || !!resolvedLead.legacy_sales_specialist_name;
+        if (hasBeenCalled) {
+          contactedLeadsCount++;
+        } else {
+          uncontactedLeadsCount++;
+        }
       }
     } else {
       unconvertedChatsCount++;
@@ -1029,13 +1035,13 @@ export default function StatisticsPage() {
       const agentStats = agentMap.get(agentName)
       agentStats.totalChats++
 
-      if (x.isConverted) {
+      if (x.isConverted && x.leadCreatedInPeriod) {
         agentStats.addedToCrm++
         const hasBeenCalled = resolvedLead.conversation_completed === true || (resolvedLead.calls && resolvedLead.calls.length > 0) || !!resolvedLead.sales_representative_text || !!resolvedLead.legacy_sales_specialist_name
         if (hasBeenCalled) {
           agentStats.calledLeads++
         }
-      } else {
+      } else if (!x.isConverted) {
         agentStats.unconvertedChats++
       }
     })
@@ -1580,15 +1586,17 @@ export default function StatisticsPage() {
         } else if (activeMetric === 'manager_unconverted_chats') {
           filteredLeads = stats.resolvedLeadsList.filter(x => !x.isConverted)
         } else if (activeMetric === 'manager_added_leads') {
-          filteredLeads = stats.resolvedLeadsList.filter(x => x.isConverted)
+          filteredLeads = stats.resolvedLeadsList.filter(x => x.isConverted && x.leadCreatedInPeriod)
         } else if (activeMetric === 'manager_contacted_leads') {
           filteredLeads = stats.resolvedLeadsList.filter(x => 
             x.isConverted && 
+            x.leadCreatedInPeriod &&
             (x.lead.conversation_completed === true || (x.lead.calls && x.lead.calls.length > 0) || !!x.lead.sales_representative_text || !!x.lead.legacy_sales_specialist_name)
           )
         } else if (activeMetric === 'manager_uncontacted_leads') {
           filteredLeads = stats.resolvedLeadsList.filter(x => 
             x.isConverted && 
+            x.leadCreatedInPeriod &&
             !(x.lead.conversation_completed === true || (x.lead.calls && x.lead.calls.length > 0) || !!x.lead.sales_representative_text || !!x.lead.legacy_sales_specialist_name)
           )
         }

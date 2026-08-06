@@ -81,6 +81,127 @@ export default function ScriptLeadsPage() {
   const [datasetId, setDatasetId] = useState('')
   const [importStatus, setImportStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null)
 
+  // Bot import states
+  const [importMethod, setImportMethod] = useState<'apify' | 'bot'>('bot')
+  const [botJson, setBotJson] = useState('')
+  const [botImporting, setBotImporting] = useState(false)
+  const [botCopied, setBotCopied] = useState(false)
+
+  const botScraperScript = `(async () => {
+  console.clear();
+  console.log("%cGoogle Maps Scraper - Sunton CRM Bot", "color: #7c3aed; font-size: 16px; font-weight: bold;");
+  console.log("Tarama başlatılıyor... Lütfen sol listedeki firmaları görmek için aşağı kaydırdığınızdan emin olun.");
+
+  const results = [];
+  const links = Array.from(document.querySelectorAll('a[href*="/maps/place/"]'));
+  console.log(\`Toplam \${links.length} potansiyel firma linki bulundu.\`);
+
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i];
+    console.log(\`[\${i + 1}/\${links.length}] Firmaya tıklanıyor...\`);
+    link.click();
+    
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    try {
+      const nameEl = document.querySelector('h1.DUw3O');
+      const title = nameEl ? nameEl.innerText.trim() : '';
+      if (!title) continue;
+
+      const phoneButton = document.querySelector('button[data-item-id^="phone:tel:"]');
+      const phone = phoneButton ? phoneButton.getAttribute('data-item-id').replace('phone:tel:', '').replace(/\\s+/g, '').trim() : '';
+
+      const webButton = document.querySelector('a[data-item-id="authority"]');
+      const website = webButton ? webButton.getAttribute('href') : '';
+
+      const addressButton = document.querySelector('button[data-item-id^="address"]');
+      const address = addressButton ? addressButton.innerText.trim() : '';
+
+      const categoryButton = document.querySelector('button.DkEaL');
+      const category = categoryButton ? categoryButton.innerText.trim() : '';
+
+      if (phone) {
+        results.push({ title, phone, website, address, category });
+        console.log(\`%c✓ Eklendi: \${title} (\${phone})\`, "color: #10b981;");
+      } else {
+        console.log(\`%c✗ Atlandı (Telefon yok): \${title}\`, "color: #ef4444;");
+      }
+    } catch (e) {
+      console.error("Detaylar okunamadı:", e.message);
+    }
+  }
+
+  console.log(\`\\nTarama tamamlandı! Toplam \${results.length} adet telefonlu firma bulundu.\`);
+  if (results.length > 0) {
+    const json = JSON.stringify(results, null, 2);
+    copy(json);
+    console.log("%c🎉 Veriler panoya (clipboard) başarıyla kopyalandı!", "color: #10b981; font-weight: bold; font-size: 14px;");
+    console.log("Şimdi CRM sayfasına geri dönüp panodaki veriyi yapıştırın.");
+    alert(\`Tarama tamamlandı! \${results.length} adet veri panoya kopyalandı. CRM'e yapıştırabilirsiniz.\`);
+  } else {
+    alert("Telefon numarası içeren yeni firma bulunamadı. Lütfen sol tarafı aşağı kaydırıp listeyi yükleyin.");
+  }
+})();`
+
+  const handleCopyScript = () => {
+    navigator.clipboard.writeText(botScraperScript)
+    setBotCopied(true)
+    setTimeout(() => setBotCopied(false), 2000)
+  }
+
+  const handleBotImport = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!botJson.trim()) {
+      alert('Lütfen kopyaladığınız JSON verisini yapıştırın.')
+      return
+    }
+
+    setBotImporting(true)
+    setImportStatus(null)
+
+    try {
+      let parsedData: any[] = []
+      try {
+        parsedData = JSON.parse(botJson.trim())
+      } catch (err) {
+        throw new Error('Geçersiz JSON formatı. Lütfen kopyaladığınız veriyi tam olarak yapıştırdığınızdan emin olun.')
+      }
+
+      if (!Array.isArray(parsedData)) {
+        throw new Error('Veri bir dizi (array) formatında olmalıdır.')
+      }
+
+      const res = await fetch('/api/leads/import-raw', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(parsedData)
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'İçe aktarım sırasında bir hata oluştu.')
+      }
+
+      setImportStatus({
+        type: data.count > 0 ? 'success' : 'error',
+        message: data.message
+      })
+
+      if (data.count > 0) {
+        setBotJson('')
+        fetchData()
+      }
+    } catch (err: any) {
+      setImportStatus({
+        type: 'error',
+        message: err.message || 'Veri işlenirken bir hata oluştu.'
+      })
+    } finally {
+      setBotImporting(false)
+    }
+  }
+
   useEffect(() => {
     fetchData()
   }, [])
@@ -305,59 +426,151 @@ export default function ScriptLeadsPage() {
       {/* Grid: Left - Import tool, Right - Representatives selector */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Import Form Card */}
-        <div className="lg:col-span-2 bg-card border border-border rounded-xl p-5 shadow-xs">
-          <h3 className="text-sm font-black text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
-            <Download className="h-4 w-4 text-primary" /> Apify Verilerini İçe Aktar
-          </h3>
-          <form onSubmit={handleImport} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-muted-foreground uppercase">Apify API Token</label>
-              <input
-                type="password"
-                placeholder="apify_api_xxxxxxxxxxxxxxxxx"
-                value={apiToken}
-                onChange={e => setApiToken(e.target.value)}
-                className="w-full h-10 px-3 border border-border rounded-lg bg-background text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-              />
+        <div className="lg:col-span-2 bg-card border border-border rounded-xl p-5 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex justify-between items-center border-b border-border pb-3 mb-4">
+              <h3 className="text-sm font-black text-foreground uppercase tracking-wider flex items-center gap-2">
+                <Download className="h-4 w-4 text-primary" /> Aday Havuzunu Besle
+              </h3>
+              
+              {/* Tab Selector */}
+              <div className="flex bg-muted p-0.5 rounded-lg border border-border text-xs">
+                <button
+                  type="button"
+                  onClick={() => setImportMethod('bot')}
+                  className={`h-7 px-3 font-extrabold rounded-md transition-all cursor-pointer ${
+                    importMethod === 'bot'
+                      ? 'bg-background text-foreground shadow-xs'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  🤖 Tarayıcı Botu (Ücretsiz)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setImportMethod('apify')}
+                  className={`h-7 px-3 font-extrabold rounded-md transition-all cursor-pointer ${
+                    importMethod === 'apify'
+                      ? 'bg-background text-foreground shadow-xs'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  ☁️ Apify Entegrasyonu
+                </button>
+              </div>
             </div>
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-muted-foreground uppercase">Dataset ID (Veri Seti)</label>
-              <input
-                type="text"
-                placeholder="3oA9d72Jxxxxxxxx"
-                value={datasetId}
-                onChange={e => setDatasetId(e.target.value)}
-                className="w-full h-10 px-3 border border-border rounded-lg bg-background text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-              />
-            </div>
-            <div className="md:col-span-2 flex justify-between items-center pt-2 gap-4">
-              {importStatus && (
-                <div className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg ${
-                  importStatus.type === 'success' 
-                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
-                    : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
-                }`}>
-                  <AlertCircle className="h-4 w-4 shrink-0" />
-                  <span>{importStatus.message}</span>
+
+            {importStatus && (
+              <div className={`mb-4 flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg ${
+                importStatus.type === 'success' 
+                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
+                  : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
+              }`}>
+                <AlertCircle className="h-4 w-4 shrink-0" />
+                <span>{importStatus.message}</span>
+              </div>
+            )}
+
+            {importMethod === 'apify' ? (
+              <form onSubmit={handleImport} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-muted-foreground uppercase">Apify API Token</label>
+                  <input
+                    type="password"
+                    placeholder="apify_api_xxxxxxxxxxxxxxxxx"
+                    value={apiToken}
+                    onChange={e => setApiToken(e.target.value)}
+                    className="w-full h-10 px-3 border border-border rounded-lg bg-background text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                  />
                 </div>
-              )}
-              <button
-                type="submit"
-                disabled={importing}
-                className="ml-auto h-10 px-5 bg-primary hover:bg-primary/95 text-primary-foreground font-bold rounded-lg text-sm cursor-pointer shadow-xs transition-colors flex items-center gap-2 disabled:opacity-50"
-              >
-                {importing ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" /> Veriler Çekiliyor...
-                  </>
-                ) : (
-                  <>
-                    <Download className="h-4 w-4" /> Verileri Çek ve Aktar
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-muted-foreground uppercase">Dataset ID (Veri Seti)</label>
+                  <input
+                    type="text"
+                    placeholder="3oA9d72Jxxxxxxxx"
+                    value={datasetId}
+                    onChange={e => setDatasetId(e.target.value)}
+                    className="w-full h-10 px-3 border border-border rounded-lg bg-background text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                  />
+                </div>
+                <div className="md:col-span-2 flex justify-end pt-2">
+                  <button
+                    type="submit"
+                    disabled={importing}
+                    className="h-10 px-5 bg-primary hover:bg-primary/95 text-primary-foreground font-bold rounded-lg text-sm cursor-pointer shadow-xs transition-colors flex items-center gap-2 disabled:opacity-50"
+                  >
+                    {importing ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" /> Veriler Çekiliyor...
+                      </>
+                    ) : (
+                      <>
+                        <Download className="h-4 w-4" /> Verileri Çek ve Aktar
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <form onSubmit={handleBotImport} className="space-y-4">
+                <div className="bg-muted/50 p-4 rounded-xl space-y-3 border border-border">
+                  <div className="flex justify-between items-start gap-3">
+                    <div className="space-y-1">
+                      <p className="text-xs font-black text-violet-600 dark:text-violet-400 uppercase tracking-wide">Ücretsiz Tarayıcı Botu Nasıl Kullanılır?</p>
+                      <ol className="list-decimal pl-4 text-[10.5px] text-slate-600 dark:text-slate-400 leading-relaxed font-medium space-y-1">
+                        <li>Google Maps'e gidin ve aramanızı yapın (örn: <b>fason lazer kesim Konya</b>).</li>
+                        <li>Sol listedeki tüm firmalar yüklenene kadar sayfayı aşağı kaydırın.</li>
+                        <li>Aşağıdaki butona basarak bot kodunu kopyalayın, Maps sayfasında <b>F12 (İncele) -&gt; Console</b> sekmesine yapıştırıp <b>Enter</b>'a basın.</li>
+                        <li>Bot tüm firmalara tıklayıp bilgileri panonuza kopyalayacaktır. Ardından gelip aşağıdaki kutuya yapıştırın.</li>
+                      </ol>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleCopyScript}
+                      className={`h-8 px-3 rounded-lg text-[10px] font-black shrink-0 transition-all select-none cursor-pointer ${
+                        botCopied 
+                          ? 'bg-emerald-500 text-white' 
+                          : 'bg-violet-600 hover:bg-violet-700 text-white'
+                      }`}
+                    >
+                      {botCopied ? '✓ Kopyalandı' : '📋 Bot Kodunu Kopyala'}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-muted-foreground uppercase flex items-center gap-1.5">
+                    📋 Panodaki JSON Verisini Yapıştırın
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder="[ { 'title': 'CNR Demir', 'phone': '90...' }, ... ]"
+                    value={botJson}
+                    onChange={e => setBotJson(e.target.value)}
+                    className="w-full p-3 border border-border rounded-lg bg-background text-[11px] font-mono focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                  />
+                </div>
+
+                <div className="flex justify-end pt-1">
+                  <button
+                    type="submit"
+                    disabled={botImporting || !botJson.trim()}
+                    className="h-9 px-5 bg-primary hover:bg-primary/95 text-primary-foreground font-black rounded-lg text-xs cursor-pointer shadow-xs transition-colors flex items-center gap-2 disabled:opacity-50"
+                  >
+                    {botImporting ? (
+                      <>
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" /> Veriler İşleniyor...
+                      </>
+                    ) : (
+                      <>
+                        <Check className="h-3.5 w-3.5" /> Adayları İçe Aktar
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
         </div>
 
         {/* Representative Selector Card */}

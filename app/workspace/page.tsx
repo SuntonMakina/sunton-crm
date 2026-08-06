@@ -150,14 +150,7 @@ export default function WorkspacePage() {
       if (outcomesList) setOutcomes(outcomesList)
       if (productsList) setProducts(productsList)
       if (reps) {
-        const EXCEL_REPS = ["Yunus Emre", "Onur", "Kaan", "Sefa", "Mustafa", "Anıl", "Batucan", "Kerem", "Emre", "Osman", "Black Sea", "Berke", "Anıl ve Onur"]
-        const filtered = reps.filter(r => 
-          EXCEL_REPS.some(er => 
-            r.full_name.toLowerCase().includes(er.toLowerCase()) || 
-            er.toLowerCase().includes(r.full_name.toLowerCase())
-          )
-        )
-        setSalesReps(filtered)
+        setSalesReps(reps)
       }
       if (provs) setProvinces(provs)
       if (sourcesList) setSources(sourcesList)
@@ -260,40 +253,49 @@ export default function WorkspacePage() {
 
         if (activities) {
           activities.forEach((act: any) => {
-            timelineItems.push({
-              id: act.id,
-              timestamp: new Date(act.created_at),
-              type: 'activity',
-              title: act.title,
-              description: act.description,
-              badge: 'İşlem'
-            })
+            const t = new Date(act.created_at)
+            if (!isNaN(t.getTime())) {
+              timelineItems.push({
+                id: act.id,
+                timestamp: t,
+                type: 'activity',
+                title: act.title,
+                description: act.description,
+                badge: 'İşlem'
+              })
+            }
           })
         }
 
         if (calls) {
           calls.forEach((c: any) => {
-            timelineItems.push({
-              id: c.id,
-              timestamp: new Date(c.created_at || c.started_at),
-              type: 'call',
-              title: c.direction === 'incoming' ? 'Gelen Arama' : 'Giden Arama',
-              description: `${(c.status === 'completed' || c.status === 'answered') ? '✅ Konuşuldu' : '❌ Cevap Yok'} - ${c.notes || ''}`,
-              badge: 'Arama'
-            })
+            const t = new Date(c.created_at || c.started_at)
+            if (!isNaN(t.getTime())) {
+              timelineItems.push({
+                id: c.id,
+                timestamp: t,
+                type: 'call',
+                title: c.direction === 'incoming' ? 'Gelen Arama' : 'Giden Arama',
+                description: `${(c.status === 'completed' || c.status === 'answered') ? '✅ Konuşuldu' : '❌ Cevap Yok'} - ${c.notes || ''}`,
+                badge: 'Arama'
+              })
+            }
           })
         }
 
         if (messages) {
           messages.forEach((m: any) => {
-            timelineItems.push({
-              id: m.id,
-              timestamp: new Date(m.sent_at || m.created_at),
-              type: 'message',
-              title: m.direction === 'outgoing' ? 'WhatsApp Mesajı Gönderildi' : 'WhatsApp Mesajı Alındı',
-              description: m.content,
-              badge: 'WhatsApp'
-            })
+            const t = new Date(m.sent_at || m.created_at)
+            if (!isNaN(t.getTime())) {
+              timelineItems.push({
+                id: m.id,
+                timestamp: t,
+                type: 'message',
+                title: m.direction === 'outgoing' ? 'WhatsApp Mesajı Gönderildi' : 'WhatsApp Mesajı Alındı',
+                description: m.content,
+                badge: 'WhatsApp'
+              })
+            }
           })
         }
 
@@ -2134,7 +2136,14 @@ export default function WorkspacePage() {
                               {selectedLeadCalls.length - idx}. Deneme: {call.call_outcomes?.name || (call.status === 'no_answer' ? 'Cevap Vermedi' : 'Arama Yapıldı')}
                             </span>
                             <span className="font-mono text-muted-foreground text-[9px]">
-                              {new Date(call.created_at || call.started_at).toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                              {(() => {
+                                try {
+                                  const d = new Date(call.created_at || call.started_at)
+                                  return isNaN(d.getTime()) ? '—' : d.toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+                                } catch (e) {
+                                  return '—'
+                                }
+                              })()}
                             </span>
                           </div>
                         ))}
@@ -2605,7 +2614,14 @@ export default function WorkspacePage() {
                             {selectedLeadCalls.length - idx}. Deneme: {call.call_outcomes?.name || (call.status === 'no_answer' ? 'Cevap Vermedi' : 'Arama Yapıldı')}
                           </span>
                           <span className="font-mono text-muted-foreground text-[9px]">
-                            {new Date(call.created_at || call.started_at).toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                            {(() => {
+                              try {
+                                  const d = new Date(call.created_at || call.started_at)
+                                  return isNaN(d.getTime()) ? '—' : d.toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+                                } catch (e) {
+                                  return '—'
+                                }
+                              })()}
                           </span>
                         </div>
                       ))}
@@ -2661,7 +2677,13 @@ export default function WorkspacePage() {
                                 {item.badge}
                               </span>
                               <span className="text-[8px] text-muted-foreground font-mono font-bold">
-                                {item.timestamp.toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                {(() => {
+                                  try {
+                                    return item.timestamp.toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                                  } catch (e) {
+                                    return '—'
+                                  }
+                                })()}
                               </span>
                             </div>
                             <p className="font-extrabold text-foreground mt-1">{item.title}</p>
@@ -2813,7 +2835,13 @@ export default function WorkspacePage() {
                                   {item.badge}
                                 </span>
                                 <span className="text-[8px] text-muted-foreground font-mono font-bold">
-                                  {item.timestamp.toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                  {(() => {
+                                    try {
+                                      return item.timestamp.toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                                    } catch (e) {
+                                      return '—'
+                                    }
+                                  })()}
                                 </span>
                               </div>
                               <p className="font-extrabold text-foreground mt-1">{item.title}</p>

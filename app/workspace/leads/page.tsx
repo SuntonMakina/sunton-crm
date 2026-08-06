@@ -109,14 +109,7 @@ export default function WorkspaceLeadsPage() {
       if (productsList) setProducts(productsList)
       if (outcomesList) setOutcomes(outcomesList)
       if (reps) {
-        const EXCEL_REPS = ["Yunus Emre", "Onur", "Kaan", "Sefa", "Mustafa", "Anıl", "Batucan", "Kerem", "Emre", "Osman", "Black Sea", "Berke", "Anıl ve Onur"]
-        const filtered = reps.filter(r => 
-          EXCEL_REPS.some(er => 
-            r.full_name.toLowerCase().includes(er.toLowerCase()) || 
-            er.toLowerCase().includes(r.full_name.toLowerCase())
-          )
-        )
-        setSalesReps(filtered)
+        setSalesReps(reps)
       }
       if (provs) setProvinces(provs)
     }
