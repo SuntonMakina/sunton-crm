@@ -813,6 +813,9 @@ export default function StatisticsPage() {
     } else if (periodFilter === 'temmuz_2026') {
       start_date = '2026-07-01'
       end_date = '2026-07-31'
+    } else if (periodFilter === 'agustos_2026') {
+      start_date = '2026-08-01'
+      end_date = '2026-08-31'
     } else if (periodFilter === 'tek_gun') {
       start_date = customStartDate || null
       end_date = customStartDate || null
@@ -2093,6 +2096,7 @@ export default function StatisticsPage() {
               <option value="mayis_2026">Mayıs 2026</option>
               <option value="haziran_2026">Haziran 2026</option>
               <option value="temmuz_2026">Temmuz 2026</option>
+              <option value="agustos_2026">Ağustos 2026</option>
               <option value="tek_gun">Tek Gün Seç...</option>
               <option value="ozel">Özel Tarih Aralığı...</option>
             </select>
