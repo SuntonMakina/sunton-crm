@@ -456,8 +456,15 @@ export default function WorkspacePage() {
   }
 
   const getLeadAddedDate = (lead: any) => {
+    const toTurkeyDate = (isoString: string) => {
+      if (!isoString) return '';
+      const d = new Date(isoString);
+      if (isNaN(d.getTime())) return isoString.split('T')[0];
+      return new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Istanbul' }).format(d);
+    }
+
     if (lead.first_contact_date) {
-      const cleanDate = lead.first_contact_date.split('T')[0]
+      const cleanDate = toTurkeyDate(lead.first_contact_date)
       const parts = cleanDate.split('-')
       if (parts.length === 3) {
         return `${parts[2]}.${parts[1]}.${parts[0]}`
@@ -468,7 +475,7 @@ export default function WorkspacePage() {
     const rawDate = lead.legacy_raw_data?.["İlk Temas Tarihi"]
     if (rawDate) {
       if (rawDate.includes('.')) return rawDate
-      const cleanDate = rawDate.split('T')[0]
+      const cleanDate = toTurkeyDate(rawDate)
       const parts = cleanDate.split('-')
       if (parts.length === 3) {
         return `${parts[2]}.${parts[1]}.${parts[0]}`
@@ -477,7 +484,7 @@ export default function WorkspacePage() {
     }
 
     if (lead.first_contact_at) {
-      const cleanDate = lead.first_contact_at.split('T')[0]
+      const cleanDate = toTurkeyDate(lead.first_contact_at)
       const parts = cleanDate.split('-')
       if (parts.length === 3) {
         return `${parts[2]}.${parts[1]}.${parts[0]}`
@@ -486,7 +493,7 @@ export default function WorkspacePage() {
     }
 
     if (lead.created_at) {
-      const cleanDate = lead.created_at.split('T')[0]
+      const cleanDate = toTurkeyDate(lead.created_at)
       const parts = cleanDate.split('-')
       if (parts.length === 3) {
         return `${parts[2]}.${parts[1]}.${parts[0]}`
