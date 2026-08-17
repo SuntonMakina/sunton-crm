@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "tauri": "tauri",
-    "gateway": "node scratch/whatsapp-gateway.mjs",
+    "gateway": "node --max-old-space-size=4096 scratch/whatsapp-gateway.mjs",
     "tunnel": "npx localtunnel --port 3001 --subdomain spotty-crews-bake"
   },
   "dependencies": {

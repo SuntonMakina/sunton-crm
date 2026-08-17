@@ -585,7 +585,7 @@ async function alignLidLeadsDatabase() {
     if (lid && phone) {
       // Small delay between calls to not overwhelm the Next.js server on startup
       await new Promise(resolve => setTimeout(resolve, 50));
-      notifyLidResolution(lid, phone);
+      await notifyLidResolution(lid, phone);
     }
   }
   console.log(`Finished database LID mappings alignment query for ${keys.length} items.`);
@@ -829,26 +829,35 @@ async function startWhatsApp() {
       finalFilteredMessages.push(...recent100);
     }
 
-    const payload = {
-      chats: payloadChats,
-      messages: (await Promise.all(finalFilteredMessages.map(async (m) => {
+    const processedMessages = [];
+    for (const m of finalFilteredMessages) {
+      try {
         const textContent = await processMessageContent(m);
         const cleanPhone = resolvePhone(m.key.remoteJid);
-        return {
-          id: m.key.id,
-          chatId: cleanPhone,
-          from: m.key.fromMe ? 'me' : cleanPhone,
-          fromMe: m.key.fromMe,
-          timestamp: getTimestamp(m.messageTimestamp),
-          content: textContent
-        };
-      }))).filter(m => m.content && m.chatId)
+        if (textContent && cleanPhone) {
+          processedMessages.push({
+            id: m.key.id,
+            chatId: cleanPhone,
+            from: m.key.fromMe ? 'me' : cleanPhone,
+            fromMe: m.key.fromMe,
+            timestamp: getTimestamp(m.messageTimestamp),
+            content: textContent
+          });
+        }
+      } catch (err) {
+        console.error('Error processing message during history sync:', err.message);
+      }
+    }
+
+    const payload = {
+      chats: payloadChats,
+      messages: processedMessages
     };
 
     // Fetch profile pictures in background asynchronously for the top 30 chats to avoid rate-limiting
-    const profilePicChats = payloadChats.slice(0, 30);
-    for (const chat of profilePicChats) {
-      (async () => {
+    (async () => {
+      const profilePicChats = payloadChats.slice(0, 30);
+      for (const chat of profilePicChats) {
         try {
           const jid = `${chat.id}@s.whatsapp.net`;
           const url = await sock.profilePictureUrl(jid, 'image');
@@ -859,8 +868,10 @@ async function startWhatsApp() {
         } catch (e) {
           console.log(`History sync: Failed to fetch profile picture for ${chat.id}:`, e.message);
         }
-      })();
-    }
+        // Small delay to avoid rate-limiting
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+    })();
 
     try {
       console.log('Forwarding history sync to Next.js webhook...');
