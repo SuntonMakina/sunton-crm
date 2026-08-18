@@ -312,19 +312,79 @@ export default function WorkspacePage() {
   }, [selectedLeadDetail, selectedLead, detailModalOpen, editFormOpen, profile, supabase])
 
   useEffect(() => {
-    if (leads && leads.length > 0) {
-      if (tabParam) {
-        setActiveTab(tabParam as any)
-      }
-      if (leadIdParam) {
-        const found = leads.find(l => l.id === leadIdParam)
-        if (found) {
-          setSelectedLeadDetail(found)
-          setDetailModalOpen(true)
+    if (tabParam) {
+      setActiveTab(tabParam as any)
+    }
+  }, [tabParam])
+
+  useEffect(() => {
+    if (!leadIdParam) {
+      setSelectedLeadDetail(null)
+      setDetailModalOpen(false)
+      return
+    }
+
+    const found = leads.find(l => l.id === leadIdParam)
+    if (found) {
+      setSelectedLeadDetail(found)
+      setDetailModalOpen(true)
+    } else {
+      async function fetchLeadDetail() {
+        try {
+          const { data, error } = await supabase
+            .from('leads')
+            .select(`
+              *,
+              lead_statuses(name, color),
+              lead_sources(name, code),
+              calls(id, status, created_at)
+            `)
+            .eq('id', leadIdParam)
+            .eq('is_active', true)
+            .single()
+          
+          if (data && !error) {
+            setSelectedLeadDetail(data)
+            setDetailModalOpen(true)
+          } else {
+            console.error('Lead not found or error:', error)
+          }
+        } catch (err) {
+          console.error('Error fetching lead details:', err)
         }
       }
+      fetchLeadDetail()
     }
-  }, [leads, tabParam, leadIdParam])
+  }, [leads, leadIdParam, supabase])
+
+  const refreshSelectedLeadDetail = async (leadId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('leads')
+        .select(`
+          *,
+          lead_statuses(name, color),
+          lead_sources(name, code),
+          calls(id, status, created_at)
+        `)
+        .eq('id', leadId)
+        .single()
+      if (data && !error) {
+        setSelectedLeadDetail(data)
+      }
+    } catch (err) {
+      console.error('Error refreshing selected lead detail:', err)
+    }
+  }
+
+  const handleCloseDetailModal = (open: boolean) => {
+    setDetailModalOpen(open)
+    if (!open) {
+      const params = new URLSearchParams(searchParams.toString())
+      params.delete('id')
+      router.replace(`/workspace?${params.toString()}`, { scroll: false })
+    }
+  }
 
   const fetchData = async (userId: string, role: string) => {
     setLoadingData(true)
@@ -1094,6 +1154,7 @@ export default function WorkspacePage() {
 
       alert('Arama sonucu başarıyla kaydedildi.')
       fetchData(profile.id, profile.role)
+      refreshSelectedLeadDetail(selectedLead.id)
       setEditFormOpen(false)
     } catch (err: any) {
       alert('İşlem kaydedilemedi: ' + err.message)
@@ -1240,6 +1301,7 @@ export default function WorkspacePage() {
       }
 
       fetchData(profile.id, profile.role)
+      refreshSelectedLeadDetail(selectedLead.id)
       setEditFormOpen(false)
     } catch (err: any) {
       alert('Güncelleme kaydedilemedi: ' + err.message)
@@ -2726,7 +2788,7 @@ export default function WorkspacePage() {
         </Dialog.Portal>
       </Dialog.Root>
       {/* 5. LEAD DETAIL DIALOG */}
-      <Dialog.Root open={detailModalOpen} onOpenChange={setDetailModalOpen}>
+      <Dialog.Root open={detailModalOpen} onOpenChange={handleCloseDetailModal}>
         <Dialog.Portal>
           <Dialog.Overlay className="bg-black/40 backdrop-blur-xs fixed inset-0 z-50" />
           <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-card border border-border rounded-xl shadow-2xl p-6 w-full max-w-lg z-50 animate-in fade-in zoom-in-95 duration-150 select-none">

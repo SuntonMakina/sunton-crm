@@ -60,6 +60,7 @@ export default function LeadsPage() {
   // View states
   const [viewMode, setViewMode] = useState<'table' | 'kanban' | 'card'>(viewModeParam as any)
   const [activeLeadId, setActiveLeadId] = useState<string | null>(detailIdParam)
+  const [activeLeadDetail, setActiveLeadDetail] = useState<any>(null)
 
   // Data states
   const [leads, setLeads] = useState<Lead[]>([])
@@ -128,6 +129,44 @@ export default function LeadsPage() {
     setViewMode(viewModeParam as any)
     setActiveLeadId(detailIdParam)
   }, [viewModeParam, detailIdParam])
+
+  // Fetch and synchronize active lead details (useful if lead is not in current paginated leads list)
+  const refreshActiveLeadDetail = async (leadId: string) => {
+    if (!leadId) return
+    try {
+      const { data, error } = await supabase
+        .from('leads')
+        .select(`
+          *,
+          lead_sources(name, color),
+          lead_statuses(name, color),
+          cc_profile:profiles!leads_assigned_call_center_user_id_fkey(full_name),
+          sales_profile:profiles!leads_assigned_sales_user_id_fkey(full_name)
+        `)
+        .eq('id', leadId)
+        .single()
+      
+      if (data && !error) {
+        setActiveLeadDetail(data)
+      }
+    } catch (err) {
+      console.error('Error fetching active lead detail:', err)
+    }
+  }
+
+  useEffect(() => {
+    if (!activeLeadId) {
+      setActiveLeadDetail(null)
+      return
+    }
+
+    const found = leads.find(l => l.id === activeLeadId)
+    if (found) {
+      setActiveLeadDetail(found)
+    } else {
+      refreshActiveLeadDetail(activeLeadId)
+    }
+  }, [activeLeadId, leads])
 
   // Load configuration and lookups
   useEffect(() => {
@@ -419,7 +458,7 @@ export default function LeadsPage() {
     if (!newCallForm.outcome || !activeLeadId) return
 
     try {
-      const activeLead = leads.find(l => l.id === activeLeadId)
+      const activeLead = activeLeadDetail
       const { error } = await supabase.from('calls').insert({
         lead_id: activeLeadId,
         direction: 'outgoing',
@@ -451,12 +490,14 @@ export default function LeadsPage() {
           if (qualifiedStatus) {
             await supabase.from('leads').update({ status_id: qualifiedStatus.id }).eq('id', activeLeadId)
             loadLeadsData()
+            refreshActiveLeadDetail(activeLeadId)
           }
         } else if (selectedOutcomeObj?.forwards_to_sales) {
           const forwardStatus = statuses.find(s => s.name === 'Satış Uzmanına İletildi')
           if (forwardStatus) {
             await supabase.from('leads').update({ status_id: forwardStatus.id, forwarded_to_sales_at: new Date().toISOString() }).eq('id', activeLeadId)
             loadLeadsData()
+            refreshActiveLeadDetail(activeLeadId)
           }
         }
 
@@ -883,8 +924,11 @@ export default function LeadsPage() {
           <div className="fixed inset-0 bg-black/30 backdrop-blur-xs z-40" onClick={() => updateUrlParams({ id: null })} />
           <div className="fixed top-0 right-0 h-screen w-full max-w-xl bg-card border-l border-border shadow-2xl z-50 flex flex-col animate-in slide-in-from-right duration-200">
             {/* Drawer header */}
-            {leads.filter(l => l.id === activeLeadId).map((lead) => (
-              <React.Fragment key={lead.id}>
+            {(() => {
+              const lead = activeLeadDetail
+              if (!lead) return null
+              return (
+                <React.Fragment key={lead.id}>
                 <div className="p-4 border-b border-border bg-accent/30 flex items-start justify-between">
                   <div>
                     <span className="text-[10px] font-bold font-mono text-muted-foreground">{lead.lead_number}</span>
@@ -1161,7 +1205,8 @@ export default function LeadsPage() {
                   )}
                 </div>
               </React.Fragment>
-            ))}
+              )
+            })()}
           </div>
         </>
       )}
