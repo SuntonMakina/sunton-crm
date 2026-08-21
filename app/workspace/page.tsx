@@ -597,8 +597,8 @@ export default function WorkspacePage() {
         return false;
       }
 
-      // Exclude leads with 6 or more call attempts
-      if (l.calls && l.calls.length >= 6) {
+      // Exclude leads with 5 or more call attempts
+      if (l.calls && l.calls.length >= 5) {
         return false;
       }
 
@@ -777,7 +777,7 @@ export default function WorkspacePage() {
     l.status_id !== '22222222-0000-0000-0000-000000000009' && 
     l.status_id !== '22222222-0000-0000-0000-000000000012' &&
     l.status_id !== '22222222-0000-0000-0000-000000000007' &&
-    (!l.calls || l.calls.length < 6) && // Exclude leads with 6 or more attempts
+    (!l.calls || l.calls.length < 5) && // Exclude leads with 5 or more attempts
     !l.sales_representative_text &&
     (
       l.next_contact_at 
