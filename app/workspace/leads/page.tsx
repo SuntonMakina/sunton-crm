@@ -135,7 +135,7 @@ export default function WorkspaceLeadsPage() {
       if (isSales) {
         query = query.eq('assigned_sales_user_id', userId)
       } else {
-        query = query.or(`assigned_call_center_user_id.eq.${userId},legacy_source_file.not.is.null,source_id.eq.11111111-0000-0000-0000-000000000005`)
+        query = query.or(`assigned_call_center_user_id.eq.${userId},legacy_source_file.not.is.null`)
       }
 
       const { data, error } = await query.order('created_at', { ascending: false })

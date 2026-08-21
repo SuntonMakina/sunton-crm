@@ -176,14 +176,11 @@ export async function POST(req: NextRequest) {
         continue // Skip machining shops
       }
 
-      // 2c. Exclude ALL machine manufacturers/sellers/services (User Request: "kendi makinesini üretiyor") unless they are explicitly a laser/bending shop
+      // 2c. Exclude ALL machine manufacturers/sellers/services (User Request: "kendi makinesini üretiyor")
       const machineExcludeKeywords = ['makine', 'makina', 'machine', 'machinery']
       const isMachineCompany = machineExcludeKeywords.some(kw => textToSearch.includes(kw))
       if (isMachineCompany) {
-        const isLaserShop = ['lazer kesim', 'kesim bukum', 'kesim büküm', 'lazer bukum', 'lazer büküm', 'abkant', 'fason kesim'].some(kw => textToSearch.includes(kw))
-        if (!isLaserShop) {
-          continue // Skip machine-related companies unless they do laser/bending
-        }
+        continue // Skip all machine-related companies
       }
 
       // 3. Exclude Retailers / Locksmiths / Service Showrooms
@@ -226,42 +223,6 @@ export async function POST(req: NextRequest) {
         continue // Skip generic stores or service centers with no factory/workshop indicators
       }
 
-      // 6. Calculate AI Score and Notes dynamically
-      let aiScore = 0
-      let aiNotes = ''
-
-      const superHighKeywords = [
-        'lazer kesim', 'fason kesim', 'sac kesim', 'kesim bukum', 'kesim büküm',
-        'lazer bukum', 'lazer büküm', 'abkant bukum', 'abkant büküm',
-        'sac isleme', 'sac işleme', 'fason lazer', 'lazer sac'
-      ]
-
-      const matchedSuperHigh = superHighKeywords.filter(kw => textToSearch.includes(kw))
-      
-      if (matchedSuperHigh.length > 0) {
-        aiScore = 95 + Math.min(matchedSuperHigh.length, 5)
-        aiNotes = `Super High priority keywords: [${matchedSuperHigh.join(', ')}]`
-      } else {
-        const highKeywords = ['lazer', 'kesim', 'bukum', 'büküm', 'abkant', 'paslanmaz', 'plazma', 'su jeti']
-        const matchedHigh = highKeywords.filter(kw => textToSearch.includes(kw))
-
-        if (matchedHigh.length > 0) {
-          aiScore = 80 + matchedHigh.length * 2
-          aiNotes = `High priority keywords: [${matchedHigh.join(', ')}]`
-        } else {
-          const medKeywords = ['metal', 'sac', 'demir', 'celik', 'çelik', 'konstruksiyon', 'konstrüksiyon', 'atolye', 'atölye', 'imalat', 'uretim', 'üretim', 'pres']
-          const matchedMed = medKeywords.filter(kw => textToSearch.includes(kw))
-
-          if (matchedMed.length > 0) {
-            aiScore = 50 + matchedMed.length * 3
-            aiNotes = `Medium priority keywords: [${matchedMed.join(', ')}]`
-          } else {
-            aiScore = 15
-            aiNotes = 'No relevant manufacturing keywords found'
-          }
-        }
-      }
-
       potentialLeadsToInsert.push({
         company_name: companyName,
         phone: normalizedPhone,
@@ -269,9 +230,7 @@ export async function POST(req: NextRequest) {
         description: descriptionText.trim() || 'Açıklama yok.',
         province: province,
         district: district,
-        status: 'pending',
-        ai_score: aiScore,
-        ai_notes: aiNotes
+        status: 'pending'
       })
 
       // Add to set to prevent duplicate inserts from the same dataset run

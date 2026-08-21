@@ -395,51 +395,27 @@ export default function WorkspacePage() {
       // Determine query filter based on role (call center rep or sales rep)
       const isSales = role === 'sales_specialist'
 
-      // A. Fetch Assigned Leads (paginated to bypass Supabase 1000 row limit)
-      const allLeads: any[] = []
-      let from = 0
-      const limit = 1000
-      let fetchMore = true
+      // A. Fetch Assigned Leads
+      let query = supabase
+        .from('leads')
+        .select(`
+          *,
+          lead_statuses(name, color),
+          lead_sources(name, code),
+          calls(id, status, created_at)
+        `)
+        .eq('is_active', true)
 
-      while (fetchMore) {
-        let batchQuery = supabase
-          .from('leads')
-          .select(`
-            *,
-            lead_statuses(name, color),
-            lead_sources(name, code),
-            calls(id, status, created_at)
-          `)
-          .eq('is_active', true)
-
-        if (isSales) {
-          batchQuery = batchQuery.eq('assigned_sales_user_id', userId)
-        } else {
-          batchQuery = batchQuery.or(`assigned_call_center_user_id.eq.${userId},legacy_source_file.not.is.null,source_id.eq.11111111-0000-0000-0000-000000000005`)
-        }
-
-        batchQuery = batchQuery
-          .order('created_at', { ascending: false })
-          .range(from, from + limit - 1)
-
-        const { data: batchData, error } = await batchQuery
-        if (error) {
-          console.error('Error fetching leads batch:', error)
-          break
-        }
-        if (!batchData || batchData.length === 0) {
-          break
-        }
-        allLeads.push(...batchData)
-        if (batchData.length < limit) {
-          fetchMore = false
-        } else {
-          from += limit
-        }
+      if (isSales) {
+        query = query.eq('assigned_sales_user_id', userId)
+      } else {
+        query = query.or(`assigned_call_center_user_id.eq.${userId},legacy_source_file.not.is.null,source_id.eq.11111111-0000-0000-0000-000000000005`)
       }
 
-      if (allLeads.length > 0) {
-        setLeads(allLeads)
+      const { data: assignedLeads } = await query
+
+      if (assignedLeads) {
+        setLeads(assignedLeads)
       }      // B. Fetch Tasks
       const { data: userTasks } = await supabase
         .from('tasks')

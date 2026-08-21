@@ -195,7 +195,7 @@ export default function Navbar({ sidebarCollapsed, setSidebarCollapsed, profile 
         company_name: leadForm.company || null,
         requested_product: leadForm.product || null,
         created_by: profile?.id,
-        status_id: '22222222-0000-0000-0000-000000000001' // Yeni Lead
+        status_id: 'ls000000-0000-0000-0000-000000000001' // Yeni Lead
       })
 
       if (!error) {
