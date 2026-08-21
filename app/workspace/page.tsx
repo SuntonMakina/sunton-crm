@@ -592,8 +592,19 @@ export default function WorkspacePage() {
     const activeCallbacks = leads.filter(l => {
       if (!l.next_contact_at) return false
 
+      // Exclude WhatsApp Sohbeti status
+      if (l.status_id === '22222222-0000-0000-0000-000000000020') {
+        return false;
+      }
+
       // Exclude WhatsApp leads that have not had any calls logged yet
-      const isWa = (l.source_id === '474b7a22-c53f-43ba-a8bd-75ce0977a798' || l.lead_sources?.code === 'META_WA') && l.legacy_source_file === null;
+      const isWa = (
+        l.source_id === '474b7a22-c53f-43ba-a8bd-75ce0977a798' || 
+        l.source_id === '11111111-0000-0000-0000-000000000005' ||
+        l.lead_sources?.code === 'META_WA' ||
+        l.lead_sources?.code === 'WHATSAPP'
+      ) && l.legacy_source_file === null;
+
       if (isWa && (!l.calls || l.calls.length === 0)) {
         return false;
       }
@@ -613,7 +624,7 @@ export default function WorkspacePage() {
       const turkeyDate = new Date(d.getTime() + offset * 60 * 60 * 1000);
       const dateKey = turkeyDate.toISOString().split('T')[0];
 
-      if (dateKey < '2026-08-20') {
+      if (dateKey < '2026-08-21') {
         const groupKey = 'overdue'
         if (!groups[groupKey]) {
           groups[groupKey] = []
