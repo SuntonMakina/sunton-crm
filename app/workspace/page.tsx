@@ -597,6 +597,11 @@ export default function WorkspacePage() {
         return false;
       }
 
+      // Exclude leads with 6 or more call attempts
+      if (l.calls && l.calls.length >= 6) {
+        return false;
+      }
+
       // Exclude WhatsApp leads that have not had any calls logged yet
       const isWa = (
         l.source_id === '474b7a22-c53f-43ba-a8bd-75ce0977a798' || 
@@ -772,6 +777,7 @@ export default function WorkspacePage() {
     l.status_id !== '22222222-0000-0000-0000-000000000009' && 
     l.status_id !== '22222222-0000-0000-0000-000000000012' &&
     l.status_id !== '22222222-0000-0000-0000-000000000007' &&
+    (!l.calls || l.calls.length < 6) && // Exclude leads with 6 or more attempts
     !l.sales_representative_text &&
     (
       l.next_contact_at 
