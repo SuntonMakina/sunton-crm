@@ -363,12 +363,42 @@ export default function WhatsAppWorkspacePage() {
       if (error) throw error
 
       if (convsData) {
-        const initialLeadsList = convsData.map((c: any) => ({
-          ...c.leads,
-          conversation_id: c.id,
-          unread_count: c.unread_count,
-          last_contact_at: c.last_message_at || c.leads.last_contact_at
-        }))
+        const leadsWithConversations = new Set<string>()
+        let initialLeadsList = convsData.map((c: any) => {
+          if (c.leads?.id) {
+            leadsWithConversations.add(c.leads.id)
+          }
+          return {
+            ...c.leads,
+            conversation_id: c.id,
+            unread_count: c.unread_count,
+            last_contact_at: c.last_message_at || c.leads.last_contact_at
+          }
+        })
+
+        // Fetch active WhatsApp leads without conversations to start new chats
+        const { data: rawLeads, error: rawLeadsErr } = await supabase
+          .from('leads')
+          .select(`
+            *,
+            lead_statuses(name, color),
+            lead_sources(name)
+          `)
+          .eq('is_active', true)
+          .or('source_id.eq.474b7a22-c53f-43ba-a8bd-75ce0977a798,source_id.eq.11111111-0000-0000-0000-000000000005,status_id.eq.22222222-0000-0000-0000-000000000020')
+          .is('legacy_source_file', null)
+
+        if (!rawLeadsErr && rawLeads) {
+          const emptyConvs = rawLeads
+            .filter((l: any) => !leadsWithConversations.has(l.id))
+            .map((l: any) => ({
+              ...l,
+              conversation_id: null,
+              unread_count: 0,
+              last_contact_at: l.last_contact_at || l.created_at
+            }))
+          initialLeadsList = [...initialLeadsList, ...emptyConvs]
+        }
 
         const excludedSalesPhones = new Set([
           '905335745839',
@@ -382,9 +412,16 @@ export default function WhatsAppWorkspacePage() {
           '905379527977'
         ])
 
-        const leadsList = initialLeadsList.filter((l: any) => {
+        let leadsList = initialLeadsList.filter((l: any) => {
           const cleanPhone = l.phone_normalized || (l.phone ? l.phone.replace(/\D/g, '') : '')
           return !excludedSalesPhones.has(cleanPhone)
+        })
+
+        // Sort by last contact descending so newest/active leads are always first
+        leadsList.sort((a, b) => {
+          const timeA = a.last_contact_at ? new Date(a.last_contact_at).getTime() : 0
+          const timeB = b.last_contact_at ? new Date(b.last_contact_at).getTime() : 0
+          return timeB - timeA
         })
 
         // Fetch matching registered leads by phone for raw chats
