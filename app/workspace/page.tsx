@@ -621,15 +621,20 @@ export default function WorkspacePage() {
     })
 
     const groups: { [key: string]: any[] } = {}
+    
+    // Get today's date in Turkey local time (YYYY-MM-DD)
+    const offset = 3; // TRT (UTC+3)
+    const turkeyNow = new Date(new Date().getTime() + offset * 60 * 60 * 1000);
+    const todayStr = turkeyNow.toISOString().split('T')[0];
+
     activeCallbacks.forEach(l => {
       const d = new Date(l.next_contact_at)
       
       // Convert to Turkey local date (YYYY-MM-DD)
-      const offset = 3; // TRT (UTC+3)
       const turkeyDate = new Date(d.getTime() + offset * 60 * 60 * 1000);
       const dateKey = turkeyDate.toISOString().split('T')[0];
 
-      if (dateKey < '2026-08-21') {
+      if (dateKey < todayStr) {
         const groupKey = 'overdue'
         if (!groups[groupKey]) {
           groups[groupKey] = []
@@ -766,14 +771,11 @@ export default function WorkspacePage() {
   // Sorting: group priority first
   const sortedLeads = [...categorizedLeads].sort((a, b) => a.priorityGroup - b.priorityGroup)
 
-  // 1. Bugün Aranacaklar: not forwarded or disinterested
-  // - Legacy leads (imported from Excel) must have a next_contact_at scheduled for today or past to show up.
-  // - CRM leads can have no schedule (next_contact_at is null, meaning needs first call) or scheduled for today or past.
   // 1. Bugün Aranacaklar: not forwarded, disinterested or already talked
   // - Legacy leads (imported from Excel) must have a next_contact_at scheduled in the past or present to show up.
   // - CRM leads can have no schedule (next_contact_at is null, meaning needs first call) or scheduled in the past or present.
   const bugunAranacakLeads = sortedLeads.filter(l => 
-    !isWhatsAppLead(l) && 
+    (!isWhatsAppLead(l) || (isWhatsAppLead(l) && (!l.calls || l.calls.length === 0 || (l.next_contact_at && (isToday(l.next_contact_at) || isPast(l.next_contact_at)))))) && 
     l.status_id !== '22222222-0000-0000-0000-000000000009' && 
     l.status_id !== '22222222-0000-0000-0000-000000000012' &&
     l.status_id !== '22222222-0000-0000-0000-000000000007' &&
@@ -789,7 +791,7 @@ export default function WorkspacePage() {
   // 2. Bugün Yapılan Aramalar: matched by lead ids in calls logged today OR WhatsApp messages sent today
   const leadIdsCalledToday = new Set(callsToday.map(c => c.lead_id))
   const bugunYapilanLeads = sortedLeads.filter(l => 
-    !isWhatsAppLead(l) && (leadIdsCalledToday.has(l.id) || messagedTodayLeads.has(l.id))
+    leadIdsCalledToday.has(l.id) || messagedTodayLeads.has(l.id)
   )
 
   // 3. Toplam Yapılmış Aramalar: called at least once (last_contact_at is not null) or legacy leads (Excel imported data) where conversation was completed
@@ -813,7 +815,6 @@ export default function WorkspacePage() {
 
   // 5. Hiç Aranmamışlar: not forwarded, disinterested or already talked, AND last_contact_at is null AND calls.length is 0
   const hicAranmamisLeads = sortedLeads.filter(l => 
-    !isWhatsAppLead(l) && 
     l.status_id !== '22222222-0000-0000-0000-000000000009' && 
     l.status_id !== '22222222-0000-0000-0000-000000000012' &&
     l.status_id !== '22222222-0000-0000-0000-000000000007' &&
@@ -1248,6 +1249,21 @@ export default function WorkspacePage() {
         finalNotes = `[${timeStr}] - ${attemptPrefix}${editForm.note.trim()}\n` + finalNotes
       }
 
+      let nextContactAt = selectedLead.next_contact_at
+      let callbackStatus = editForm.callbackStatus || 'none'
+
+      if (editForm.callbackDate) {
+        const timePart = editForm.callbackTime || '09:00'
+        const targetDate = new Date(`${editForm.callbackDate}T${timePart}`)
+        nextContactAt = targetDate.toISOString()
+        if (callbackStatus === 'none') {
+          callbackStatus = 'pending'
+        }
+      } else {
+        nextContactAt = null
+        callbackStatus = 'none'
+      }
+
       const updatePayload: any = {
         first_name: editForm.firstName,
         last_name: editForm.lastName,
@@ -1268,10 +1284,11 @@ export default function WorkspacePage() {
         temperature: editForm.temperature || 'warm',
         extra_notes: finalNotes,
         lead_quality_category: editForm.leadQualityStatus || null,
-        callback_status: editForm.callbackStatus,
+        callback_status: callbackStatus,
         callback_date: editForm.callbackDate || null,
         callback_time: editForm.callbackTime || null,
-        callback_notes: editForm.callbackNotes || null
+        callback_notes: editForm.callbackNotes || null,
+        next_contact_at: nextContactAt
       }
 
       if (editForm.leadQualityStatus) {

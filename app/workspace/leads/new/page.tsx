@@ -188,6 +188,10 @@ export default function AddLeadPage() {
       setDuplicateLead(null)
       setBypassDuplicate(false)
 
+      setTimeout(() => {
+        router.push('/workspace')
+      }, 1500)
+
     } catch (err: any) {
       console.error(err)
       const details = err.details ? ` (Detay: ${err.details})` : ''
