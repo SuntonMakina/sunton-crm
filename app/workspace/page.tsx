@@ -499,14 +499,9 @@ export default function WorkspacePage() {
     }
   }
 
-  // Helper to identify WhatsApp leads
+  // Helper to identify WhatsApp leads (only raw unconverted chats)
   const isWhatsAppLead = (l: any) => {
-    return (
-      l.source_id === '474b7a22-c53f-43ba-a8bd-75ce0977a798' || 
-      l.source_id === '11111111-0000-0000-0000-000000000005' ||
-      l.status_id === '22222222-0000-0000-0000-000000000020' ||
-      l.lead_sources?.code === 'META_WA'
-    ) && l.legacy_source_file === null;
+    return l.status_id === '22222222-0000-0000-0000-000000000020';
   }
 
   const handleStatusChange = async (newStatus: string) => {
@@ -599,18 +594,6 @@ export default function WorkspacePage() {
 
       // Exclude leads with 5 or more call attempts
       if (l.calls && l.calls.length >= 5) {
-        return false;
-      }
-
-      // Exclude WhatsApp leads that have not had any calls logged yet
-      const isWa = (
-        l.source_id === '474b7a22-c53f-43ba-a8bd-75ce0977a798' || 
-        l.source_id === '11111111-0000-0000-0000-000000000005' ||
-        l.lead_sources?.code === 'META_WA' ||
-        l.lead_sources?.code === 'WHATSAPP'
-      ) && l.legacy_source_file === null;
-
-      if (isWa && (!l.calls || l.calls.length === 0)) {
         return false;
       }
 
@@ -775,7 +758,7 @@ export default function WorkspacePage() {
   // - Legacy leads (imported from Excel) must have a next_contact_at scheduled in the past or present to show up.
   // - CRM leads can have no schedule (next_contact_at is null, meaning needs first call) or scheduled in the past or present.
   const bugunAranacakLeads = sortedLeads.filter(l => 
-    (!isWhatsAppLead(l) || (isWhatsAppLead(l) && (!l.calls || l.calls.length === 0 || (l.next_contact_at && (isToday(l.next_contact_at) || isPast(l.next_contact_at)))))) && 
+    !isWhatsAppLead(l) && 
     l.status_id !== '22222222-0000-0000-0000-000000000009' && 
     l.status_id !== '22222222-0000-0000-0000-000000000012' &&
     l.status_id !== '22222222-0000-0000-0000-000000000007' &&
