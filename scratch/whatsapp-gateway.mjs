@@ -5,6 +5,8 @@ import qrcode from 'qrcode';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { spawn } from 'child_process';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -59,9 +61,79 @@ async function getNgrokUrl() {
   return null;
 }
 
+let activeTunnelUrl = null;
+let tunnelProcess = null;
+
+function startCloudflareTunnel() {
+  return new Promise((resolve) => {
+    const envUrl = process.env.GATEWAY_PUBLIC_URL;
+    if (envUrl && !envUrl.includes('trycloudflare.com')) {
+      console.log(`Using static GATEWAY_PUBLIC_URL from env: ${envUrl}`);
+      activeTunnelUrl = envUrl;
+      return resolve(envUrl);
+    }
+
+    console.log('Starting Cloudflare quick tunnel via cloudflared...');
+    tunnelProcess = spawn('cloudflared', ['tunnel', '--url', `http://localhost:${PORT}`]);
+
+    let resolved = false;
+
+    tunnelProcess.stderr.on('data', (data) => {
+      const output = data.toString();
+      console.log(`[Tunnel] ${output.trim()}`);
+
+      const match = output.match(/https:\/\/[a-z0-9-]+\.trycloudflare\.com/);
+      if (match && !resolved) {
+        activeTunnelUrl = match[0];
+        console.log(`\n======================================================`);
+        console.log(`[Tunnel] Detected Cloudflare Tunnel URL: ${activeTunnelUrl}`);
+        console.log(`======================================================\n`);
+        resolved = true;
+        
+        // Dynamically register the URL as soon as it is detected
+        registerGatewayUrl();
+        resolve(activeTunnelUrl);
+      }
+    });
+
+    tunnelProcess.on('close', (code) => {
+      console.log(`[Tunnel] Cloudflare tunnel process exited with code ${code}`);
+    });
+
+    const cleanup = () => {
+      if (tunnelProcess) {
+        console.log('[Tunnel] Terminating Cloudflare tunnel child process...');
+        tunnelProcess.kill();
+        tunnelProcess = null;
+      }
+    };
+
+    process.on('exit', cleanup);
+    process.on('SIGINT', () => {
+      cleanup();
+      process.exit(0);
+    });
+    process.on('SIGTERM', () => {
+      cleanup();
+      process.exit(0);
+    });
+
+    setTimeout(() => {
+      if (!resolved) {
+        console.warn('[Tunnel] Cloudflare tunnel resolution timed out after 15s.');
+        resolve(null);
+      }
+    }, 15000);
+  });
+}
+
 async function registerGatewayUrl() {
   const ngrokUrl = await getNgrokUrl();
-  const publicUrl = process.env.GATEWAY_PUBLIC_URL || ngrokUrl || `http://localhost:${PORT}`;
+  const envUrl = process.env.GATEWAY_PUBLIC_URL;
+  const isTryCloudflareEnv = envUrl && envUrl.includes('trycloudflare.com');
+  
+  const publicUrl = activeTunnelUrl || (!isTryCloudflareEnv && envUrl) || ngrokUrl || `http://localhost:${PORT}`;
+  
   console.log(`Registering WhatsApp Gateway URL to CRM: ${publicUrl}`);
   try {
     const res = await fetch(`${NEXTJS_URL}/api/whatsapp/register-gateway`, {
@@ -76,6 +148,7 @@ async function registerGatewayUrl() {
     console.error('Failed to register gateway URL:', err.message);
   }
 }
+
 
 function getExtensionFromMimetype(mime, defaultExt) {
   if (!mime) return defaultExt;
@@ -1190,10 +1263,17 @@ app.post('/reset', async (req, res) => {
   res.json({ success: true, message: 'Session reset started.' });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`WhatsApp Gateway HTTP server running on http://localhost:${PORT}`);
+  
+  // Start Cloudflare tunnel asynchronously
+  startCloudflareTunnel().catch((err) => {
+    console.error('Error starting Cloudflare tunnel:', err.message);
+  });
+
   registerGatewayUrl();
   sendStatusToCRM();
   // Sync status to CRM periodically every 10 seconds
   setInterval(sendStatusToCRM, 10000);
 });
+

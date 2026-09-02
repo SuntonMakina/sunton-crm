@@ -9,7 +9,7 @@
     "lint": "eslint",
     "tauri": "tauri",
     "gateway": "node --max-old-space-size=4096 scratch/whatsapp-gateway.mjs",
-    "tunnel": "npx localtunnel --port 3001 --subdomain spotty-crews-bake"
+    "tunnel": "cloudflared tunnel --url http://localhost:3001"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
