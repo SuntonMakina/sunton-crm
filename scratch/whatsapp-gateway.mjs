@@ -63,6 +63,7 @@ async function getNgrokUrl() {
 
 let activeTunnelUrl = null;
 let tunnelProcess = null;
+let isShuttingDown = false;
 
 function startCloudflareTunnel() {
   return new Promise((resolve) => {
@@ -73,34 +74,66 @@ function startCloudflareTunnel() {
       return resolve(envUrl);
     }
 
+    if (tunnelProcess) {
+      try {
+        tunnelProcess.kill();
+      } catch (e) {}
+      tunnelProcess = null;
+    }
+
     console.log('Starting Cloudflare quick tunnel via cloudflared...');
     tunnelProcess = spawn('cloudflared', ['tunnel', '--url', `http://localhost:${PORT}`]);
 
     let resolved = false;
 
-    tunnelProcess.stderr.on('data', (data) => {
+    const handleData = (data) => {
       const output = data.toString();
-      console.log(`[Tunnel] ${output.trim()}`);
+      const lines = output.trim().split('\n');
+      for (const line of lines) {
+        if (line.includes('trycloudflare.com') || line.includes('error') || line.includes('INF')) {
+          console.log(`[Tunnel] ${line.trim()}`);
+        }
+      }
 
       const match = output.match(/https:\/\/[a-z0-9-]+\.trycloudflare\.com/);
-      if (match && !resolved) {
-        activeTunnelUrl = match[0];
-        console.log(`\n======================================================`);
-        console.log(`[Tunnel] Detected Cloudflare Tunnel URL: ${activeTunnelUrl}`);
-        console.log(`======================================================\n`);
-        resolved = true;
-        
-        // Dynamically register the URL as soon as it is detected
-        registerGatewayUrl();
-        resolve(activeTunnelUrl);
+      if (match) {
+        const detectedUrl = match[0];
+        if (detectedUrl !== activeTunnelUrl) {
+          activeTunnelUrl = detectedUrl;
+          console.log(`\n======================================================`);
+          console.log(`[Tunnel] Detected/Updated Cloudflare Tunnel URL: ${activeTunnelUrl}`);
+          console.log(`======================================================\n`);
+          registerGatewayUrl();
+        }
+        if (!resolved) {
+          resolved = true;
+          resolve(activeTunnelUrl);
+        }
       }
+    };
+
+    tunnelProcess.stderr.on('data', handleData);
+    tunnelProcess.stdout.on('data', handleData);
+
+    tunnelProcess.on('error', (err) => {
+      console.error(`[Tunnel] Failed to start cloudflared:`, err.message);
     });
 
     tunnelProcess.on('close', (code) => {
       console.log(`[Tunnel] Cloudflare tunnel process exited with code ${code}`);
+      tunnelProcess = null;
+      if (!isShuttingDown) {
+        console.log('[Tunnel] Restarting Cloudflare tunnel in 5 seconds...');
+        setTimeout(() => {
+          if (!isShuttingDown) {
+            startCloudflareTunnel().catch(console.error);
+          }
+        }, 5000);
+      }
     });
 
     const cleanup = () => {
+      isShuttingDown = true;
       if (tunnelProcess) {
         console.log('[Tunnel] Terminating Cloudflare tunnel child process...');
         tunnelProcess.kill();
@@ -1275,5 +1308,7 @@ app.listen(PORT, async () => {
   sendStatusToCRM();
   // Sync status to CRM periodically every 10 seconds
   setInterval(sendStatusToCRM, 10000);
+  // Re-register gateway URL periodically every 60 seconds
+  setInterval(registerGatewayUrl, 60000);
 });
 
