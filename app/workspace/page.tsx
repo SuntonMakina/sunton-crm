@@ -32,6 +32,7 @@ import {
 } from 'lucide-react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { formatLeadId, getProgressiveCallSchedule, getNumericPart } from '@/lib/utils'
+import MeryemCallCenterView from '@/components/workspace/MeryemCallCenterView'
 
 export default function WorkspacePage() {
   const supabase = createClient()
@@ -1366,6 +1367,11 @@ export default function WorkspacePage() {
     } finally {
       setSavingEdit(false)
     }
+  }
+
+  // If logged in as Meryem, render her dedicated streamlined calling console
+  if (profile && profile.email === 'meryem@suntonmakina.com') {
+    return <MeryemCallCenterView profile={profile} />
   }
 
   return (

@@ -13,22 +13,30 @@ import {
   ChevronRight,
   MessageCircle
 } from 'lucide-react'
+import { Profile } from '@/types/crm'
 import { cn } from '@/lib/utils'
 
 interface WorkspaceSidebarProps {
   collapsed: boolean
   setCollapsed: (collapsed: boolean) => void
+  profile?: Profile | null
 }
 
-export default function WorkspaceSidebar({ collapsed, setCollapsed }: WorkspaceSidebarProps) {
+export default function WorkspaceSidebar({ collapsed, setCollapsed, profile }: WorkspaceSidebarProps) {
   const pathname = usePathname()
+  const isMeryem = profile?.email === 'meryem@suntonmakina.com'
 
-  const menuItems = [
-    { name: 'Çalışma Ekranım', href: '/workspace', icon: LayoutGrid },
-    { name: 'Görevlerim', href: '/workspace/tasks', icon: CheckSquare },
-    { name: 'Yönetici Mesajları', href: '/workspace/messages', icon: MessageSquare },
-    { name: 'WhatsApp', href: '/workspace/whatsapp', icon: MessageCircle },
-  ]
+  const menuItems = isMeryem
+    ? [
+        { name: 'Arama Ekranım', href: '/workspace', icon: LayoutGrid },
+        { name: 'Yönetici Mesajları', href: '/workspace/messages', icon: MessageSquare },
+      ]
+    : [
+        { name: 'Çalışma Ekranım', href: '/workspace', icon: LayoutGrid },
+        { name: 'Görevlerim', href: '/workspace/tasks', icon: CheckSquare },
+        { name: 'Yönetici Mesajları', href: '/workspace/messages', icon: MessageSquare },
+        { name: 'WhatsApp', href: '/workspace/whatsapp', icon: MessageCircle },
+      ]
 
   return (
     <aside

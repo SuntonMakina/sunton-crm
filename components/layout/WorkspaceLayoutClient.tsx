@@ -26,20 +26,28 @@ export default function WorkspaceLayoutClient({ children, profile }: WorkspaceLa
   const [collapsed, setCollapsed] = useState(false)
 
   // Mobile navigation tabs
-  const mobileTabs = [
-    { name: 'Çalışma', href: '/workspace', icon: LayoutGrid },
-    { name: 'Leadlerim', href: '/workspace/leads', icon: UserCheck },
-    { name: 'Görevlerim', href: '/workspace/tasks', icon: CheckSquare },
-    { name: 'WhatsApp', href: '/workspace/whatsapp', icon: MessageCircle },
-    { name: 'Mesajlar', href: '/workspace/messages', icon: MessageSquare },
-    { name: 'Profil', href: '/workspace/profile', icon: User },
-  ]
+  const isMeryem = profile?.email === 'meryem@suntonmakina.com'
+  
+  const mobileTabs = isMeryem
+    ? [
+        { name: 'Arama Ekranı', href: '/workspace', icon: LayoutGrid },
+        { name: 'Mesajlar', href: '/workspace/messages', icon: MessageSquare },
+        { name: 'Profil', href: '/workspace/profile', icon: User },
+      ]
+    : [
+        { name: 'Çalışma', href: '/workspace', icon: LayoutGrid },
+        { name: 'Leadlerim', href: '/workspace/leads', icon: UserCheck },
+        { name: 'Görevlerim', href: '/workspace/tasks', icon: CheckSquare },
+        { name: 'WhatsApp', href: '/workspace/whatsapp', icon: MessageCircle },
+        { name: 'Mesajlar', href: '/workspace/messages', icon: MessageSquare },
+        { name: 'Profil', href: '/workspace/profile', icon: User },
+      ]
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       {/* Sidebar: hidden on mobile */}
       <div className="hidden md:flex">
-        <WorkspaceSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+        <WorkspaceSidebar collapsed={collapsed} setCollapsed={setCollapsed} profile={profile} />
       </div>
 
       {/* Main Content Area */}
