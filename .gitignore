@@ -45,8 +45,10 @@ next-env.d.ts
 next_temp/
 
 # WhatsApp Gateway session, caches and media
-/scratch/whatsapp-session/
-/scratch/contacts.json
-/scratch/lid-map.json
+/scratch/
+/backups/
+*.xlsx
+*.zip
+*.log
 /public/whatsapp_media/
 
