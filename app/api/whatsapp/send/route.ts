@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
+import { getResolvedGatewayUrl } from '@/lib/whatsapp/gateway'
+
 export async function POST(request: Request) {
   try {
     const supabase = await createClient()
@@ -37,9 +39,8 @@ export async function POST(request: Request) {
       formattedPhone = '90' + cleanPhone
     }
 
-    // Fetch dynamic gateway URL from database using RPC to bypass RLS
-    const { data: dbGatewayUrl } = await supabase.rpc('get_whatsapp_gateway_url')
-    const gatewayUrl = dbGatewayUrl || process.env.WHATSAPP_GATEWAY_URL || 'http://localhost:3001'
+    // Fetch dynamic gateway URL using resilient helper (localhost:3001 first, validated tunnel fallback)
+    const gatewayUrl = await getResolvedGatewayUrl(supabase)
     const gatewayResponse = await fetch(`${gatewayUrl}/send`, {
       method: 'POST',
       headers: {

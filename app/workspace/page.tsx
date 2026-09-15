@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { useWorkspace } from '@/components/layout/WorkspaceLayoutClient'
 
 import { 
   Phone, 
@@ -28,7 +29,8 @@ import {
   Smile,
   Shield,
   Clock3,
-  Calendar
+  Calendar,
+  Loader2
 } from 'lucide-react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { formatLeadId, getProgressiveCallSchedule, getNumericPart } from '@/lib/utils'
@@ -41,10 +43,12 @@ export default function WorkspacePage() {
   const tabParam = searchParams.get('tab')
   const leadIdParam = searchParams.get('id')
 
+  const { profile: layoutProfile } = useWorkspace()
+
   // Profile and active status state
-  const [profile, setProfile] = useState<any>(null)
-  const [loadingProfile, setLoadingProfile] = useState(true)
-  const [status, setStatus] = useState('active') // active, inactive, away
+  const [profile, setProfile] = useState<any>(layoutProfile || null)
+  const [loadingProfile, setLoadingProfile] = useState(!layoutProfile)
+  const [status, setStatus] = useState<string>(layoutProfile?.status || 'active') // active, inactive, away
 
   // Leads and tasks states
   const [leads, setLeads] = useState<any[]>([])
@@ -52,8 +56,6 @@ export default function WorkspacePage() {
   const [tasks, setTasks] = useState<any[]>([])
   const [callsToday, setCallsToday] = useState<any[]>([])
   const [loadingData, setLoadingData] = useState(true)
-
-
 
   // Lookups
   const [outcomes, setOutcomes] = useState<any[]>([])
@@ -124,42 +126,65 @@ export default function WorkspacePage() {
     return () => clearInterval(timer)
   }, [])
 
+  // Sync with layoutProfile
+  useEffect(() => {
+    if (layoutProfile) {
+      setProfile(layoutProfile)
+      setStatus(layoutProfile.status || 'active')
+      setLoadingProfile(false)
+      fetchData(layoutProfile.id, layoutProfile.role)
+    }
+  }, [layoutProfile])
+
   useEffect(() => {
     async function init() {
-      // 1. Fetch current profile
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        const { data: prof } = await supabase.from('profiles').select('*').eq('id', user.id).single()
-        if (prof) {
-          setProfile(prof)
-          setStatus(prof.status || 'active')
-          
-          // 2. Fetch lookups & user data
-          fetchData(prof.id, prof.role)
-        }
+      if (layoutProfile) {
+        setProfile(layoutProfile)
+        setStatus(layoutProfile.status || 'active')
+        setLoadingProfile(false)
+        fetchData(layoutProfile.id, layoutProfile.role)
+        return
       }
-      setLoadingProfile(false)
+
+      try {
+        // 1. Fetch current profile
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          const { data: prof } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+          if (prof) {
+            setProfile(prof)
+            setStatus(prof.status || 'active')
+            fetchData(prof.id, prof.role)
+          }
+        }
+      } catch (err) {
+        console.error('Error in workspace init:', err)
+      } finally {
+        setLoadingProfile(false)
+      }
     }
 
     async function loadLookups() {
-      const { data: outcomesList } = await supabase.from('call_outcomes').select('*').eq('is_active', true).order('sort_order', { ascending: true })
-      const { data: productsList } = await supabase.from('products').select('*').eq('is_active', true)
-      const { data: reps } = await supabase.from('profiles').select('id, full_name').eq('role', 'sales_specialist').eq('is_active', true).order('full_name')
-      const { data: provs } = await supabase.from('provinces').select('id, name').eq('is_active', true).order('name')
-      const { data: sourcesList } = await supabase.from('lead_sources').select('id, name').eq('is_active', true).order('name')
-      
-      if (outcomesList) setOutcomes(outcomesList)
-      if (productsList) setProducts(productsList)
-      if (reps) {
-        setSalesReps(reps)
+      try {
+        const { data: outcomesList } = await supabase.from('call_outcomes').select('*').eq('is_active', true).order('sort_order', { ascending: true })
+        const { data: productsList } = await supabase.from('products').select('*').eq('is_active', true)
+        const { data: reps } = await supabase.from('profiles').select('id, full_name').eq('role', 'sales_specialist').eq('is_active', true).order('full_name')
+        const { data: provs } = await supabase.from('provinces').select('id, name').eq('is_active', true).order('name')
+        const { data: sourcesList } = await supabase.from('lead_sources').select('id, name').eq('is_active', true).order('name')
+        
+        if (outcomesList) setOutcomes(outcomesList)
+        if (productsList) setProducts(productsList)
+        if (reps) setSalesReps(reps)
+        if (provs) setProvinces(provs)
+        if (sourcesList) setSources(sourcesList)
+      } catch (err) {
+        console.error('Error loading lookups:', err)
       }
-      if (provs) setProvinces(provs)
-      if (sourcesList) setSources(sourcesList)
     }
 
     init()
     loadLookups()
-  }, [supabase])
+  }, [supabase, layoutProfile])
 
   // Listen to realtime updates to auto-refresh lists
   useEffect(() => {
@@ -1369,9 +1394,22 @@ export default function WorkspacePage() {
     }
   }
 
+  const isMeryem = 
+    profile?.email?.toLowerCase().trim() === 'meryem@suntonmakina.com' ||
+    profile?.id === '1e07f9f9-058d-4437-824c-134255b87e3d'
+
   // If logged in as Meryem, render her dedicated streamlined calling console
-  if (profile && profile.email === 'meryem@suntonmakina.com') {
+  if (isMeryem && profile) {
     return <MeryemCallCenterView profile={profile} />
+  }
+
+  if (loadingProfile && !profile) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-3 text-muted-foreground">
+        <Loader2 className="h-7 w-7 animate-spin text-primary" />
+        <p className="text-xs font-medium">Çalışma alanı yükleniyor...</p>
+      </div>
+    )
   }
 
   return (
@@ -3111,7 +3149,3 @@ export default function WorkspacePage() {
   )
 }
 
-// Simple loader helper inline
-function Loader2({ className }: { className?: string }) {
-  return <RefreshCw className={`${className} animate-spin`} />
-}

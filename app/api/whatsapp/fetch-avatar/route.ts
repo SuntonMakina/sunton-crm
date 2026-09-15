@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { getResolvedGatewayUrl } from '@/lib/whatsapp/gateway'
 
 export async function POST(request: Request) {
   try {
@@ -11,8 +12,7 @@ export async function POST(request: Request) {
     }
 
     const supabase = await createClient()
-    const { data: dbGatewayUrl } = await supabase.rpc('get_whatsapp_gateway_url')
-    const gatewayUrl = dbGatewayUrl || process.env.WHATSAPP_GATEWAY_URL || 'http://localhost:3001'
+    const gatewayUrl = await getResolvedGatewayUrl(supabase)
     
     console.log(`Proxying fetch-avatar to gateway: ${gatewayUrl}/fetch-avatar for phone: ${phone}`)
     

@@ -616,6 +616,8 @@ export default function StatisticsPage() {
   const [periodFilter, setPeriodFilter] = useState('tum_eski')
   const [channelFilter, setChannelFilter] = useState('all_channels')
   const [scopeFilter, setScopeFilter] = useState('all_data')
+  const [repFilter, setRepFilter] = useState('ebru')
+  const [callCenterReps, setCallCenterReps] = useState<any[]>([])
   const [customStartDate, setCustomStartDate] = useState(() => {
     const today = new Date()
     const y = today.getFullYear()
@@ -630,6 +632,64 @@ export default function StatisticsPage() {
     const d = String(today.getDate()).padStart(2, '0')
     return `${y}-${m}-${d}`
   })
+
+  // Representative matching helper functions
+  const isLeadOfRep = (l: any, filter: string) => {
+    if (!filter || filter === 'all') return true
+    const repId = l.assigned_call_center_user_id
+    const repName = (l.profiles?.full_name || '').toLowerCase()
+    if (filter === 'ebru' || filter === 'b2b2b2b2-bbbb-cccc-dddd-eeeeeeeeeeee') {
+      if (repId === 'b2b2b2b2-bbbb-cccc-dddd-eeeeeeeeeeee') return true
+      if (repName.includes('ebru')) return true
+      if (l.legacy_source_file !== null && !repName.includes('meryem')) return true
+      return false
+    }
+    if (filter === 'meryem' || filter === '1e07f9f9-058d-4437-824c-134255b87e3d') {
+      if (repId === '1e07f9f9-058d-4437-824c-134255b87e3d') return true
+      if (repName.includes('meryem')) return true
+      return false
+    }
+    return repId === filter || l.profiles?.id === filter
+  }
+
+  const isConvOfRep = (c: any, lead: any, filter: string) => {
+    if (!filter || filter === 'all') return true
+    if (lead) {
+      return isLeadOfRep(lead, filter)
+    }
+    const assignedUserId = c.assigned_user_id
+    const assignedName = (c.profiles?.full_name || '').toLowerCase()
+    if (filter === 'ebru' || filter === 'b2b2b2b2-bbbb-cccc-dddd-eeeeeeeeeeee') {
+      if (assignedUserId === 'b2b2b2b2-bbbb-cccc-dddd-eeeeeeeeeeee') return true
+      if (assignedName.includes('ebru')) return true
+      if (!assignedUserId) return true
+      return false
+    }
+    if (filter === 'meryem' || filter === '1e07f9f9-058d-4437-824c-134255b87e3d') {
+      if (assignedUserId === '1e07f9f9-058d-4437-824c-134255b87e3d') return true
+      if (assignedName.includes('meryem')) return true
+      return false
+    }
+    return assignedUserId === filter
+  }
+
+  const isCallOfRep = (call: any, filter: string) => {
+    if (!filter || filter === 'all') return true
+    const callerName = (call.profiles?.full_name || '').toLowerCase()
+    const callerId = call.user_id
+    if (filter === 'ebru' || filter === 'b2b2b2b2-bbbb-cccc-dddd-eeeeeeeeeeee') {
+      if (callerId === 'b2b2b2b2-bbbb-cccc-dddd-eeeeeeeeeeee') return true
+      if (callerName.includes('ebru')) return true
+      if (call.id && String(call.id).startsWith('legacy-') && !callerName.includes('meryem')) return true
+      return false
+    }
+    if (filter === 'meryem' || filter === '1e07f9f9-058d-4437-824c-134255b87e3d') {
+      if (callerId === '1e07f9f9-058d-4437-824c-134255b87e3d') return true
+      if (callerName.includes('meryem')) return true
+      return false
+    }
+    return callerId === filter
+  }
 
   // Refresh trigger state
   const [refreshTrigger, setRefreshTrigger] = useState(0)
@@ -690,6 +750,26 @@ export default function StatisticsPage() {
     }, 4000)
   }
 
+  // Fetch available call center reps
+  useEffect(() => {
+    const fetchReps = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('id, full_name, role')
+          .eq('role', 'call_center_rep')
+          .eq('is_active', true)
+          .order('full_name')
+        if (data && !error) {
+          setCallCenterReps(data)
+        }
+      } catch (e) {
+        console.error('Error fetching call center reps:', e)
+      }
+    }
+    fetchReps()
+  }, [supabase])
+
   // Persist and load filters to/from localStorage
   useEffect(() => {
     // Clear React Query cache key or localStorage cache if any (Rule 12)
@@ -710,11 +790,13 @@ export default function StatisticsPage() {
       const savedPeriod = localStorage.getItem('stats_period_filter')
       const savedChannel = localStorage.getItem('stats_channel_filter')
       const savedScope = localStorage.getItem('stats_scope_filter')
+      const savedRep = localStorage.getItem('stats_rep_filter')
       const savedStart = localStorage.getItem('stats_custom_start')
       const savedEnd = localStorage.getItem('stats_custom_end')
 
       if (savedPeriod) setPeriodFilter(savedPeriod)
       if (savedChannel) setChannelFilter(savedChannel)
+      if (savedRep) setRepFilter(savedRep)
       if (savedStart) setCustomStartDate(savedStart)
       if (savedEnd) setCustomEndDate(savedEnd)
     }
@@ -731,6 +813,10 @@ export default function StatisticsPage() {
   useEffect(() => {
     localStorage.setItem('stats_scope_filter', scopeFilter)
   }, [scopeFilter])
+
+  useEffect(() => {
+    localStorage.setItem('stats_rep_filter', repFilter)
+  }, [repFilter])
 
   useEffect(() => {
     localStorage.setItem('stats_custom_start', customStartDate)
@@ -1235,7 +1321,8 @@ export default function StatisticsPage() {
 
       const cleanRawLeads = rawLeads.filter(lead => {
         const ph = cleanPhoneNum(lead.phone || lead.phone_normalized)
-        return !EXCLUDED_PHONES.has(ph) && !EXCLUDED_PHONES.has(ph.replace(/^90/, ''))
+        const notExcluded = !EXCLUDED_PHONES.has(ph) && !EXCLUDED_PHONES.has(ph.replace(/^90/, ''))
+        return notExcluded && isLeadOfRep(lead, repFilter)
       })
       setAllRawLeads(cleanRawLeads)
 
@@ -1248,7 +1335,7 @@ export default function StatisticsPage() {
             return false
           }
         }
-        return true
+        return isConvOfRep(c, lead, repFilter)
       })
       setAllRawConversations(filteredConversations)
 
@@ -1440,7 +1527,7 @@ export default function StatisticsPage() {
       }))
 
       // Apply channel filter to calls/conversations
-      let filteredActiveCalls = activeCalls
+      let filteredActiveCalls = activeCalls.filter(c => isCallOfRep(c, repFilter))
       let filteredVirtualCalls = virtualCalls
 
       if (channelFilter === 'WhatsApp Mesajı') {
@@ -1790,7 +1877,7 @@ export default function StatisticsPage() {
   // Load stats and debug list whenever filters or refresh trigger changes
   useEffect(() => {
     fetchStatsData()
-  }, [periodFilter, channelFilter, scopeFilter, customStartDate, customEndDate, refreshTrigger])
+  }, [periodFilter, channelFilter, scopeFilter, repFilter, customStartDate, customEndDate, refreshTrigger])
 
   // Load drawer leads whenever activeMetric or active filters change
   useEffect(() => {
@@ -2062,21 +2149,39 @@ export default function StatisticsPage() {
             <BarChart3 className="h-5 w-5 text-amber-500" />
             Çağrı Merkezi & Kalite İstatistikleri
           </h1>
-          <p className="text-xs text-muted-foreground mt-0.5">Eski Excel kayıtları üzerinden dinamik olarak hesaplanan kalite ve satış yönlendirme performans raporu.</p>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            {repFilter === 'ebru' 
+              ? 'Ebru Şimşek temsilcisine ait çağrı merkezi lead dönüşüm, arama ve kalite metrikleri.' 
+              : repFilter === 'all' 
+              ? 'Tüm çağrı merkezi temsilcilerine ait lead dönüşüm, arama ve kalite metrikleri.'
+              : `${callCenterReps.find(r => r.id === repFilter)?.full_name || 'Temsilci'} temsilcisine ait performans raporu.`}
+          </p>
         </div>
 
         {/* Action Controls & Filters bar */}
         <div className="flex flex-wrap items-center gap-3 bg-card border border-border/85 p-2 rounded-xl shadow-sm">
           
-          {/* Data Scope Filter */}
+          {/* Representative Filter */}
           <div className="flex items-center gap-1">
-            <span className="text-[10px] text-muted-foreground font-semibold px-1 uppercase tracking-wider">Veri Kapsamı:</span>
-            <span className="h-8 flex items-center text-xs bg-background border border-border/80 rounded-lg px-3 font-semibold text-foreground">
-              Tüm Veriler (Excel + CRM)
-            </span>
+            <span className="text-[10px] text-muted-foreground font-semibold px-1 uppercase tracking-wider">Temsilci:</span>
+            <select
+              value={repFilter}
+              onChange={(e) => setRepFilter(e.target.value)}
+              className="h-8 text-xs bg-background border border-primary/40 text-foreground font-bold rounded-lg px-2.5 focus:outline-none cursor-pointer hover:border-primary transition-colors shadow-2xs"
+            >
+              <option value="ebru">Ebru Şimşek</option>
+              {callCenterReps
+                .filter(r => !r.full_name?.toLowerCase().includes('ebru'))
+                .map(r => (
+                  <option key={r.id} value={r.id}>
+                    {r.full_name}
+                  </option>
+                ))}
+              <option value="all">Tüm Temsilciler</option>
+            </select>
           </div>
 
-           {/* Period Filter */}
+          {/* Period Filter */}
           <div className="flex items-center gap-1 border-l border-border/60 pl-2">
             <span className="text-[10px] text-muted-foreground font-semibold px-1 uppercase tracking-wider">Dönem:</span>
             <select
