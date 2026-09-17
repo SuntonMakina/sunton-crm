@@ -252,43 +252,31 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
     const m = String(localNow.getMonth() + 1).padStart(2, '0')
     const d = String(localNow.getDate()).padStart(2, '0')
     const calculatedTodayStr = `${y}-${m}-${d}`
-    const todayDateStr = (calculatedTodayStr >= '2026-09-14' && calculatedTodayStr <= '2026-09-18') ? calculatedTodayStr : '2026-09-15'
+    const todayDateStr = (calculatedTodayStr >= '2026-09-14' && calculatedTodayStr <= '2026-09-18') ? calculatedTodayStr : '2026-09-17'
 
     // Helper filter to test whether a lead is valid/open to call
     const isLeadValidToCall = (l: any) => {
+      // ABSOLUTE RULE 1: Never show already-called leads in the calling queue!
+      if ((l.calls || []).length > 0 || l.last_contact_at) return false
+
+      // ABSOLUTE RULE 2: Only pure İzmir leads!
+      if (l.province !== 'İzmir') return false
+
       if (forwarded.some((f) => f.id === l.id)) return false
       if (uninterestedIds.includes(l.status_id)) return false
 
-      const callCount = (l.calls || []).length
-      const hasNegativeCall = (l.calls || []).some((c: any) => 
-        c.status === 'completed' && 
-        (c.notes?.toLowerCase().includes('i̇lgilenmiyor') || 
-         c.notes?.toLowerCase().includes('ilgilenmiyor') || 
-         c.notes?.toLowerCase().includes('olumsuz') || 
-         c.notes?.toLowerCase().includes('geçersiz') ||
-         c.notes?.toLowerCase().includes('gecersiz'))
-      )
-      if (hasNegativeCall) return false
-
-      if (callCount >= 4 && l.status_id === '22222222-0000-0000-0000-000000000005') {
-        return false
-      }
       return true
     }
 
-    // 5. Follow-ups pending (2., 3., 4. call scheduled or callback scheduled)
+    // 5. Follow-ups pending (only if specifically flagged)
     const followups = leads.filter((l) => {
-      if (!isLeadValidToCall(l)) return false
       const hasCalls = (l.calls || []).length > 0
-      const isCallbackPending = l.callback_status === 'pending' || (l.next_contact_at && l.next_contact_at > todayEndISO)
-      return hasCalls && (isCallbackPending || (l.calls || []).length < 4)
+      const isCallbackPending = l.callback_status === 'pending'
+      return isCallbackPending && hasCalls
     })
 
-    // Today's exact 40 quota (Salı / Bugün)
-    const todayQuota = weeklyPool.filter(l => {
-      const contactDay = l.next_contact_at ? l.next_contact_at.split('T')[0] : null
-      return contactDay === todayDateStr && isLeadValidToCall(l)
-    })
+    // Today's exact 40 quota (Perşembe / Bugün)
+    const todayQuota = thu.filter(isLeadValidToCall)
 
     // Selected Day Leads
     let activeDayPool = weeklyPool
@@ -298,7 +286,7 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
       else if (todayDateStr === '2026-09-16') activeDayPool = wed
       else if (todayDateStr === '2026-09-17') activeDayPool = thu
       else if (todayDateStr === '2026-09-18') activeDayPool = fri
-      else activeDayPool = tue
+      else activeDayPool = thu
     } else if (selectedPlanDay === '2026-09-14') {
       activeDayPool = mon
     } else if (selectedPlanDay === '2026-09-15') {
@@ -810,7 +798,7 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
               <Sparkles className="h-3.5 w-3.5" />
               <span>Bugünün Planı</span>
             </div>
-            <span className="text-[11px] opacity-90 font-mono">Salı ({tuesdayLeads.length})</span>
+            <span className="text-[11px] opacity-90 font-mono">Perşembe ({todayQuotaLeads.length})</span>
           </button>
 
           {/* Pazartesi */}
@@ -824,7 +812,7 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
             }`}
           >
             <span>Pazartesi</span>
-            <span className="text-[11px] text-muted-foreground font-mono">14 Eyl ({mondayLeads.length})</span>
+            <span className="text-[11px] text-muted-foreground font-mono">14 Eyl (Tamamlandı)</span>
           </button>
 
           {/* Salı */}
@@ -837,8 +825,8 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
                 : 'bg-background border-border text-foreground hover:border-primary/50'
             }`}
           >
-            <span>Salı (Bugün)</span>
-            <span className="text-[11px] text-muted-foreground font-mono">15 Eyl ({tuesdayLeads.length})</span>
+            <span>Salı</span>
+            <span className="text-[11px] text-muted-foreground font-mono">15 Eyl (Tamamlandı)</span>
           </button>
 
           {/* Çarşamba */}
@@ -852,7 +840,7 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
             }`}
           >
             <span>Çarşamba</span>
-            <span className="text-[11px] text-muted-foreground font-mono">16 Eyl ({wednesdayLeads.length})</span>
+            <span className="text-[11px] text-muted-foreground font-mono">16 Eyl (Tamamlandı)</span>
           </button>
 
           {/* Perşembe */}
@@ -860,12 +848,12 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
             type="button"
             onClick={() => { setSelectedPlanDay('2026-09-17'); setActiveTab('toCall'); }}
             className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
-              selectedPlanDay === '2026-09-17' && activeTab === 'toCall'
+              (selectedPlanDay === '2026-09-17' || selectedPlanDay === 'today') && activeTab === 'toCall'
                 ? 'bg-primary text-primary-foreground border-primary shadow-sm ring-2 ring-primary/20'
                 : 'bg-background border-border text-foreground hover:border-primary/50'
             }`}
           >
-            <span>Perşembe</span>
+            <span>Perşembe (Bugün)</span>
             <span className="text-[11px] text-muted-foreground font-mono">17 Eyl ({thursdayLeads.length})</span>
           </button>
 
@@ -893,8 +881,8 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
                 : 'bg-background border-border text-foreground hover:border-purple-500/50'
             }`}
           >
-            <span>Tüm Hafta</span>
-            <span className="text-[11px] text-muted-foreground font-mono">200 Firma</span>
+            <span>Tüm Liste</span>
+            <span className="text-[11px] text-muted-foreground font-mono">İzmir ({thursdayLeads.length + fridayLeads.length})</span>
           </button>
         </div>
       </div>
