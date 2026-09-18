@@ -5,7 +5,8 @@ import qrcode from 'qrcode';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { spawn } from 'child_process';
+import { spawn, execSync } from 'child_process';
+import { createClient } from '@supabase/supabase-js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,12 +30,31 @@ if (fs.existsSync(envPath)) {
   });
 }
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+let supabaseDirect = null;
+if (supabaseUrl && supabaseAnonKey) {
+  supabaseDirect = createClient(supabaseUrl, supabaseAnonKey);
+}
+
+process.on('uncaughtException', (err) => {
+  console.error('[Gateway] Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[Gateway] Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', time: Date.now() });
+});
+
 const PORT = process.env.PORT || 3001;
-const NEXTJS_URL = process.env.NEXTJS_URL || 'http://localhost:3005';
+const NEXTJS_URL = process.env.NEXTJS_URL || 'https://sunton-crm-mu.vercel.app';
 const WEBHOOK_URL = `${NEXTJS_URL}/api/whatsapp/webhook`;
 const SESSION_DIR = path.join(__dirname, 'whatsapp-session');
 const CONTACTS_FILE = path.join(__dirname, 'contacts.json');
@@ -64,8 +84,27 @@ async function getNgrokUrl() {
 let activeTunnelUrl = null;
 let tunnelProcess = null;
 let isShuttingDown = false;
+let isStartingTunnel = false;
+let tunnelRetryDelay = 5000;
+let tunnelRestartTimeout = null;
+
+function restartCloudflareTunnel(delay = 5000) {
+  if (isShuttingDown) return;
+  if (tunnelRestartTimeout) {
+    clearTimeout(tunnelRestartTimeout);
+  }
+  console.log(`[Tunnel] Scheduling Cloudflare tunnel restart in ${delay / 1000}s...`);
+  tunnelRestartTimeout = setTimeout(() => {
+    tunnelRestartTimeout = null;
+    if (!isShuttingDown) {
+      startCloudflareTunnel().catch(console.error);
+    }
+  }, delay);
+}
 
 function startCloudflareTunnel() {
+  if (isStartingTunnel || isShuttingDown) return Promise.resolve(activeTunnelUrl);
+
   return new Promise((resolve) => {
     const envUrl = process.env.GATEWAY_PUBLIC_URL;
     if (envUrl && !envUrl.includes('trycloudflare.com')) {
@@ -76,11 +115,13 @@ function startCloudflareTunnel() {
 
     if (tunnelProcess) {
       try {
-        tunnelProcess.kill();
+        tunnelProcess.removeAllListeners('close');
+        tunnelProcess.kill('SIGKILL');
       } catch (e) {}
       tunnelProcess = null;
     }
 
+    isStartingTunnel = true;
     console.log('Starting Cloudflare quick tunnel via cloudflared...');
     tunnelProcess = spawn('cloudflared', ['tunnel', '--url', `http://localhost:${PORT}`]);
 
@@ -90,7 +131,7 @@ function startCloudflareTunnel() {
       const output = data.toString();
       const lines = output.trim().split('\n');
       for (const line of lines) {
-        if (line.includes('trycloudflare.com') || line.includes('error') || line.includes('INF')) {
+        if (line.includes('trycloudflare.com') || line.includes('error') || line.includes('INF') || line.includes('ERR')) {
           console.log(`[Tunnel] ${line.trim()}`);
         }
       }
@@ -98,6 +139,7 @@ function startCloudflareTunnel() {
       const match = output.match(/https:\/\/[a-z0-9-]+\.trycloudflare\.com/);
       if (match) {
         const detectedUrl = match[0];
+        tunnelRetryDelay = 5000; // Reset delay on success
         if (detectedUrl !== activeTunnelUrl) {
           activeTunnelUrl = detectedUrl;
           console.log(`\n======================================================`);
@@ -107,6 +149,7 @@ function startCloudflareTunnel() {
         }
         if (!resolved) {
           resolved = true;
+          isStartingTunnel = false;
           resolve(activeTunnelUrl);
         }
       }
@@ -117,57 +160,91 @@ function startCloudflareTunnel() {
 
     tunnelProcess.on('error', (err) => {
       console.error(`[Tunnel] Failed to start cloudflared:`, err.message);
+      isStartingTunnel = false;
+      if (!resolved) {
+        resolved = true;
+        resolve(null);
+      }
+      restartCloudflareTunnel(10000);
     });
 
     tunnelProcess.on('close', (code) => {
       console.log(`[Tunnel] Cloudflare tunnel process exited with code ${code}`);
       tunnelProcess = null;
+      isStartingTunnel = false;
+      if (!resolved) {
+        resolved = true;
+        resolve(null);
+      }
       if (!isShuttingDown) {
-        console.log('[Tunnel] Restarting Cloudflare tunnel in 5 seconds...');
-        setTimeout(() => {
-          if (!isShuttingDown) {
-            startCloudflareTunnel().catch(console.error);
-          }
-        }, 5000);
+        tunnelRetryDelay = Math.min(tunnelRetryDelay * 1.5, 30000);
+        restartCloudflareTunnel(tunnelRetryDelay);
       }
-    });
-
-    const cleanup = () => {
-      isShuttingDown = true;
-      if (tunnelProcess) {
-        console.log('[Tunnel] Terminating Cloudflare tunnel child process...');
-        tunnelProcess.kill();
-        tunnelProcess = null;
-      }
-    };
-
-    process.on('exit', cleanup);
-    process.on('SIGINT', () => {
-      cleanup();
-      process.exit(0);
-    });
-    process.on('SIGTERM', () => {
-      cleanup();
-      process.exit(0);
     });
 
     setTimeout(() => {
       if (!resolved) {
-        console.warn('[Tunnel] Cloudflare tunnel resolution timed out after 15s.');
+        console.warn('[Tunnel] Cloudflare tunnel resolution timed out after 20s. Restarting...');
+        resolved = true;
+        isStartingTunnel = false;
         resolve(null);
+        if (tunnelProcess) {
+          try {
+            tunnelProcess.kill('SIGKILL');
+          } catch (e) {}
+        }
       }
-    }, 15000);
+    }, 20000);
   });
 }
+
+const cleanup = () => {
+  isShuttingDown = true;
+  if (tunnelProcess) {
+    console.log('[Tunnel] Terminating Cloudflare tunnel child process...');
+    try {
+      tunnelProcess.kill();
+    } catch (e) {}
+    tunnelProcess = null;
+  }
+};
+
+process.on('exit', cleanup);
+process.on('SIGINT', () => {
+  cleanup();
+  process.exit(0);
+});
+process.on('SIGTERM', () => {
+  cleanup();
+  process.exit(0);
+});
 
 async function registerGatewayUrl() {
   const ngrokUrl = await getNgrokUrl();
   const envUrl = process.env.GATEWAY_PUBLIC_URL;
   const isTryCloudflareEnv = envUrl && envUrl.includes('trycloudflare.com');
   
+  if (!activeTunnelUrl && isTryCloudflareEnv) {
+    console.log('[Gateway] Waiting for Cloudflare tunnel URL before registering to CRM/DB...');
+    return;
+  }
+
   const publicUrl = activeTunnelUrl || (!isTryCloudflareEnv && envUrl) || ngrokUrl || `http://localhost:${PORT}`;
   
   console.log(`Registering WhatsApp Gateway URL to CRM: ${publicUrl}`);
+
+  // 1. Direct Supabase DB update
+  if (supabaseDirect) {
+    try {
+      const { error: dbErr } = await supabaseDirect.rpc('register_whatsapp_gateway', { p_url: publicUrl });
+      if (dbErr) console.warn('[Gateway] Direct DB register warning:', dbErr.message);
+      else console.log('[Gateway] Direct DB gateway URL registered successfully:', publicUrl);
+    } catch (e) {
+      console.warn('[Gateway] Direct DB register exception:', e.message);
+    }
+  }
+
+  // 2. Also notify Next.js backend endpoint
   try {
     const res = await fetch(`${NEXTJS_URL}/api/whatsapp/register-gateway`, {
       method: 'POST',
@@ -176,9 +253,9 @@ async function registerGatewayUrl() {
       },
       body: JSON.stringify({ gatewayUrl: publicUrl })
     });
-    console.log(`Gateway registration response: ${res.status}`);
+    console.log(`Gateway registration HTTP response: ${res.status}`);
   } catch (err) {
-    console.error('Failed to register gateway URL:', err.message);
+    console.error('Failed to register gateway URL via HTTP:', err.message);
   }
 }
 
@@ -341,6 +418,26 @@ async function sendStatusToCRM() {
     }
   }
 
+  // 1. Direct Supabase DB update
+  if (supabaseDirect) {
+    try {
+      const { data: updateRes, error: statusErr } = await supabaseDirect.rpc(
+        'update_whatsapp_gateway_status',
+        { p_status: connectionStatus, p_qr: currentQrDataUrl }
+      );
+      if (!statusErr && updateRes && updateRes.reset_requested && !isResetting) {
+        console.log('CRITICAL: Remote reset request received from CRM database!');
+        isResetting = true;
+        await supabaseDirect.rpc('clear_whatsapp_gateway_reset');
+        performLocalReset();
+        return;
+      }
+    } catch (e) {
+      console.warn('[Gateway] Direct DB status update exception:', e.message);
+    }
+  }
+
+  // 2. Also notify Next.js backend endpoint
   try {
     const res = await fetch(`${NEXTJS_URL}/api/whatsapp/status`, {
       method: 'POST',
@@ -513,11 +610,29 @@ function saveLidMap() {
   }
 }
 
-// Notify Next.js about a resolved LID so it can merge/update leads dynamically
+// Notify Next.js and Supabase about a resolved LID so it can merge/update leads dynamically
 async function notifyLidResolution(lid, phone) {
   if (!lid || !phone) return;
+  
+  // 1. Direct Supabase DB update
+  if (supabaseDirect) {
+    try {
+      const { data: rpcResult, error: rpcErr } = await supabaseDirect.rpc('resolve_whatsapp_lid_lead', {
+        p_lid: lid,
+        p_real_phone: phone
+      });
+      if (rpcErr) {
+        console.warn(`[Gateway] Direct DB LID resolution warning:`, rpcErr.message);
+      } else {
+        console.log(`[Gateway] Direct DB LID resolution completed (${lid} -> ${phone}):`, rpcResult);
+      }
+    } catch (e) {
+      console.warn(`[Gateway] Direct DB LID resolution exception:`, e.message);
+    }
+  }
+
+  // 2. Next.js endpoint notification
   try {
-    console.log(`Notifying Next.js about LID resolution: ${lid} -> ${phone}`);
     const res = await fetch(`${NEXTJS_URL}/api/whatsapp/resolve-lid`, {
       method: 'POST',
       headers: {
@@ -527,20 +642,36 @@ async function notifyLidResolution(lid, phone) {
     });
     if (!res.ok) {
       console.error(`Next.js LID resolution endpoint failed with status ${res.status}`);
-    } else {
-      const data = await res.json();
-      console.log('LID resolution result:', data);
     }
   } catch (err) {
     console.error('Error notifying LID resolution to Next.js:', err.message);
   }
 }
 
-// Notify Next.js about a resolved avatar so it can update the lead's avatar_url
+// Notify Next.js and Supabase about a resolved avatar so it can update the lead's avatar_url
 async function notifyAvatarResolution(phone, avatarUrl) {
   if (!phone || !avatarUrl) return;
+
+  // 1. Direct Supabase DB update
+  if (supabaseDirect) {
+    try {
+      const cleanPhone = phone.replace(/\D/g, '');
+      const { error } = await supabaseDirect
+        .from('leads')
+        .update({ avatar_url: avatarUrl })
+        .eq('phone_normalized', cleanPhone);
+      if (error) {
+        console.warn(`[Gateway] Direct DB avatar update warning:`, error.message);
+      } else {
+        console.log(`[Gateway] Direct DB avatar URL saved for ${phone}`);
+      }
+    } catch (e) {
+      console.warn(`[Gateway] Direct DB avatar update exception:`, e.message);
+    }
+  }
+
+  // 2. Next.js endpoint notification
   try {
-    console.log(`Notifying Next.js about Avatar URL for phone ${phone}: ${avatarUrl}`);
     const res = await fetch(`${NEXTJS_URL}/api/whatsapp/resolve-avatar`, {
       method: 'POST',
       headers: {
@@ -550,9 +681,6 @@ async function notifyAvatarResolution(phone, avatarUrl) {
     });
     if (!res.ok) {
       console.error(`Next.js Avatar resolution endpoint failed with status ${res.status}`);
-    } else {
-      const data = await res.json();
-      console.log('Avatar resolution result:', data);
     }
   } catch (err) {
     console.error('Error notifying Avatar resolution to Next.js:', err.message);
@@ -979,6 +1107,25 @@ async function startWhatsApp() {
       }
     })();
 
+    // 1. Direct Supabase DB history sync
+    if (supabaseDirect) {
+      try {
+        console.log(`Syncing WhatsApp history directly to Supabase RPC (${payloadChats.length} chats, ${processedMessages.length} msgs)...`);
+        const { data: rpcRes, error: rpcErr } = await supabaseDirect.rpc('handle_whatsapp_history_sync', {
+          p_chats: payloadChats,
+          p_messages: processedMessages
+        });
+        if (rpcErr) {
+          console.warn('[Gateway] Direct DB history sync RPC warning:', rpcErr.message);
+        } else {
+          console.log('[Gateway] Direct DB history sync completed successfully:', rpcRes);
+        }
+      } catch (err) {
+        console.warn('[Gateway] Direct DB history sync exception:', err.message);
+      }
+    }
+
+    // 2. Next.js endpoint notification
     try {
       console.log('Forwarding history sync to Next.js webhook...');
       const res = await fetch(`${NEXTJS_URL}/api/whatsapp/sync-history`, {
@@ -1091,7 +1238,31 @@ async function startWhatsApp() {
         ]
       };
       
-      // Forward the parsed message to Next.js Webhook URL
+      // 1. Direct Supabase DB incoming message RPC execution
+      if (supabaseDirect) {
+        try {
+          const { data: rpcResult, error: rpcErr } = await supabaseDirect.rpc(
+            'handle_webhook_incoming_message',
+            {
+              p_from_phone: senderPhone,
+              p_content: textContent,
+              p_profile_name: finalPushName,
+              p_timestamp: String(getTimestamp(msg.messageTimestamp)),
+              p_from_me: !!msg.key.fromMe,
+              p_external_message_id: msg.key.id
+            }
+          );
+          if (rpcErr) {
+            console.warn('[Gateway] Direct DB incoming message RPC warning:', rpcErr.message);
+          } else {
+            console.log(`[Gateway] Direct DB incoming message recorded successfully (${senderPhone})`);
+          }
+        } catch (e) {
+          console.warn('[Gateway] Direct DB incoming message exception:', e.message);
+        }
+      }
+
+      // 2. Next.js endpoint notification
       try {
         console.log(`Forwarding message to local webhook: ${WEBHOOK_URL}`);
         const res = await fetch(WEBHOOK_URL, {
@@ -1296,6 +1467,41 @@ app.post('/reset', async (req, res) => {
   res.json({ success: true, message: 'Session reset started.' });
 });
 
+let tunnelFailureCount = 0;
+
+async function checkTunnelHealth() {
+  if (isShuttingDown || isStartingTunnel) return;
+  if (!activeTunnelUrl || !activeTunnelUrl.includes('trycloudflare.com')) return;
+  
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 12000);
+    const res = await fetch(`${activeTunnelUrl}/health`, { signal: controller.signal });
+    clearTimeout(timeout);
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+    // Success - reset failure counter
+    tunnelFailureCount = 0;
+  } catch (err) {
+    tunnelFailureCount++;
+    console.warn(`[Tunnel Health] Ping attempt ${tunnelFailureCount}/3 failed for (${activeTunnelUrl}): ${err.message}`);
+    
+    if (tunnelFailureCount >= 3) {
+      console.warn(`[Tunnel Health] 3 consecutive ping failures. Restarting Cloudflare tunnel...`);
+      tunnelFailureCount = 0;
+      activeTunnelUrl = null;
+      if (tunnelProcess) {
+        try {
+          tunnelProcess.kill('SIGKILL');
+        } catch (e) {}
+      } else {
+        restartCloudflareTunnel(2000);
+      }
+    }
+  }
+}
+
 app.listen(PORT, async () => {
   console.log(`WhatsApp Gateway HTTP server running on http://localhost:${PORT}`);
   
@@ -1310,5 +1516,8 @@ app.listen(PORT, async () => {
   setInterval(sendStatusToCRM, 10000);
   // Re-register gateway URL periodically every 60 seconds
   setInterval(registerGatewayUrl, 60000);
+  // Self-heal/monitor tunnel health every 45 seconds
+  setInterval(checkTunnelHealth, 45000);
 });
+
 

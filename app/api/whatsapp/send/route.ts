@@ -20,16 +20,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Eksik parametreler: leadId, phone ve content zorunludur.' }, { status: 400 })
     }
 
-    // Read Env Variables
-    const token = process.env.META_WHATSAPP_TOKEN
-    const phoneNumberId = process.env.META_WHATSAPP_PHONE_NUMBER_ID
-
-    if (!token || !phoneNumberId) {
-      return NextResponse.json({ 
-        error: 'Sistem hatası: WhatsApp API yapılandırması (.env.local) eksik.' 
-      }, { status: 500 })
-    }
-
     // Normalize Recipient Phone Number
     const cleanPhone = phone.replace(/\D/g, '')
     let formattedPhone = cleanPhone
@@ -41,18 +31,26 @@ export async function POST(request: Request) {
 
     // Fetch dynamic gateway URL using resilient helper (localhost:3001 first, validated tunnel fallback)
     const gatewayUrl = await getResolvedGatewayUrl(supabase)
-    const gatewayResponse = await fetch(`${gatewayUrl}/send`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        phone: formattedPhone,
-        content: content
+    let gatewayResponse: Response
+    try {
+      gatewayResponse = await fetch(`${gatewayUrl}/send`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          phone: formattedPhone,
+          content: content
+        })
       })
-    })
+    } catch (networkErr: any) {
+      console.error(`Error connecting to WhatsApp Gateway at ${gatewayUrl}:`, networkErr)
+      return NextResponse.json({ 
+        error: `WhatsApp Ağ Geçidine (${gatewayUrl}) ulaşılamadı. Lütfen ağ geçidinin çalıştığından emin olun.` 
+      }, { status: 503 })
+    }
 
-    const gatewayData = await gatewayResponse.json()
+    const gatewayData = await gatewayResponse.json().catch(() => ({}))
     if (!gatewayResponse.ok) {
       return NextResponse.json({ 
         error: gatewayData.error || 'WhatsApp Gateway mesaj gönderim hatası' 

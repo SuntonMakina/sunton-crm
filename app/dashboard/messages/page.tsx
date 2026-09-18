@@ -302,25 +302,46 @@ export default function MessagesPage() {
     setNewMessageText('')
 
     try {
-      const { error } = await supabase.from('messages').insert({
-        conversation_id: activeConvId,
-        sender_type: 'user',
-        sender_user_id: currentUser.id,
-        direction: 'outgoing',
-        channel: conversations.find(c => c.id === activeConvId)?.channel || 'internal',
-        content: messageText
-      })
+      const activeConv = conversations.find(c => c.id === activeConvId)
+      const isWhatsapp = activeConv?.channel === 'whatsapp'
 
-      if (error) {
-        alert(error.message)
+      if (isWhatsapp && activeConv?.leads) {
+        const response = await fetch('/api/whatsapp/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            leadId: activeConv.leads.id,
+            phone: activeConv.leads.phone,
+            content: messageText,
+            conversationId: activeConvId
+          })
+        })
+        const result = await response.json()
+        if (!response.ok) {
+          alert('WhatsApp mesajı gönderilemedi: ' + (result.error || 'Bilinmeyen hata'))
+        }
       } else {
-        await supabase
-          .from('conversations')
-          .update({ last_message_at: new Date().toISOString() })
-          .eq('id', activeConvId)
+        const { error } = await supabase.from('messages').insert({
+          conversation_id: activeConvId,
+          sender_type: 'user',
+          sender_user_id: currentUser.id,
+          direction: 'outgoing',
+          channel: activeConv?.channel || 'internal',
+          content: messageText
+        })
+
+        if (error) {
+          alert(error.message)
+        } else {
+          await supabase
+            .from('conversations')
+            .update({ last_message_at: new Date().toISOString() })
+            .eq('id', activeConvId)
+        }
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err)
+      alert('Mesaj gönderilemedi: ' + (err.message || 'Hata oluştu'))
     }
   }
 
