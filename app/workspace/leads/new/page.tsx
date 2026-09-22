@@ -41,6 +41,7 @@ export default function AddLeadPage() {
   const [district, setDistrict] = useState('')
   const [requestedProduct, setRequestedProduct] = useState('')
   const [sourceId, setSourceId] = useState('11111111-0000-0000-0000-000000000007') // Default: Telefon
+  const [statusId, setStatusId] = useState('22222222-0000-0000-0000-000000000001') // Default: Yeni Lead
 
   // Status states
   const [submitting, setSubmitting] = useState(false)
@@ -147,6 +148,7 @@ export default function AddLeadPage() {
       }
 
       // 2. Insert Lead with collision-proof auto-retry
+      const isHsg = statusId === '22222222-0000-0000-0000-000000000030'
       const { data: newLead, error: insertError } = await safeInsertLeadWithRetry(supabase, {
         first_name: firstName,
         last_name: lastName,
@@ -160,7 +162,11 @@ export default function AddLeadPage() {
         district: district || null,
         source_id: sourceId || null,
         requested_product: requestedProduct || null,
-        status_id: '22222222-0000-0000-0000-000000000001', // Yeni Lead
+        status_id: statusId || '22222222-0000-0000-0000-000000000001',
+        lead_quality_category: isHsg ? 'hsg_customer' : null,
+        last_contact_at: isHsg ? new Date().toISOString() : null,
+        callback_status: 'none',
+        next_contact_at: null,
         assigned_call_center_user_id: profile.id, // Assign to current user (Ebru)
         created_by: profile.id,
         updated_by: profile.id,
@@ -446,6 +452,25 @@ export default function AddLeadPage() {
                 <option value="11111111-0000-0000-0000-000000000007">📞 Telefon</option>
                 <option value="11111111-0000-0000-0000-000000000008">✉️ Mail</option>
                 <option value="11111111-0000-0000-0000-000000000013">🌐 Diğer</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Durum / Kayıt Türü */}
+          <div className="space-y-1.5">
+            <label className="block text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Durum / Kayıt Türü *</label>
+            <div className="relative">
+              <CheckCircle className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <select
+                required
+                value={statusId}
+                onChange={(e) => setStatusId(e.target.value)}
+                className="w-full h-10 pl-9 pr-3 bg-background border border-border rounded-xl text-xs focus:ring-1 focus:ring-primary focus:outline-none cursor-pointer font-extrabold text-violet-600 dark:text-violet-400"
+              >
+                <option value="22222222-0000-0000-0000-000000000001">🟢 Yeni Lead (Standart Arama Sırası)</option>
+                <option value="22222222-0000-0000-0000-000000000030">🟣 HSG Müşterisi (Ayrı Marka / Analiz Dışı)</option>
+                <option value="22222222-0000-0000-0000-000000000007">🔵 Görüşme Yapıldı</option>
+                <option value="22222222-0000-0000-0000-000000000012">⚪ İlgilenmiyor</option>
               </select>
             </div>
           </div>

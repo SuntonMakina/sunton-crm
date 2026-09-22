@@ -1211,6 +1211,12 @@ export default function StatisticsPage() {
       }
 
       const cleanRawLeads = rawLeads.filter(lead => {
+        // Exclude HSG customers from all analytics and statistics completely
+        if (lead.status_id === '22222222-0000-0000-0000-000000000030' || 
+            lead.lead_quality_category === 'hsg_customer' ||
+            lead.lead_statuses?.name === 'HSG Müşterisi') {
+          return false
+        }
         const ph = cleanPhoneNum(lead.phone || lead.phone_normalized)
         const notExcluded = !EXCLUDED_PHONES.has(ph) && !EXCLUDED_PHONES.has(ph.replace(/^90/, ''))
         return notExcluded && isLeadOfRep(lead, repFilter)
@@ -1221,6 +1227,11 @@ export default function StatisticsPage() {
       const filteredConversations = rawConversations.filter(c => {
         const lead = c.lead_id ? leadsMap.get(c.lead_id) : null
         if (lead) {
+          if (lead.status_id === '22222222-0000-0000-0000-000000000030' || 
+              lead.lead_quality_category === 'hsg_customer' ||
+              lead.lead_statuses?.name === 'HSG Müşterisi') {
+            return false
+          }
           const ph = cleanPhoneNum(lead.phone || lead.phone_normalized)
           if (EXCLUDED_PHONES.has(ph) || EXCLUDED_PHONES.has(ph.replace(/^90/, ''))) {
             return false
@@ -1235,6 +1246,11 @@ export default function StatisticsPage() {
         if (leadId) {
           const lead = leadsMap.get(leadId)
           if (lead) {
+            if (lead.status_id === '22222222-0000-0000-0000-000000000030' || 
+                lead.lead_quality_category === 'hsg_customer' ||
+                lead.lead_statuses?.name === 'HSG Müşterisi') {
+              return false
+            }
             const ph = cleanPhoneNum(lead.phone || lead.phone_normalized)
             if (EXCLUDED_PHONES.has(ph) || EXCLUDED_PHONES.has(ph.replace(/^90/, ''))) {
               return false

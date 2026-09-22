@@ -398,6 +398,7 @@ export default function WorkspaceLeadsPage() {
     if (statusId === '22222222-0000-0000-0000-000000000006') return 'Geri Aranacak'
     if (statusId === '22222222-0000-0000-0000-000000000007') return 'Görüşme Yapıldı'
     if (statusId === '22222222-0000-0000-0000-000000000012') return 'İlgilenmiyor'
+    if (statusId === '22222222-0000-0000-0000-000000000030') return 'HSG Müşterisi'
     return 'Görüşme Yapıldı'
   }
 
@@ -427,7 +428,10 @@ export default function WorkspaceLeadsPage() {
 
   const handleLeadQualityChange = (val: string) => {
     const nextForm = { ...editForm, leadQualityStatus: val }
-    if (val === 'not_interested') {
+    if (val === 'hsg_customer') {
+      nextForm.statusId = '22222222-0000-0000-0000-000000000030' // HSG Müşterisi
+      nextForm.callbackStatus = 'none'
+    } else if (val === 'not_interested') {
       nextForm.statusId = '22222222-0000-0000-0000-000000000012' // İlgilenmiyor
       nextForm.callbackStatus = 'none'
     } else if (val === 'unreachable') {
@@ -445,7 +449,10 @@ export default function WorkspaceLeadsPage() {
 
   const handleStatusIdChange = (val: string) => {
     const nextForm = { ...editForm, statusId: val }
-    if (val === '22222222-0000-0000-0000-000000000012') {
+    if (val === '22222222-0000-0000-0000-000000000030') {
+      nextForm.leadQualityStatus = 'hsg_customer'
+      nextForm.callbackStatus = 'none'
+    } else if (val === '22222222-0000-0000-0000-000000000012') {
       nextForm.leadQualityStatus = 'not_interested'
       nextForm.callbackStatus = 'none'
     } else if (val === '22222222-0000-0000-0000-000000000005') {
@@ -1128,6 +1135,7 @@ export default function WorkspaceLeadsPage() {
                     <option value="22222222-0000-0000-0000-000000000005">Ulaşılamadı</option>
                     <option value="22222222-0000-0000-0000-000000000006">Geri Aranacak</option>
                     <option value="22222222-0000-0000-0000-000000000012">İlgilenmiyor</option>
+                    <option value="22222222-0000-0000-0000-000000000030">HSG Müşterisi</option>
                     <option value="22222222-0000-0000-0000-000000000009">Satış Uzmanına İletildi</option>
                   </select>
                 </div>
@@ -1141,8 +1149,9 @@ export default function WorkspaceLeadsPage() {
                   className="w-full h-10 px-3 bg-background border border-border rounded-lg text-xs focus:ring-1 focus:ring-primary focus:outline-none cursor-pointer font-bold text-amber-600 dark:text-amber-400"
                 >
                   <option value="">Belirtilmemiş (Veri Yok)</option>
+                  <option value="hsg_customer">🏢 HSG Müşterisi (Ayrı Marka / Analiz Dışı)</option>
                   <option value="unrelated">Alakasız / Konu Dışı Lead</option>
-                  <option value="accidental_click">Yanlışlıkla Tıklayan / "Elim Çarptı"</option>
+                  <option value="accidental_click">Yanlışlıkla Tıklayan / &quot;Elim Çarptı&quot;</option>
                   <option value="unreachable">Ulaşılamayan / Açmayan / Cevap Vermeyen</option>
                   <option value="not_interested">İlgilenmeyen / Vazgeçen / Başka Yerden Alan</option>
                   <option value="callback">Geri Aranacak / Bizi Arayacak (Callback)</option>

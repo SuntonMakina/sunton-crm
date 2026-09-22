@@ -122,7 +122,7 @@ export default function WorkspacePage() {
   const [calendarView, setCalendarView] = useState<'horizontal' | 'grid'>('horizontal')
   const [copiedForwardText, setCopiedForwardText] = useState(false)
   const [editMode, setEditMode] = useState<'outcome' | 'full'>('outcome')
-  const [quickStatus, setQuickStatus] = useState<'reached' | 'missed' | 'forward'>('reached')
+  const [quickStatus, setQuickStatus] = useState<'reached' | 'missed' | 'forward' | 'hsg'>('reached')
   const [quickNotes, setQuickNotes] = useState('')
   const [quickSalesUserId, setQuickSalesUserId] = useState('')
   const [quickCallbackDate, setQuickCallbackDate] = useState('')
@@ -825,6 +825,9 @@ export default function WorkspacePage() {
     !isWhatsAppLead(l) && 
     l.status_id !== '22222222-0000-0000-0000-000000000009' && 
     l.status_id !== '22222222-0000-0000-0000-000000000012' &&
+    l.status_id !== '22222222-0000-0000-0000-000000000030' &&
+    l.lead_quality_category !== 'hsg_customer' &&
+    l.lead_statuses?.name !== 'HSG Müşterisi' &&
     l.status_id !== '22222222-0000-0000-0000-000000000007' &&
     (!l.calls || l.calls.length < 5) && // Exclude leads with 5 or more attempts
     !l.sales_representative_text &&
@@ -855,15 +858,21 @@ export default function WorkspacePage() {
     return l.last_contact_at !== null || (l.legacy_source_file !== null && l.conversation_completed !== null) || !!l.sales_representative_text;
   })
 
-  // 4. Toplam Ulaşan: all leads that have been converted/registered (excluding raw WhatsApp chats)
+  // 4. Toplam Ulaşan: all leads that have been converted/registered (excluding raw WhatsApp chats and HSG customers)
   const toplamUlasanLeads = sortedLeads.filter(l => 
-    l.status_id !== '22222222-0000-0000-0000-000000000020'
+    l.status_id !== '22222222-0000-0000-0000-000000000020' &&
+    l.status_id !== '22222222-0000-0000-0000-000000000030' &&
+    l.lead_quality_category !== 'hsg_customer' &&
+    l.lead_statuses?.name !== 'HSG Müşterisi'
   )
 
-  // 5. Hiç Aranmamışlar: not forwarded, disinterested or already talked, AND last_contact_at is null AND calls.length is 0
+  // 5. Hiç Aranmamışlar: not forwarded, disinterested, HSG, or already talked, AND last_contact_at is null AND calls.length is 0
   const hicAranmamisLeads = sortedLeads.filter(l => 
     l.status_id !== '22222222-0000-0000-0000-000000000009' && 
     l.status_id !== '22222222-0000-0000-0000-000000000012' &&
+    l.status_id !== '22222222-0000-0000-0000-000000000030' &&
+    l.lead_quality_category !== 'hsg_customer' &&
+    l.lead_statuses?.name !== 'HSG Müşterisi' &&
     l.status_id !== '22222222-0000-0000-0000-000000000007' &&
     (l.last_contact_at === null || !l.calls || l.calls.length === 0) &&
     !l.sales_representative_text
@@ -874,6 +883,9 @@ export default function WorkspacePage() {
     if (!l.next_contact_at) return false;
     const isUnresolved = l.status_id !== '22222222-0000-0000-0000-000000000009' && // Satış Uzmanına İletildi
                          l.status_id !== '22222222-0000-0000-0000-000000000012' && // İlgilenmiyor
+                         l.status_id !== '22222222-0000-0000-0000-000000000030' && // HSG Müşterisi
+                         l.lead_quality_category !== 'hsg_customer' &&
+                         l.lead_statuses?.name !== 'HSG Müşterisi' &&
                          l.status_id !== '22222222-0000-0000-0000-000000000007';   // Görüşme Yapıldı
     if (!isUnresolved) return false;
     const nextContactDate = new Date(l.next_contact_at);
@@ -980,6 +992,7 @@ export default function WorkspacePage() {
     if (statusId === '22222222-0000-0000-0000-000000000006') return 'Geri Aranacak'
     if (statusId === '22222222-0000-0000-0000-000000000007') return 'Görüşme Yapıldı'
     if (statusId === '22222222-0000-0000-0000-000000000012') return 'İlgilenmiyor'
+    if (statusId === '22222222-0000-0000-0000-000000000030') return 'HSG Müşterisi'
     if (statusId === '22222222-0000-0000-0000-000000000016') return 'Veri Yok'
     return 'Görüşme Yapıldı'
   }
@@ -1082,7 +1095,10 @@ export default function WorkspacePage() {
 
   const handleLeadQualityChange = (val: string) => {
     const nextForm = { ...editForm, leadQualityStatus: val }
-    if (val === 'not_interested') {
+    if (val === 'hsg_customer') {
+      nextForm.statusId = '22222222-0000-0000-0000-000000000030' // HSG Müşterisi
+      nextForm.callbackStatus = 'none'
+    } else if (val === 'not_interested') {
       nextForm.statusId = '22222222-0000-0000-0000-000000000012' // İlgilenmiyor
       nextForm.callbackStatus = 'none'
     } else if (val === 'unreachable') {
@@ -1100,7 +1116,10 @@ export default function WorkspacePage() {
 
   const handleStatusIdChange = (val: string) => {
     const nextForm = { ...editForm, statusId: val }
-    if (val === '22222222-0000-0000-0000-000000000012') {
+    if (val === '22222222-0000-0000-0000-000000000030') {
+      nextForm.leadQualityStatus = 'hsg_customer'
+      nextForm.callbackStatus = 'none'
+    } else if (val === '22222222-0000-0000-0000-000000000012') {
       nextForm.leadQualityStatus = 'not_interested'
       nextForm.callbackStatus = 'none'
     } else if (val === '22222222-0000-0000-0000-000000000005') {
@@ -1255,6 +1274,34 @@ export default function WorkspacePage() {
           title: 'Satış Danışmanına Yönlendirildi',
           description: `Müşteri, ${selectedRep?.full_name || 'Satış Uzmanı'} danışmanına yönlendirildi.`,
           user_id: profile.id
+        })
+      } else if (quickStatus === 'hsg') {
+        const noteText = attemptPrefix + (quickNotes.trim() ? `HSG Müşterisi olarak kaydedildi. Not: ${quickNotes.trim()}` : 'HSG Müşterisi (Ayrı Marka / Analiz Dışı Kayıt)')
+        finalNotes = `[${new Date().toLocaleString('tr-TR')}] - ${noteText}\n` + (selectedLead.extra_notes || '')
+
+        // 1. Update Lead
+        const { error } = await supabase
+          .from('leads')
+          .update({
+            status_id: '22222222-0000-0000-0000-000000000030', // HSG Müşterisi
+            lead_quality_category: 'hsg_customer',
+            last_contact_at: nowStr,
+            next_contact_at: null,
+            callback_status: 'none',
+            extra_notes: finalNotes
+          })
+          .eq('id', selectedLead.id)
+        if (error) throw error
+
+        // 2. Insert Call Log
+        await supabase.from('calls').insert({
+          lead_id: selectedLead.id,
+          user_id: profile.id,
+          direction: 'outgoing',
+          phone_number: selectedLead.phone,
+          notes: noteText,
+          duration_seconds: 30,
+          status: 'completed'
         })
       }
 
@@ -2450,7 +2497,7 @@ export default function WorkspacePage() {
 
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Arama Sonucu Seçin</label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     <button
                       type="button"
                       onClick={() => setQuickStatus('reached')}
@@ -2488,6 +2535,19 @@ export default function WorkspacePage() {
                     >
                       <span>➡️ Yönlendir</span>
                       <span className="text-[9px] opacity-80 mt-0.5 font-medium">Satışçı Listesi</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setQuickStatus('hsg')}
+                      className={`h-11 rounded-lg border text-xs font-bold transition-all cursor-pointer flex flex-col items-center justify-center ${
+                        quickStatus === 'hsg'
+                          ? 'border-violet-500 bg-violet-500/15 text-violet-600 dark:text-violet-400 font-extrabold shadow-sm ring-1 ring-violet-500/30'
+                          : 'border-border hover:bg-accent text-slate-600'
+                      }`}
+                    >
+                      <span>🏢 HSG Müşteri</span>
+                      <span className="text-[9px] opacity-80 mt-0.5 font-medium">Analiz Dışı</span>
                     </button>
                   </div>
                 </div>
@@ -2553,6 +2613,30 @@ export default function WorkspacePage() {
                   <div className="p-3.5 bg-rose-500/5 border border-rose-500/10 rounded-xl text-rose-600 text-xs leading-relaxed animate-in fade-in slide-in-from-top-1 duration-150">
                     <p className="font-bold">Müşteri &quot;Ulaşılamadı (Cevap Vermedi / Açmadı)&quot; olarak loglanacaktır.</p>
                     <p className="text-[10px] text-rose-500/80 mt-1 font-semibold">Bu işlem, lead&apos;i bugünün aranacaklar listesinden çıkaracak ve bir cevapsız arama kaydı ekleyecektir.</p>
+                  </div>
+                )}
+
+                {quickStatus === 'hsg' && (
+                  <div className="space-y-3.5 animate-in fade-in slide-in-from-top-1 duration-150">
+                    <div className="p-3.5 bg-violet-500/10 border border-violet-500/20 rounded-xl text-violet-700 dark:text-violet-300 text-xs leading-relaxed">
+                      <p className="font-bold flex items-center gap-1.5">
+                        <span className="h-2 w-2 rounded-full bg-violet-500 animate-pulse" />
+                        Müşteri &quot;HSG Müşterisi&quot; olarak kaydedilecektir.
+                      </p>
+                      <p className="text-[10px] text-muted-foreground mt-1 font-semibold">
+                        Bu lead arama kuyruğundan çıkarılacak ve Sunton CRM genel performans/dönüşüm analizlerine kesinlikle dahil edilmeyecektir.
+                      </p>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-muted-foreground mb-1 uppercase tracking-wider">Açıklama / Not (Opsiyonel)</label>
+                      <textarea
+                        value={quickNotes}
+                        onChange={(e) => setQuickNotes(e.target.value)}
+                        placeholder="Örn: WhatsApp üzerinden HSG kataloğu iletildi, HSG Excel'ine kaydedildi..."
+                        rows={2.5}
+                        className="w-full p-3 bg-background border border-border rounded-lg text-xs focus:ring-1 focus:ring-violet-500 focus:outline-none font-medium"
+                      />
+                    </div>
                   </div>
                 )}
 
@@ -2825,6 +2909,7 @@ export default function WorkspacePage() {
                     <option value="22222222-0000-0000-0000-000000000005">Ulaşılamadı</option>
                     <option value="22222222-0000-0000-0000-000000000006">Geri Aranacak</option>
                     <option value="22222222-0000-0000-0000-000000000012">İlgilenmiyor</option>
+                    <option value="22222222-0000-0000-0000-000000000030">HSG Müşterisi</option>
                     <option value="22222222-0000-0000-0000-000000000009">Satış Uzmanına İletildi</option>
                   </select>
                 </div>
@@ -2838,6 +2923,7 @@ export default function WorkspacePage() {
                   className="w-full h-10 px-3 bg-background border border-border rounded-lg text-xs focus:ring-1 focus:ring-primary focus:outline-none cursor-pointer font-bold text-amber-600 dark:text-amber-400"
                 >
                   <option value="">Belirtilmemiş (Veri Yok)</option>
+                  <option value="hsg_customer">🏢 HSG Müşterisi (Ayrı Marka / Analiz Dışı)</option>
                   <option value="unrelated">Alakasız / Konu Dışı Lead</option>
                   <option value="accidental_click">Yanlışlıkla Tıklayan / &quot;Elim Çarptı&quot;</option>
                   <option value="unreachable">Ulaşılamayan / Açmayan / Cevap Vermeyen</option>
