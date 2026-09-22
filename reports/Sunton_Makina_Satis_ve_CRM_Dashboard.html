@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunton Makina — Satış & Lead Performans Grafikleri</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #F8FAFC; 
+            color: #0F172A; 
+        }
+        .clean-card { 
+            background: #FFFFFF; 
+            border: 1px solid #E2E8F0; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+        .clean-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="p-6 md:p-10 min-h-screen">
+
+    <!-- Header -->
+    <header class="max-w-7xl mx-auto mb-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-200 pb-6">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">Sunton Makina <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-blue-600">Satış & Lead Performans Grafikleri</span></h1>
+                <p class="text-slate-500 text-sm mt-1">Çağrı merkezi ve CRM sistemimiz üzerinden yönlendirilen leadlerin satışa dönüşüm analizi</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2.5">
+                <a href="Sunton_Makina_Tum_Satis_ve_Lead_Detay_Tablosu.html" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition-all shadow-sm flex items-center gap-2">
+                    <span>📑</span> Firma Detay Tablosu (Excel Eşleşmeleri) ➔
+                </a>
+                <a href="Sunton_Makina_Komisyon_ve_Odeme_Takvimi.html" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 transition-all shadow-sm flex items-center gap-2">
+                    <span>💰</span> Ödeme & Hak Ediş Takvimi ➔
+                </a>
+                <a href="Sunton_Makina_Aylik_Satis_ve_CRM_Lead_Eslesme_Raporu_2026.xlsx" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md shadow-blue-500/20 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    Excel İndir
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto space-y-8">
+
+        <!-- Top 4 KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="clean-card rounded-2xl p-6 transition-all">
+                <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">TOPLAM ŞİRKET SATIŞI</p>
+                <h3 class="text-3xl font-extrabold text-slate-900 mt-2">162 <span class="text-sm font-semibold text-slate-500">Makine</span></h3>
+                <p class="text-xs text-slate-400 mt-2">2026 Ocak - Ağustos Genel Toplam</p>
+            </div>
+            <div class="clean-card rounded-2xl p-6 border-emerald-200 bg-emerald-50/40 transition-all">
+                <p class="text-emerald-700 text-xs font-bold uppercase tracking-wider">BİZİM İLETTİĞİMİZ AKTİF CRM SATIŞLARI</p>
+                <h3 class="text-3xl font-extrabold text-emerald-700 mt-2">26 <span class="text-sm font-semibold text-emerald-600">Makine</span></h3>
+                <p class="text-xs text-emerald-600 mt-2">Doğrudan CRM Lead Hak Edişi (%16.0 Pay)</p>
+            </div>
+            <div class="clean-card rounded-2xl p-6 border-amber-200 bg-amber-50/40 transition-all">
+                <p class="text-amber-800 text-xs font-bold uppercase tracking-wider">YÖNETİCİ TARAFINDAN ÇIKARILAN</p>
+                <h3 class="text-3xl font-extrabold text-amber-800 mt-2">15 <span class="text-sm font-semibold text-amber-700">Makine</span></h3>
+                <p class="text-xs text-amber-700 mt-2">Doğrudan ve Eski İlişkili Firmalar</p>
+            </div>
+            <div class="clean-card rounded-2xl p-6 border-orange-200 bg-orange-50/40 transition-all">
+                <p class="text-orange-700 text-xs font-bold uppercase tracking-wider">TEMMUZ AYI CRM REKORU</p>
+                <h3 class="text-3xl font-extrabold text-orange-600 mt-2">%64.7 <span class="text-sm font-semibold text-orange-700">(11/17)</span></h3>
+                <p class="text-xs text-orange-600 mt-2">17 Satışın 11'i Net Aktif CRM Lead'i</p>
+            </div>
+        </div>
+
+        <!-- Chart Row 1: Monthly Trend & Doughnut -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left 2 Cols: Monthly Bar & Line Chart -->
+            <div class="lg:col-span-2 clean-card rounded-2xl p-6 md:p-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">Aylık Satış Dağılımı ve Bizim CRM Satışlarımız</h2>
+                        <p class="text-xs text-slate-500">Ocak - Ağustos 2026 aylık seyir, aktif CRM ve yönetici incelemesi</p>
+                    </div>
+                    <span class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-600">2026 Aylık Trend</span>
+                </div>
+                <div class="h-80 w-full">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Right 1 Col: Doughnut Chart -->
+            <div class="clean-card rounded-2xl p-6 md:p-8 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900 mb-1">Genel Satış Dağılımı</h2>
+                    <p class="text-xs text-slate-500 mb-4">Toplam 162 makinede aktif CRM, çıkarılan ve bireysel satış payı</p>
+                </div>
+                <div class="h-64 w-full flex items-center justify-center">
+                    <canvas id="doughnutChart"></canvas>
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-3 gap-2 text-center">
+                    <div class="p-2 rounded-xl bg-emerald-50 border border-emerald-100">
+                        <span class="text-[11px] text-emerald-700 block font-bold">Aktif CRM</span>
+                        <span class="text-xs font-extrabold text-emerald-800">26 (%16.0)</span>
+                    </div>
+                    <div class="p-2 rounded-xl bg-amber-50 border border-amber-100">
+                        <span class="text-[11px] text-amber-800 block font-bold">Yönetici Çıkardı</span>
+                        <span class="text-xs font-extrabold text-amber-900">15 (%9.3)</span>
+                    </div>
+                    <div class="p-2 rounded-xl bg-blue-50 border border-blue-100">
+                        <span class="text-[11px] text-blue-700 block font-bold">Bireysel</span>
+                        <span class="text-xs font-extrabold text-blue-800">121 (%74.7)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Row 2: Sales Rep Horizontal Bar Chart -->
+        <div class="clean-card rounded-2xl p-6 md:p-8">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Satış Temsilcisi Bazında Bizim İlettiğimiz Aktif Lead Satışları</h2>
+                    <p class="text-xs text-slate-500">Hangi satış temsilcisi bizim sağladığımız aktif leadlerle kaç adet makine kapattı?</p>
+                </div>
+                <span class="px-3 py-1 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Sıralı Liste (En Çok Aktif CRM Kapatanlar)</span>
+            </div>
+            <div class="h-96 w-full">
+                <canvas id="repChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Monthly Data Summary Table -->
+        <div class="clean-card rounded-2xl p-6 md:p-8">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                <h2 class="text-lg font-bold text-slate-900">Aylık Konsolide Özet Tablosu</h2>
+                <a href="Sunton_Makina_Tum_Satis_ve_Lead_Detay_Tablosu.html" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
+                    Firma Bazında Tüm 162 Satışı Görüntüle ➔
+                </a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-600">
+                    <thead class="bg-slate-50 text-xs font-bold uppercase text-slate-700 border-b border-slate-200">
+                        <tr>
+                            <th class="p-3.5">Dönem / Ay</th>
+                            <th class="p-3.5 text-center">Toplam Satış (Adet)</th>
+                            <th class="p-3.5 text-center text-emerald-700">Bizim İlettiğimiz Aktif CRM Satışları</th>
+                            <th class="p-3.5 text-center text-amber-800">Yönetici Tarafından Çıkarılan</th>
+                            <th class="p-3.5 text-center text-slate-600">Temsilci Bireysel Satışlar</th>
+                            <th class="p-3.5 text-center text-orange-600">Aktif CRM Satış Oranı (%)</th>
+                            <th class="p-3.5">Görsel Çubuk</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium">
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="p-3.5 font-bold text-slate-900">Ocak 2026</td>
+                            <td class="p-3.5 text-center font-bold">26</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">4</td>
+                            <td class="p-3.5 text-center font-bold text-amber-800 bg-amber-50/30">4</td>
+                            <td class="p-3.5 text-center">18</td>
+                            <td class="p-3.5 text-center font-bold text-orange-600">%15.4</td>
+                            <td class="p-3.5"><div class="w-36 bg-slate-100 rounded-full h-2.5"><div class="bg-emerald-500 h-2.5 rounded-full" style="width: 15.4%"></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="p-3.5 font-bold text-slate-900">Şubat 2026</td>
+                            <td class="p-3.5 text-center font-bold">14</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">2</td>
+                            <td class="p-3.5 text-center font-bold text-amber-800 bg-amber-50/30">2</td>
+                            <td class="p-3.5 text-center">10</td>
+                            <td class="p-3.5 text-center font-bold text-orange-600">%14.3</td>
+                            <td class="p-3.5"><div class="w-36 bg-slate-100 rounded-full h-2.5"><div class="bg-emerald-500 h-2.5 rounded-full" style="width: 14.3%"></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="p-3.5 font-bold text-slate-900">Mart 2026</td>
+                            <td class="p-3.5 text-center font-bold">22</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">3</td>
+                            <td class="p-3.5 text-center font-bold text-amber-800 bg-amber-50/30">2</td>
+                            <td class="p-3.5 text-center">17</td>
+                            <td class="p-3.5 text-center font-bold text-orange-600">%13.6</td>
+                            <td class="p-3.5"><div class="w-36 bg-slate-100 rounded-full h-2.5"><div class="bg-emerald-500 h-2.5 rounded-full" style="width: 13.6%"></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="p-3.5 font-bold text-slate-900">Nisan 2026</td>
+                            <td class="p-3.5 text-center font-bold">31</td>
+                            <td class="p-3.5 text-center font-bold text-slate-400">0</td>
+                            <td class="p-3.5 text-center font-bold text-slate-400">0</td>
+                            <td class="p-3.5 text-center">31</td>
+                            <td class="p-3.5 text-center text-slate-400">%0.0</td>
+                            <td class="p-3.5"><div class="w-36 bg-slate-100 rounded-full h-2.5"><div class="bg-slate-300 h-2.5 rounded-full" style="width: 0%"></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="p-3.5 font-bold text-slate-900">Mayıs 2026</td>
+                            <td class="p-3.5 text-center font-bold">14</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">2</td>
+                            <td class="p-3.5 text-center font-bold text-amber-800 bg-amber-50/30">2</td>
+                            <td class="p-3.5 text-center">10</td>
+                            <td class="p-3.5 text-center font-bold text-orange-600">%14.3</td>
+                            <td class="p-3.5"><div class="w-36 bg-slate-100 rounded-full h-2.5"><div class="bg-emerald-500 h-2.5 rounded-full" style="width: 14.3%"></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="p-3.5 font-bold text-slate-900">Haziran 2026</td>
+                            <td class="p-3.5 text-center font-bold">22</td>
+                            <td class="p-3.5 text-center font-bold text-slate-400">0</td>
+                            <td class="p-3.5 text-center font-bold text-slate-400">0</td>
+                            <td class="p-3.5 text-center">22</td>
+                            <td class="p-3.5 text-center text-slate-400">%0.0</td>
+                            <td class="p-3.5"><div class="w-36 bg-slate-100 rounded-full h-2.5"><div class="bg-slate-300 h-2.5 rounded-full" style="width: 0%"></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-emerald-50/80 bg-emerald-50/40 transition-colors">
+                            <td class="p-3.5 font-extrabold text-emerald-800">Temmuz 2026 ⭐</td>
+                            <td class="p-3.5 text-center font-bold text-slate-900">17</td>
+                            <td class="p-3.5 text-center font-extrabold text-emerald-700 bg-emerald-100/60">11</td>
+                            <td class="p-3.5 text-center font-bold text-amber-800 bg-amber-50/30">4</td>
+                            <td class="p-3.5 text-center font-bold">2</td>
+                            <td class="p-3.5 text-center font-extrabold text-emerald-700">%64.7</td>
+                            <td class="p-3.5"><div class="w-36 bg-slate-100 rounded-full h-2.5"><div class="bg-emerald-500 h-2.5 rounded-full" style="width: 64.7%"></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="p-3.5 font-bold text-slate-900">Ağustos 2026</td>
+                            <td class="p-3.5 text-center font-bold">16</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">4</td>
+                            <td class="p-3.5 text-center font-bold text-amber-800 bg-amber-50/30">1</td>
+                            <td class="p-3.5 text-center">11</td>
+                            <td class="p-3.5 text-center font-bold text-orange-600">%25.0</td>
+                            <td class="p-3.5"><div class="w-36 bg-slate-100 rounded-full h-2.5"><div class="bg-emerald-500 h-2.5 rounded-full" style="width: 25.0%"></div></div></td>
+                        </tr>
+                        <tr class="bg-blue-50/60 font-extrabold text-slate-900 border-t-2 border-blue-200">
+                            <td class="p-4 text-blue-800">GENEL TOPLAM</td>
+                            <td class="p-4 text-center">162</td>
+                            <td class="p-4 text-center text-emerald-800 bg-emerald-100/80">26</td>
+                            <td class="p-4 text-center text-amber-800 bg-amber-100/80">15</td>
+                            <td class="p-4 text-center">121</td>
+                            <td class="p-4 text-center text-orange-700">%16.0</td>
+                            <td class="p-4"><div class="w-36 bg-slate-200 rounded-full h-3"><div class="bg-emerald-600 h-3 rounded-full" style="width: 16.0%"></div></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Chart.js Scripts -->
+    <script>
+        const ctxMonthly = document.getElementById('monthlyChart').getContext('2d');
+        new Chart(ctxMonthly, {
+            type: 'bar',
+            data: {
+                labels: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos'],
+                datasets: [
+                    {
+                        label: 'Aktif CRM Satış Oranı (%)',
+                        data: [15.4, 14.3, 13.6, 0.0, 14.3, 0.0, 64.7, 25.0],
+                        type: 'line',
+                        borderColor: '#EA580C',
+                        backgroundColor: '#EA580C',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#EA580C',
+                        pointBorderColor: '#FFFFFF',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        yAxisID: 'y1',
+                        order: 1
+                    },
+                    {
+                        label: 'Bizim İlettiğimiz Aktif CRM Satışları',
+                        data: [4, 2, 3, 0, 2, 0, 11, 4],
+                        backgroundColor: '#10B981',
+                        borderRadius: 6,
+                        order: 2
+                    },
+                    {
+                        label: 'Yönetici Tarafından Çıkarılan Satışlar',
+                        data: [4, 2, 2, 0, 2, 0, 4, 1],
+                        backgroundColor: '#F59E0B',
+                        borderRadius: 6,
+                        order: 3
+                    },
+                    {
+                        label: 'Toplam Satış (Adet)',
+                        data: [26, 14, 22, 31, 14, 22, 17, 16],
+                        backgroundColor: '#3B82F6',
+                        borderRadius: 6,
+                        order: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#334155', font: { family: 'Plus Jakarta Sans', weight: 'bold', size: 12 } } },
+                    tooltip: { backgroundColor: '#0F172A', titleColor: '#FFFFFF', bodyColor: '#F8FAFC', padding: 12, cornerRadius: 8 }
+                },
+                scales: {
+                    x: { ticks: { color: '#475569', font: { weight: 'bold' } }, grid: { display: false } },
+                    y: { ticks: { color: '#475569' }, grid: { color: '#F1F5F9' }, title: { display: true, text: 'Satış Adedi', color: '#64748B', font: { weight: 'bold' } } },
+                    y1: { position: 'right', min: 0, max: 100, ticks: { color: '#EA580C', callback: v => '%' + v, font: { weight: 'bold' } }, grid: { display: false }, title: { display: true, text: 'Aktif CRM Payı (%)', color: '#EA580C', font: { weight: 'bold' } } }
+                }
+            }
+        });
+
+        const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+        new Chart(ctxDoughnut, {
+            type: 'doughnut',
+            data: {
+                labels: ['Aktif CRM Satışları (26)', 'Yönetici Çıkardı (15)', 'Temsilci Bireysel (121)'],
+                datasets: [{
+                    data: [26, 15, 121],
+                    backgroundColor: ['#10B981', '#F59E0B', '#3B82F6'],
+                    borderWidth: 3,
+                    borderColor: '#FFFFFF',
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { backgroundColor: '#0F172A', titleColor: '#FFFFFF', bodyColor: '#F8FAFC', padding: 12, cornerRadius: 8 }
+                }
+            }
+        });
+
+        const ctxRep = document.getElementById('repChart').getContext('2d');
+        new Chart(ctxRep, {
+            type: 'bar',
+            indexAxis: 'y',
+            data: {
+                labels: ['Emre Bayrak', 'Batucan İşler', 'Yunus Emre', 'Anıl Yerlikaya', 'Sefa Fırat', 'Kerem Akpınar', 'Mustafa Akdemirci', 'Osman Özcan', 'Berke Demirkaya', 'Kaan Çalışkan', 'Karadeniz'],
+                datasets: [
+                    {
+                        label: 'Bizim İlettiğimiz Aktif CRM Satışları',
+                        data: [7, 5, 4, 3, 3, 1, 1, 1, 1, 0, 0],
+                        backgroundColor: '#10B981',
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'Yönetici Tarafından Çıkarılan Satışlar',
+                        data: [2, 3, 1, 5, 0, 2, 2, 0, 0, 0, 0],
+                        backgroundColor: '#F59E0B',
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'Toplam Satış (Bireysel + CRM)',
+                        data: [21, 17, 26, 25, 12, 19, 16, 13, 5, 6, 2],
+                        backgroundColor: '#94A3B8',
+                        borderRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#334155', font: { family: 'Plus Jakarta Sans', weight: 'bold', size: 12 } } },
+                    tooltip: { backgroundColor: '#0F172A', titleColor: '#FFFFFF', bodyColor: '#F8FAFC', padding: 12, cornerRadius: 8 }
+                },
+                scales: {
+                    x: { ticks: { color: '#475569' }, grid: { color: '#F1F5F9' }, title: { display: true, text: 'Satış Adedi (Makine)', color: '#64748B', font: { weight: 'bold' } } },
+                    y: { ticks: { color: '#0F172A', font: { weight: 'bold' } }, grid: { display: false } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

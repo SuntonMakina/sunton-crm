@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunton Makina — CRM Satış Gelir & Hak Ediş Simülasyonu</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8FAFC;
+            color: #0F172A;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .white-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .white-card:hover {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            border-color: #CBD5E1;
+        }
+
+        .tab-btn.active {
+            background-color: #0F172A;
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+        }
+
+        .tab-btn:not(.active) {
+            background-color: #FFFFFF;
+            color: #475569;
+            border: 1px solid #E2E8F0;
+        }
+
+        .tab-btn:not(.active):hover {
+            background-color: #F1F5F9;
+            color: #0F172A;
+        }
+
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 6mm 8mm 6mm 8mm;
+            }
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            body {
+                background: white !important;
+                padding: 0 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .white-card {
+                box-shadow: none !important;
+                border: 1px solid #CBD5E1 !important;
+                break-inside: avoid;
+            }
+            table {
+                width: 100% !important;
+                page-break-inside: auto;
+            }
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-6 md:p-8">
+
+    <div class="max-w-7xl mx-auto space-y-5">
+
+        <!-- Top Header Navigation & Meta -->
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-200/80 pb-5">
+            <div>
+                <div class="flex items-center gap-2.5 mb-1.5">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-600 text-white shadow-sm">
+                        <span>💰</span> HAK EDİŞ & KAZANÇ SİMÜLASYONU
+                    </span>
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                        %30 Hata Payı Duyarlılık Modeli
+                    </span>
+                    <span class="text-xs text-slate-400 font-mono">26 Aktif CRM Satışı</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Sunton Makina <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600">Gelir & Komisyon Hesaplama Tablosu</span>
+                </h1>
+                <p class="text-slate-500 text-xs sm:text-sm mt-0.5 max-w-3xl">
+                    Tarafınızdan sağlanan leadlerden kapanan 26 makine satışı için baz hak ediş ve -%30 (taban) / +%30 (tavan) hata payı duyarlılık analizleri.
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap items-center gap-2 no-print">
+                <button onclick="toggleMasking()" id="maskToggleBtn" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white border border-slate-900 transition-all shadow-sm flex items-center gap-1.5">
+                    <span id="maskIcon" class="text-sm">👁️</span>
+                    <span id="maskText">İsimleri Göster</span>
+                </button>
+
+                <button onclick="window.print()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white border border-blue-600 transition-all shadow-sm flex items-center gap-1.5">
+                    <span>📥</span>
+                    <span>PDF Olarak İndir / Yazdır</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- KPI Summary Cards for Active Period -->
+        <section class="grid grid-cols-2 lg:grid-cols-4 gap-3.5" id="kpiContainer">
+            <!-- Dynamic KPIs -->
+        </section>
+
+        <!-- Period Select Tabs -->
+        <div class="white-card rounded-2xl p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 no-print">
+            <div class="flex flex-wrap items-center gap-1.5">
+                <button onclick="setPeriod('ocak_eylul')" id="tab-ocak_eylul" class="tab-btn active px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
+                    <span>📅</span>
+                    <span>1. Ocak — Eylül (Genel Toplam)</span>
+                </button>
+                <button onclick="setPeriod('ocak_nisan')" id="tab-ocak_nisan" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
+                    <span>🌱</span>
+                    <span>2. Ocak — Nisan Dönemi</span>
+                </button>
+                <button onclick="setPeriod('mayis_eylul')" id="tab-mayis_eylul" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
+                    <span>⚡</span>
+                    <span>3. Mayıs — Eylül Dönemi</span>
+                </button>
+                <button onclick="setPeriod('rate_comparison')" id="tab-rate_comparison" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
+                    <span>📊</span>
+                    <span>Komisyon Oran Karşılaştırması</span>
+                </button>
+            </div>
+
+            <!-- Rate Selector -->
+            <div class="flex items-center gap-2 text-xs font-semibold text-slate-700">
+                <span>Oran:</span>
+                <select id="rateSelect" onchange="changeRate(this.value)" class="px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white text-xs font-bold focus:outline-none focus:ring-2 focus:ring-slate-900">
+                    <option value="0.002" selected>%0.20 (Binde 2 - Standart)</option>
+                    <option value="0.005">%0.50 (Binde 5)</option>
+                    <option value="0.010">%1.00 (Yüzde 1)</option>
+                    <option value="0.020">%2.00 (Yüzde 2)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Main Table Container -->
+        <main class="white-card rounded-2xl overflow-hidden border border-slate-200">
+            <!-- Period Header Banner -->
+            <div class="p-4 border-b border-slate-100 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <h2 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2" id="tablePeriodTitle">
+                        <span>Ocak — Eylül 2026 Gelir & Komisyon Simülasyonu</span>
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-0.5" id="tablePeriodSubtitle">
+                        Temsilci bazında üretilen ciro ve %30 hata payı ile hesaplanan net kazanç aralıkları
+                    </p>
+                </div>
+                <div class="flex items-center gap-2 text-[11px] font-semibold text-slate-600 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200 no-print">
+                    <span>💡 Model:</span>
+                    <span class="text-slate-500">Düşük (-%30) • Baz (%100) • Yüksek (+%30)</span>
+                </div>
+            </div>
+
+            <!-- Table View -->
+            <div class="overflow-x-auto" id="standardTableView">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/80 text-[11px] font-extrabold uppercase tracking-wider text-slate-600 border-b border-slate-200">
+                            <th class="py-3 px-3 w-10 text-center">Sıra</th>
+                            <th class="py-3 px-4">Satış Temsilcisi</th>
+                            <th class="py-3 px-3 text-center">CRM Satış Adedi</th>
+                            <th class="py-3 px-3 text-center bg-blue-50/30 text-blue-900">Oluşan Ciro (USD)</th>
+                            <th class="py-3 px-3 text-center bg-amber-50/60 text-amber-900">Düşük Senaryo (-%30)</th>
+                            <th class="py-3 px-3 text-center bg-emerald-100/60 text-emerald-950 font-extrabold">BAZ KAZANÇ (%100)</th>
+                            <th class="py-3 px-3 text-center bg-teal-50/60 text-teal-900">Yüksek Senaryo (+%30)</th>
+                            <th class="py-3 px-3 text-center text-slate-500">Ciro Payı (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700" id="tableBody">
+                        <!-- Dynamic Rows -->
+                    </tbody>
+                    <tfoot class="bg-slate-50 font-extrabold text-slate-900 border-t-2 border-slate-200" id="tableFoot">
+                        <!-- Dynamic Totals -->
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Rate Comparison View -->
+            <div class="overflow-x-auto hidden" id="rateComparisonView">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-900 text-white text-[11px] font-extrabold uppercase tracking-wider">
+                            <th class="py-3 px-4">Komisyon Oran Modeli</th>
+                            <th class="py-3 px-3 text-center">Toplam Satış Cirosu</th>
+                            <th class="py-3 px-3 text-center bg-amber-900/80 text-amber-200">Düşük Senaryo (-%30)</th>
+                            <th class="py-3 px-3 text-center bg-emerald-800 text-white font-extrabold">HEDEF KAZANÇ (BAZ)</th>
+                            <th class="py-3 px-3 text-center bg-teal-800 text-teal-200">Yüksek Senaryo (+%30)</th>
+                            <th class="py-3 px-3 text-center">Makine Başı Ortalama Kazanç</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tr class="hover:bg-slate-50 bg-emerald-50/20 font-bold">
+                            <td class="py-3.5 px-4 font-extrabold text-emerald-900">
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2 py-0.5 rounded bg-emerald-200 text-emerald-900 text-[10px]">Mevcut Anlaşma</span>
+                                    <span>%0.20 (Binde 2)</span>
+                                </div>
+                            </td>
+                            <td class="py-3.5 px-3 text-center font-bold text-slate-800">$1,653,500 USD</td>
+                            <td class="py-3.5 px-3 text-center font-extrabold text-amber-800 bg-amber-50/50">$2,314.90 USD</td>
+                            <td class="py-3.5 px-3 text-center font-extrabold text-emerald-800 text-sm bg-emerald-100/70">$3,307.00 USD</td>
+                            <td class="py-3.5 px-3 text-center font-extrabold text-teal-800 bg-teal-50/50">$4,299.10 USD</td>
+                            <td class="py-3.5 px-3 text-center text-slate-600 font-mono">$127.19 / Makine</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="py-3.5 px-4 font-bold text-slate-900">%0.50 (Binde 5)</td>
+                            <td class="py-3.5 px-3 text-center font-bold text-slate-800">$1,653,500 USD</td>
+                            <td class="py-3.5 px-3 text-center font-bold text-amber-800 bg-amber-50/30">$5,787.25 USD</td>
+                            <td class="py-3.5 px-3 text-center font-extrabold text-emerald-800 text-sm bg-emerald-50/50">$8,267.50 USD</td>
+                            <td class="py-3.5 px-3 text-center font-bold text-teal-800 bg-teal-50/30">$10,747.75 USD</td>
+                            <td class="py-3.5 px-3 text-center text-slate-600 font-mono">$317.98 / Makine</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="py-3.5 px-4 font-bold text-slate-900">%1.00 (Yüzde 1)</td>
+                            <td class="py-3.5 px-3 text-center font-bold text-slate-800">$1,653,500 USD</td>
+                            <td class="py-3.5 px-3 text-center font-bold text-amber-800 bg-amber-50/30">$11,574.50 USD</td>
+                            <td class="py-3.5 px-3 text-center font-extrabold text-emerald-800 text-sm bg-emerald-50/50">$16,535.00 USD</td>
+                            <td class="py-3.5 px-3 text-center font-bold text-teal-800 bg-teal-50/30">$21,495.50 USD</td>
+                            <td class="py-3.5 px-3 text-center text-slate-600 font-mono">$635.96 / Makine</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="py-3.5 px-4 font-bold text-slate-900">%2.00 (Yüzde 2)</td>
+                            <td class="py-3.5 px-3 text-center font-bold text-slate-800">$1,653,500 USD</td>
+                            <td class="py-3.5 px-3 text-center font-bold text-amber-800 bg-amber-50/30">$23,149.00 USD</td>
+                            <td class="py-3.5 px-3 text-center font-extrabold text-emerald-800 text-sm bg-emerald-50/50">$33,070.00 USD</td>
+                            <td class="py-3.5 px-3 text-center font-bold text-teal-800 bg-teal-50/30">$42,991.00 USD</td>
+                            <td class="py-3.5 px-3 text-center text-slate-600 font-mono">$1,271.92 / Makine</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+        <!-- Information & Methodology Box -->
+        <footer class="white-card rounded-2xl p-5 space-y-3 border-slate-200 text-slate-600 text-xs leading-relaxed">
+            <div class="flex items-center gap-2 pb-2 border-b border-slate-100">
+                <span class="text-sm">📌</span>
+                <h3 class="font-extrabold text-slate-900 text-xs sm:text-sm">Hesaplama ve %30 Hata Payı Metodolojisi</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="space-y-1 p-3 rounded-xl bg-amber-50/50 border border-amber-200">
+                    <span class="font-extrabold text-amber-900 block text-xs">1. Düşük Senaryo (-%30 Taban)</span>
+                    <p class="text-amber-800 text-[11px]">
+                        Vadeli çeklerde gecikmeler, iptaller veya leasing süreçlerinde oluşabilecek olası %30'luk eksilme senaryosudur.
+                    </p>
+                </div>
+                <div class="space-y-1 p-3 rounded-xl bg-emerald-50/50 border border-emerald-200">
+                    <span class="font-extrabold text-emerald-900 block text-xs">2. Hedef / Baz Kazanç (%100 Kapanış)</span>
+                    <p class="text-emerald-800 text-[11px]">
+                        CRM'den iletilen 26 makinenin resmi satış raporlarındaki tüm sözleşme tutarları üzerinden %100 tahsilatla kazanılacak net hak ediş tutarıdır.
+                    </p>
+                </div>
+                <div class="space-y-1 p-3 rounded-xl bg-teal-50/50 border border-teal-200">
+                    <span class="font-extrabold text-teal-900 block text-xs">3. Yüksek Senaryo (+%30 Tavan)</span>
+                    <p class="text-teal-800 text-[11px]">
+                        Görüşmesi devam eden adayların ek satışa dönmesi veya opsiyonlu makinelerin kesinleşmesiyle oluşabilecek %30 ek getiri potansiyelidir.
+                    </p>
+                </div>
+            </div>
+            <div class="pt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-slate-400 text-[10px]">
+                <span>Sunton Makina Çağrı Merkezi CRM Hak Ediş Raporu • 2026</span>
+                <span class="font-mono">Tüm para birimleri USD bazında kesinleştirilmiştir.</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Data & Script Logic -->
+    <script>
+        const rawReps = [
+  {
+    "rep": "EMRE BAYRAK",
+    "p1_count": 3,
+    "p1_turnover": 290000.0,
+    "p2_count": 4,
+    "p2_turnover": 148000.0,
+    "total_count": 7,
+    "total_turnover": 438000.0,
+    "p1_base": 580.0,
+    "p1_low": 406.0,
+    "p1_high": 754.0,
+    "p2_base": 296.0,
+    "p2_low": 207.2,
+    "p2_high": 384.8,
+    "total_base": 876.0,
+    "total_low": 613.1999999999999,
+    "total_high": 1138.8
+  },
+  {
+    "rep": "YUNUS EMRE",
+    "p1_count": 0,
+    "p1_turnover": 0.0,
+    "p2_count": 4,
+    "p2_turnover": 340000.0,
+    "total_count": 4,
+    "total_turnover": 340000.0,
+    "p1_base": 0.0,
+    "p1_low": 0.0,
+    "p1_high": 0.0,
+    "p2_base": 680.0,
+    "p2_low": 475.99999999999994,
+    "p2_high": 884.0,
+    "total_base": 680.0,
+    "total_low": 475.99999999999994,
+    "total_high": 884.0
+  },
+  {
+    "rep": "BATUCAN İŞLER",
+    "p1_count": 3,
+    "p1_turnover": 138000.0,
+    "p2_count": 2,
+    "p2_turnover": 117000.0,
+    "total_count": 5,
+    "total_turnover": 255000.0,
+    "p1_base": 276.0,
+    "p1_low": 193.2,
+    "p1_high": 358.8,
+    "p2_base": 234.0,
+    "p2_low": 163.79999999999998,
+    "p2_high": 304.2,
+    "total_base": 510.0,
+    "total_low": 357.0,
+    "total_high": 663.0
+  },
+  {
+    "rep": "OSMAN ÖZCAN",
+    "p1_count": 0,
+    "p1_turnover": 0.0,
+    "p2_count": 1,
+    "p2_turnover": 215000.0,
+    "total_count": 1,
+    "total_turnover": 215000.0,
+    "p1_base": 0.0,
+    "p1_low": 0.0,
+    "p1_high": 0.0,
+    "p2_base": 430.0,
+    "p2_low": 301.0,
+    "p2_high": 559.0,
+    "total_base": 430.0,
+    "total_low": 301.0,
+    "total_high": 559.0
+  },
+  {
+    "rep": "SEFA FIRAT",
+    "p1_count": 1,
+    "p1_turnover": 59000.0,
+    "p2_count": 2,
+    "p2_turnover": 112000.0,
+    "total_count": 3,
+    "total_turnover": 171000.0,
+    "p1_base": 118.0,
+    "p1_low": 82.6,
+    "p1_high": 153.4,
+    "p2_base": 224.0,
+    "p2_low": 156.79999999999998,
+    "p2_high": 291.2,
+    "total_base": 342.0,
+    "total_low": 239.39999999999998,
+    "total_high": 444.6
+  },
+  {
+    "rep": "ANIL YERLİKAYA",
+    "p1_count": 2,
+    "p1_turnover": 69500.0,
+    "p2_count": 1,
+    "p2_turnover": 60000.0,
+    "total_count": 3,
+    "total_turnover": 129500.0,
+    "p1_base": 139.0,
+    "p1_low": 97.3,
+    "p1_high": 180.70000000000002,
+    "p2_base": 120.0,
+    "p2_low": 84.0,
+    "p2_high": 156.0,
+    "total_base": 259.0,
+    "total_low": 181.29999999999998,
+    "total_high": 336.7
+  },
+  {
+    "rep": "MUSTAFA AKDEMİRCİ",
+    "p1_count": 0,
+    "p1_turnover": 0.0,
+    "p2_count": 1,
+    "p2_turnover": 38000.0,
+    "total_count": 1,
+    "total_turnover": 38000.0,
+    "p1_base": 0.0,
+    "p1_low": 0.0,
+    "p1_high": 0.0,
+    "p2_base": 76.0,
+    "p2_low": 53.199999999999996,
+    "p2_high": 98.8,
+    "total_base": 76.0,
+    "total_low": 53.199999999999996,
+    "total_high": 98.8
+  },
+  {
+    "rep": "BERKE DEMİRKAYA",
+    "p1_count": 0,
+    "p1_turnover": 0.0,
+    "p2_count": 1,
+    "p2_turnover": 34000.0,
+    "total_count": 1,
+    "total_turnover": 34000.0,
+    "p1_base": 0.0,
+    "p1_low": 0.0,
+    "p1_high": 0.0,
+    "p2_base": 68.0,
+    "p2_low": 47.599999999999994,
+    "p2_high": 88.4,
+    "total_base": 68.0,
+    "total_low": 47.599999999999994,
+    "total_high": 88.4
+  },
+  {
+    "rep": "KEREM AKPINAR",
+    "p1_count": 0,
+    "p1_turnover": 0.0,
+    "p2_count": 1,
+    "p2_turnover": 33000.0,
+    "total_count": 1,
+    "total_turnover": 33000.0,
+    "p1_base": 0.0,
+    "p1_low": 0.0,
+    "p1_high": 0.0,
+    "p2_base": 66.0,
+    "p2_low": 46.199999999999996,
+    "p2_high": 85.8,
+    "total_base": 66.0,
+    "total_low": 46.199999999999996,
+    "total_high": 85.8
+  }
+];
+        let currentPeriod = 'ocak_eylul';
+        let currentRate = 0.002;
+        let isMasked = true;
+
+        function getDisplayName(rawName, idx) {
+            if (!isMasked) return rawName;
+            return `Satış Temsilcisi #${idx + 1}`;
+        }
+
+        function toggleMasking() {
+            isMasked = !isMasked;
+            const btn = document.getElementById('maskToggleBtn');
+            const icon = document.getElementById('maskIcon');
+            const text = document.getElementById('maskText');
+
+            if (isMasked) {
+                icon.innerText = '👁️';
+                text.innerText = 'İsimleri Göster';
+                btn.classList.add('bg-slate-900', 'text-white', 'border-slate-900');
+                btn.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
+            } else {
+                icon.innerText = '🔒';
+                text.innerText = 'İsimleri Gizle';
+                btn.classList.remove('bg-slate-900', 'text-white', 'border-slate-900');
+                btn.classList.add('bg-white', 'text-slate-700', 'border-slate-300');
+            }
+            render();
+        }
+
+        function changeRate(val) {
+            currentRate = parseFloat(val);
+            render();
+        }
+
+        function setPeriod(period) {
+            currentPeriod = period;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.getElementById(`tab-${period}`);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            if (period === 'rate_comparison') {
+                document.getElementById('standardTableView').classList.add('hidden');
+                document.getElementById('rateComparisonView').classList.remove('hidden');
+                document.getElementById('tablePeriodTitle').innerText = 'Farklı Komisyon Oranlarına Göre Gelir Tablosu';
+                document.getElementById('tablePeriodSubtitle').innerText = '%0.20, %0.50, %1.00 ve %2.00 oranları için -%30 / Baz / +%30 karşılaştırması';
+            } else {
+                document.getElementById('standardTableView').classList.remove('hidden');
+                document.getElementById('rateComparisonView').classList.add('hidden');
+
+                if (period === 'ocak_eylul') {
+                    document.getElementById('tablePeriodTitle').innerText = '1. Ocak — Eylül 2026 Gelir & Komisyon Tablosu';
+                    document.getElementById('tablePeriodSubtitle').innerText = 'Tüm yılın 26 CRM satışı üzerinden elde edilecek net kazançlar';
+                } else if (period === 'ocak_nisan') {
+                    document.getElementById('tablePeriodTitle').innerText = '2. Ocak — Nisan 2026 Gelir & Komisyon Tablosu';
+                    document.getElementById('tablePeriodSubtitle').innerText = 'Yılın ilk 4 aylık döneminde kapatılan 9 satışın hak edişleri';
+                } else if (period === 'mayis_eylul') {
+                    document.getElementById('tablePeriodTitle').innerText = '3. Mayıs — Eylül 2026 Dönemi Gelir & Komisyon Tablosu';
+                    document.getElementById('tablePeriodSubtitle').innerText = 'Aktif çağrı merkezi dönemindeki 17 satışın hak edişleri';
+                }
+            }
+            render();
+        }
+
+        function render() {
+            if (currentPeriod === 'rate_comparison') return;
+
+            // Prepare list for active period
+            let list = rawReps.map(r => {
+                let count = 0, turnover = 0;
+                if (currentPeriod === 'ocak_eylul') {
+                    count = r.total_count; turnover = r.total_turnover;
+                } else if (currentPeriod === 'ocak_nisan') {
+                    count = r.p1_count; turnover = r.p1_turnover;
+                } else if (currentPeriod === 'mayis_eylul') {
+                    count = r.p2_count; turnover = r.p2_turnover;
+                }
+
+                const base = turnover * currentRate;
+                const low = base * 0.70;
+                const high = base * 1.30;
+
+                return {
+                    rep: r.rep,
+                    count: count,
+                    turnover: turnover,
+                    base: base,
+                    low: low,
+                    high: high
+                };
+            }).filter(item => item.count > 0);
+
+            list.sort((a, b) => b.turnover - a.turnover);
+
+            let totalCount = 0, totalTurnover = 0, totalBase = 0, totalLow = 0, totalHigh = 0;
+            list.forEach(i => {
+                totalCount += i.count;
+                totalTurnover += i.turnover;
+                totalBase += i.base;
+                totalLow += i.low;
+                totalHigh += i.high;
+            });
+
+            // Render KPIs
+            const kpi = document.getElementById('kpiContainer');
+            kpi.innerHTML = `
+                <div class="white-card rounded-2xl p-4 border border-blue-100 bg-blue-50/20">
+                    <p class="text-blue-700 text-[10px] font-extrabold uppercase tracking-wider">TOPLAM CRM SATIŞ CİROSU</p>
+                    <div class="flex items-baseline gap-1.5 mt-1.5">
+                        <span class="text-2xl sm:text-3xl font-extrabold text-blue-900">$${totalTurnover.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</span>
+                        <span class="text-xs font-bold text-blue-600">USD (${totalCount} Makine)</span>
+                    </div>
+                    <p class="text-[10px] text-blue-600 mt-0.5">Seçili dönemdeki hak edişe konu satışlar</p>
+                </div>
+
+                <div class="white-card rounded-2xl p-4 border border-amber-200 bg-amber-50/30">
+                    <p class="text-amber-800 text-[10px] font-extrabold uppercase tracking-wider">DÜŞÜK SENARYO (-%30)</p>
+                    <div class="flex items-baseline gap-1.5 mt-1.5">
+                        <span class="text-2xl sm:text-3xl font-extrabold text-amber-800">$${totalLow.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                        <span class="text-xs font-bold text-amber-700">USD</span>
+                    </div>
+                    <p class="text-[10px] text-amber-700 mt-0.5">Olası gecikme / iptal tabanı</p>
+                </div>
+
+                <div class="white-card rounded-2xl p-4 border border-emerald-300 bg-emerald-50/50 shadow-sm">
+                    <p class="text-emerald-900 text-[10px] font-extrabold uppercase tracking-wider">HEDEF / BAZ KAZANÇ (%100)</p>
+                    <div class="flex items-baseline gap-1.5 mt-1.5">
+                        <span class="text-2xl sm:text-3xl font-extrabold text-emerald-800">$${totalBase.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                        <span class="text-xs font-bold text-emerald-700">USD</span>
+                    </div>
+                    <p class="text-[10px] text-emerald-700 mt-0.5">Net kazanılacak komisyon tutarı</p>
+                </div>
+
+                <div class="white-card rounded-2xl p-4 border border-teal-200 bg-teal-50/30">
+                    <p class="text-teal-800 text-[10px] font-extrabold uppercase tracking-wider">YÜKSEK SENARYO (+%30)</p>
+                    <div class="flex items-baseline gap-1.5 mt-1.5">
+                        <span class="text-2xl sm:text-3xl font-extrabold text-teal-800">$${totalHigh.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                        <span class="text-xs font-bold text-teal-700">USD</span>
+                    </div>
+                    <p class="text-[10px] text-teal-700 mt-0.5">Ek kapanışlar ile tavan kazanç</p>
+                </div>
+            `;
+
+            // Render Table Rows
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            list.forEach((row, idx) => {
+                const share = totalTurnover > 0 ? (row.turnover / totalTurnover * 100).toFixed(1) : 0;
+                const displayName = getDisplayName(row.rep, idx);
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition-colors';
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 text-center text-slate-400 font-mono">${idx + 1}</td>
+                    <td class="py-2.5 px-4 font-extrabold ${isMasked ? 'text-slate-700 font-mono' : 'text-slate-900'} text-xs">${displayName}</td>
+                    <td class="py-2.5 px-3 text-center font-bold">
+                        <span class="inline-block px-2.5 py-0.5 rounded-lg text-xs bg-slate-100 text-slate-800 border border-slate-200">
+                            ${row.count} Satış
+                        </span>
+                    </td>
+                    <td class="py-2.5 px-3 text-center font-extrabold text-blue-950 bg-blue-50/20">
+                        $${row.turnover.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                    </td>
+                    <td class="py-2.5 px-3 text-center font-bold text-amber-800 bg-amber-50/40">
+                        $${row.low.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </td>
+                    <td class="py-2.5 px-3 text-center font-extrabold text-emerald-900 bg-emerald-100/60 text-xs">
+                        $${row.base.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </td>
+                    <td class="py-2.5 px-3 text-center font-bold text-teal-800 bg-teal-50/40">
+                        $${row.high.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </td>
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-mono">%${share}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Render Footer Totals
+            const tfoot = document.getElementById('tableFoot');
+            tfoot.innerHTML = `
+                <tr>
+                    <td class="py-3 px-3 text-center text-slate-400">∑</td>
+                    <td class="py-3 px-4 font-extrabold text-slate-900 text-xs">GENEL TOPLAM (${list.length} Temsilci)</td>
+                    <td class="py-3 px-3 text-center font-extrabold text-slate-900 text-xs">${totalCount} Satış</td>
+                    <td class="py-3 px-3 text-center font-extrabold text-blue-900 bg-blue-50/50 text-xs">
+                        $${totalTurnover.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                    </td>
+                    <td class="py-3 px-3 text-center font-extrabold text-amber-900 bg-amber-100/60 text-xs">
+                        $${totalLow.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+                    </td>
+                    <td class="py-3 px-3 text-center font-extrabold text-emerald-950 bg-emerald-200/80 text-sm">
+                        $${totalBase.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+                    </td>
+                    <td class="py-3 px-3 text-center font-extrabold text-teal-900 bg-teal-100/60 text-xs">
+                        $${totalHigh.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+                    </td>
+                    <td class="py-3 px-3 text-center font-bold text-slate-700">%100.0</td>
+                </tr>
+            `;
+        }
+
+        // Initial Load
+        render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunton Makina — %100 Kapanış Esaslı Ödeme & Komisyon Takvimi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #F8FAFC; 
+            color: #0F172A; 
+        }
+        .clean-card { 
+            background: #FFFFFF; 
+            border: 1px solid #E2E8F0; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+        .clean-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="p-6 md:p-10 min-h-screen">
+
+    <!-- Header -->
+    <header class="max-w-7xl mx-auto mb-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-200 pb-6">
+            <div>
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">%100 TAMAMLANMA ESASLI</span>
+                    <span class="text-xs font-semibold text-slate-500">Temmuz & Ağustos 2026 CRM Satışları</span>
+                </div>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 tracking-tight">Sunton Makina <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-blue-600">Ödeme & Komisyon Takvimi</span></h1>
+                <p class="text-slate-500 text-sm mt-1">Müşterinin tüm ödemesi / vadeleri %100 bittiğinde hesabınıza yatacak net tutarlar</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2.5">
+                <a href="Sunton_Makina_Tum_Satis_ve_Lead_Detay_Tablosu.html" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition-all shadow-sm flex items-center gap-2">
+                    <span>📑</span> Firma Detay Tablosu ➔
+                </a>
+                <a href="Sunton_Makina_Satis_ve_CRM_Dashboard.html" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white transition-all shadow-sm flex items-center gap-2">
+                    <span>📊</span> Performans Dashboard'una Dön
+                </a>
+                <a href="Sunton_Makina_Aylik_Satis_ve_CRM_Lead_Eslesme_Raporu_2026.xlsx" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md shadow-blue-500/20 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    Excel İndir
+                </a>
+            </div>
+        </div>
+
+        <!-- Strict Business Rule Alert -->
+        <div class="mt-6 p-5 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-4">
+            <div class="p-2.5 bg-amber-100 rounded-xl text-amber-800 shrink-0 font-extrabold text-sm">⚠️ HAK EDİŞ KURALI</div>
+            <div class="text-sm text-amber-950 leading-relaxed">
+                <strong>%100 Tamamlanma Şartı & Yönetici İncelemesi:</strong> Müşteri peşinat veya ara kapora ödese dahi <u>tüm vadeler ve evraklar tamamen bitmeden</u> komisyon oluşmaz. Her firmanın <strong>son vadeli çekinin tahsil edildiği / leasingin şirkete tam geçtiği %100 kapanış ayında</strong> o makinenin tüm komisyonu tek seferde toplu olarak hesabınıza geçecektir. Şirket yönetimi ile doğrudan ve uzun yıllara dayanan ilişkisi bulunan firmalar hak ediş kapsamı dışına alınmıştır.
+            </div>
+        </div>
+
+        <!-- Payout KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-6">
+            <div class="clean-card rounded-2xl p-6">
+                <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Komisyona Tabi Toplam Satış</p>
+                <h3 class="text-3xl font-extrabold text-slate-900 mt-2">$987,000 <span class="text-sm font-semibold text-slate-500">USD</span></h3>
+                <p class="text-xs text-slate-400 mt-2">Temmuz & Ağustos Aktif CRM Satışları (15 Makine)</p>
+            </div>
+            <div class="clean-card rounded-2xl p-6 border-emerald-200 bg-emerald-50/40">
+                <p class="text-emerald-700 text-xs font-bold uppercase tracking-wider">Toplam Kazanılacak Net Para</p>
+                <h3 class="text-3xl font-extrabold text-emerald-700 mt-2">$1,974.00 <span class="text-sm font-semibold text-emerald-600">USD</span></h3>
+                <p class="text-xs text-emerald-600 mt-2">%0.20 (Binde 2) Net Komisyon</p>
+            </div>
+            <div class="clean-card rounded-2xl p-6 border-blue-200 bg-blue-50/40">
+                <p class="text-blue-700 text-xs font-bold uppercase tracking-wider">Son Tahsilat / Kapanış Ayı</p>
+                <h3 class="text-3xl font-extrabold text-blue-700 mt-2">Şubat 2027</h3>
+                <p class="text-xs text-blue-600 mt-2">7. Ay Son Çek Kapanışı (Altın Makina)</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto space-y-8">
+
+        <!-- Payout Bar Chart -->
+        <div class="clean-card rounded-2xl p-6 md:p-8">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Ay Ay Hesabınıza Yatacak Para Miktarı (USD)</h2>
+                    <p class="text-xs text-slate-500">Ödemesi %100 biten her ayın net komisyon tutarları (Temmuz 2026 — Şubat 2027)</p>
+                </div>
+            </div>
+            <div class="h-72 w-full">
+                <canvas id="payoutBarChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Detailed Month-by-Month Firm Payout Table -->
+        <div class="clean-card rounded-2xl p-6 md:p-8 border-emerald-200">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                <div>
+                    <h2 class="text-xl font-extrabold text-slate-900">Ay Ay Hangi Firmadan Ne Kadar Para Gelecek?</h2>
+                    <p class="text-xs text-slate-500">Ödemesi %100 biten firmaların model, satış tutarı ve sizin hak edişiniz</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs font-bold text-slate-500 block uppercase tracking-wider">Genel Toplam Hak Ediş</span>
+                    <span class="text-2xl font-extrabold text-emerald-700">$1,974.00 USD</span>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-600 border-collapse">
+                    <thead>
+                        <tr class="bg-slate-800 text-xs font-bold uppercase text-white">
+                            <th class="p-3.5 rounded-tl-xl">Kapanış / Hak Ediş Ayı</th>
+                            <th class="p-3.5">Firma / Müşteri Adı</th>
+                            <th class="p-3.5">Satış Temsilcisi</th>
+                            <th class="p-3.5">Satılan Model & Güç</th>
+                            <th class="p-3.5 text-center">Satış Tutarı</th>
+                            <th class="p-3.5 text-center text-emerald-400 font-extrabold">O Ay Yatacak Para (%0.20)</th>
+                            <th class="p-3.5 rounded-tr-xl">Tüm Ödemenin %100 Bitme Şekli</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200">
+
+                        <!-- TEMMUZ 2026 -->
+                        <tr class="bg-slate-100 font-bold text-slate-900 border-l-4 border-emerald-500">
+                            <td class="p-3.5 text-emerald-800" colspan="4">📅 TEMMUZ 2026 — %100 Ödemesi Biten Satışlar</td>
+                            <td class="p-3.5 text-center text-slate-700 font-extrabold">$30,000</td>
+                            <td class="p-3.5 text-center text-emerald-700 font-extrabold text-base bg-emerald-100/60">$60.00 USD</td>
+                            <td class="p-3.5 text-xs text-slate-600 font-bold">Temmuz Hak Edişi</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-3.5 text-xs text-slate-400 font-semibold pl-6">Temmuz 2026</td>
+                            <td class="p-3.5 font-bold text-slate-900">TAVŞANLI EFE MÜH.</td>
+                            <td class="p-3.5 font-medium">Batucan İşler</td>
+                            <td class="p-3.5">Z3015 3KW (Plaka)</td>
+                            <td class="p-3.5 text-center font-semibold">$30,000</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">$60.00</td>
+                            <td class="p-3.5 text-xs"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">%100 Peşin Ödendi</span> (14.07.2026 tek seferde kapandı)</td>
+                        </tr>
+
+                        <!-- AĞUSTOS 2026 -->
+                        <tr class="bg-slate-100 font-bold text-slate-900 border-l-4 border-emerald-500">
+                            <td class="p-3.5 text-emerald-800" colspan="4">📅 AĞUSTOS 2026 — %100 Ödemesi Biten Satışlar</td>
+                            <td class="p-3.5 text-center text-slate-700 font-extrabold">$25,000</td>
+                            <td class="p-3.5 text-center text-emerald-700 font-extrabold text-base bg-emerald-100/60">$50.00 USD</td>
+                            <td class="p-3.5 text-xs text-slate-600 font-bold">Ağustos Hak Edişi</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-3.5 text-xs text-slate-400 font-semibold pl-6">Ağustos 2026</td>
+                            <td class="p-3.5 font-bold text-slate-900">VENÜS REKLAM (Plaka)</td>
+                            <td class="p-3.5 font-medium">Emre Bayrak</td>
+                            <td class="p-3.5">ST3015 6KW (Plaka)</td>
+                            <td class="p-3.5 text-center font-semibold">$20,000</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">$40.00</td>
+                            <td class="p-3.5 text-xs"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">Tek Çekle Tamamı Ödendi</span> (Ağustos)</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-3.5 text-xs text-slate-400 font-semibold pl-6">Ağustos 2026</td>
+                            <td class="p-3.5 font-bold text-slate-900">VENÜS REKLAM (Kaynak)</td>
+                            <td class="p-3.5 font-medium">Emre Bayrak</td>
+                            <td class="p-3.5">Lazer Kaynak 1.5KW</td>
+                            <td class="p-3.5 text-center font-semibold">$5,000</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">$10.00</td>
+                            <td class="p-3.5 text-xs"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">Tek Çekle Tamamı Ödendi</span> (Ağustos)</td>
+                        </tr>
+
+                        <!-- EYLÜL 2026 -->
+                        <tr class="bg-slate-100 font-bold text-slate-900 border-l-4 border-emerald-500">
+                            <td class="p-3.5 text-emerald-800" colspan="4">📅 EYLÜL 2026 — %100 Ödemesi Biten Satışlar</td>
+                            <td class="p-3.5 text-center text-slate-700 font-extrabold">$91,000</td>
+                            <td class="p-3.5 text-center text-emerald-700 font-extrabold text-base bg-emerald-100/60">$182.00 USD</td>
+                            <td class="p-3.5 text-xs text-slate-600 font-bold">Eylül Hak Edişi</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-3.5 text-xs text-slate-400 font-semibold pl-6">Eylül 2026</td>
+                            <td class="p-3.5 font-bold text-slate-900">TARIK METAL</td>
+                            <td class="p-3.5 font-medium">Sefa Fırat</td>
+                            <td class="p-3.5">R2 3KW (Boru Lazer)</td>
+                            <td class="p-3.5 text-center font-semibold">$57,000</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">$114.00</td>
+                            <td class="p-3.5 text-xs"><span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold">%100 Leasing Makine Teslimatı</span> (Eylül)</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-3.5 text-xs text-slate-400 font-semibold pl-6">Eylül 2026</td>
+                            <td class="p-3.5 font-bold text-slate-900">GÖNÜL HENEK</td>
+                            <td class="p-3.5 font-medium">Berke Demirkaya</td>
+                            <td class="p-3.5">Z3015 3KW (Plaka)</td>
+                            <td class="p-3.5 text-center font-semibold">$34,000</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">$68.00</td>
+                            <td class="p-3.5 text-xs">400.000 TL Nakit Peşin, <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-semibold">Kurulum Çekiyle %100 Kapanış</span></td>
+                        </tr>
+
+                        <!-- EKİM 2026 -->
+                        <tr class="bg-slate-100 font-bold text-slate-900 border-l-4 border-emerald-500">
+                            <td class="p-3.5 text-emerald-800" colspan="4">📅 EKİM 2026 — %100 Ödemesi Biten Satışlar</td>
+                            <td class="p-3.5 text-center text-slate-700 font-extrabold">$206,000</td>
+                            <td class="p-3.5 text-center text-emerald-700 font-extrabold text-base bg-emerald-100/60">$412.00 USD</td>
+                            <td class="p-3.5 text-xs text-slate-600 font-bold">Ekim Hak Edişi</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-3.5 text-xs text-slate-400 font-semibold pl-6">Ekim 2026</td>
+                            <td class="p-3.5 font-bold text-slate-900">İRPA AYDINLATMA (Paket)</td>
+                            <td class="p-3.5 font-medium">Emre Bayrak</td>
+                            <td class="p-3.5">R2 3KW + G3015X 12KW</td>
+                            <td class="p-3.5 text-center font-semibold">$123,000</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">$246.00</td>
+                            <td class="p-3.5 text-xs"><span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold">%100 Leasing Makine Teslimatı</span> (Ekim)</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-3.5 text-xs text-slate-400 font-semibold pl-6">Ekim 2026</td>
+                            <td class="p-3.5 font-bold text-slate-900">HOUSEART</td>
+                            <td class="p-3.5 font-medium">Yunus Emre</td>
+                            <td class="p-3.5">D90 3KW (Boru Lazer)</td>
+                            <td class="p-3.5 text-center font-semibold">$50,000</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">$100.00</td>
+                            <td class="p-3.5 text-xs">Yarı Nakit Peşin, <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold">3 Ay Vadeli Kalan Çek Sonu</span></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-3.5 text-xs text-slate-400 font-semibold pl-6">Ekim 2026</td>
+                            <td class="p-3.5 font-bold text-slate-900">ÇİĞDEMLER PANO</td>
+                            <td class="p-3.5 font-medium">Kerem Akpınar</td>
+                            <td class="p-3.5">ST3015 3KW (Plaka)</td>
+                            <td class="p-3.5 text-center font-semibold">$33,000</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">$66.00</td>
+                            <td class="p-3.5 text-xs"><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-semibold">31.10.2026 Vadeli Çek Tahsilatı</span></td>
+                        </tr>
+
+                        <!-- KASIM 2026 -->
+                        <tr class="bg-slate-100 font-bold text-slate-900 border-l-4 border-emerald-500">
+                            <td class="p-3.5 text-emerald-800" colspan="4">📅 KASIM 2026 — %100 Ödemesi Biten Satışlar</td>
+                            <td class="p-3.5 text-center text-slate-700 font-extrabold">$60,000</td>
+                            <td class="p-3.5 text-center text-emerald-700 font-extrabold text-base bg-emerald-100/60">$120.00 USD</td>
+                            <td class="p-3.5 text-xs text-slate-600 font-bold">Kasım Hak Edişi</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-3.5 text-xs text-slate-400 font-semibold pl-6">Kasım 2026</td>
+                            <td class="p-3.5 font-bold text-slate-900">ÖZ UMUT METAL</td>
+                            <td class="p-3.5 font-medium">Anıl Yerlikaya</td>
+                            <td class="p-3.5">Z6020 6KW (Plaka)</td>
+                            <td class="p-3.5 text-center font-semibold">$60,000</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">$120.00</td>
+                            <td class="p-3.5 text-xs">Kapora Alındı, <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-semibold">3 Ay Vade Sonu Kapanış</span></td>
+                        </tr>
+
+                        <!-- ARALIK 2026 -->
+                        <tr class="bg-slate-100 font-bold text-slate-900 border-l-4 border-emerald-500">
+                            <td class="p-3.5 text-emerald-800" colspan="4">📅 ARALIK 2026 — %100 Ödemesi Biten Satışlar</td>
+                            <td class="p-3.5 text-center text-slate-700 font-extrabold">$270,000</td>
+                            <td class="p-3.5 text-center text-emerald-700 font-extrabold text-base bg-emerald-100/60">$540.00 USD</td>
+                            <td class="p-3.5 text-xs text-slate-600 font-bold">Aralık Hak Edişi</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-3.5 text-xs text-slate-400 font-semibold pl-6">Aralık 2026</td>
+                            <td class="p-3.5 font-bold text-slate-900">YEMSA MAKİNA</td>
+                            <td class="p-3.5 font-medium">Osman Özcan</td>
+                            <td class="p-3.5">G6025H 30KW + Kaynak</td>
+                            <td class="p-3.5 text-center font-semibold">$215,000</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">$430.00</td>
+                            <td class="p-3.5 text-xs">%30 Peşin, %40 Liman, <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-semibold">3 Ay Vade Sonu Kapanış</span></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-3.5 text-xs text-slate-400 font-semibold pl-6">Aralık 2026</td>
+                            <td class="p-3.5 font-bold text-slate-900">VURAL MÜHENDİSLİK</td>
+                            <td class="p-3.5 font-medium">Sefa Fırat</td>
+                            <td class="p-3.5">G3015X 6KW (Plaka)</td>
+                            <td class="p-3.5 text-center font-semibold">$55,000</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">$110.00</td>
+                            <td class="p-3.5 text-xs">%20 Peşin, %30 Gümrük, <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-semibold">120 Günlük 4. Çek Sonu</span></td>
+                        </tr>
+
+                        <!-- OCAK 2027 -->
+                        <tr class="bg-slate-100 font-bold text-slate-900 border-l-4 border-emerald-500">
+                            <td class="p-3.5 text-emerald-800" colspan="4">📅 OCAK 2027 — %100 Ödemesi Biten Satışlar</td>
+                            <td class="p-3.5 text-center text-slate-700 font-extrabold">$125,000</td>
+                            <td class="p-3.5 text-center text-emerald-700 font-extrabold text-base bg-emerald-100/60">$250.00 USD</td>
+                            <td class="p-3.5 text-xs text-slate-600 font-bold">Ocak Hak Edişi</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-3.5 text-xs text-slate-400 font-semibold pl-6">Ocak 2027</td>
+                            <td class="p-3.5 font-bold text-slate-900">ENDÜSTRİ GM</td>
+                            <td class="p-3.5 font-medium">Batucan İşler</td>
+                            <td class="p-3.5">G6025X 12KW (Plaka)</td>
+                            <td class="p-3.5 text-center font-semibold">$87,000</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">$174.00</td>
+                            <td class="p-3.5 text-xs">%30 Peşin, <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-semibold">6 Ay Sıralı Çek Sonu</span></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-3.5 text-xs text-slate-400 font-semibold pl-6">Ocak 2027</td>
+                            <td class="p-3.5 font-bold text-slate-900">SUN ALÜMİNYUM</td>
+                            <td class="p-3.5 font-medium">Mustafa Akdemirci</td>
+                            <td class="p-3.5">Z3015 6KW (Plaka)</td>
+                            <td class="p-3.5 text-center font-semibold">$38,000</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">$76.00</td>
+                            <td class="p-3.5 text-xs">%40 Peşin, <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-semibold">6 Ay Vade Sonu Kapanış</span></td>
+                        </tr>
+
+                        <!-- ŞUBAT 2027 -->
+                        <tr class="bg-slate-100 font-bold text-slate-900 border-l-4 border-emerald-500">
+                            <td class="p-3.5 text-emerald-800" colspan="4">📅 ŞUBAT 2027 — %100 Ödemesi Biten Satışlar</td>
+                            <td class="p-3.5 text-center text-slate-700 font-extrabold">$180,000</td>
+                            <td class="p-3.5 text-center text-emerald-700 font-extrabold text-base bg-emerald-100/60">$360.00 USD</td>
+                            <td class="p-3.5 text-xs text-slate-600 font-bold">Şubat Hak Edişi</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-3.5 text-xs text-slate-400 font-semibold pl-6">Şubat 2027</td>
+                            <td class="p-3.5 font-bold text-slate-900">ALTIN MAKİNA</td>
+                            <td class="p-3.5 font-medium">Yunus Emre</td>
+                            <td class="p-3.5">G6025H 20KW (Plaka)</td>
+                            <td class="p-3.5 text-center font-semibold">$180,000</td>
+                            <td class="p-3.5 text-center font-bold text-emerald-700 bg-emerald-50/50">$360.00</td>
+                            <td class="p-3.5 text-xs">Yarı Nakit Peşin, <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-semibold">7 Ay Vadeli Çek Sonu</span></td>
+                        </tr>
+
+                        <!-- GRAND TOTAL -->
+                        <tr class="bg-emerald-100/80 font-extrabold text-slate-900 border-t-2 border-emerald-500">
+                            <td class="p-4 text-emerald-950 text-base" colspan="4">GENEL TOPLAM KAZANILACAK NET KOMİSYON</td>
+                            <td class="p-4 text-center text-slate-900 text-lg font-extrabold">$987,000</td>
+                            <td class="p-4 text-center text-emerald-900 text-2xl font-extrabold bg-emerald-200/80">$1,974.00 USD</td>
+                            <td class="p-4 text-emerald-950 font-bold text-xs">Tüm Satışların Ödemeleri %100 Tamamlanır</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- EXCLUDED FIRMS SECTION -->
+        <div class="clean-card rounded-2xl p-6 md:p-8 border-amber-200 bg-amber-50/20">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                <div>
+                    <h2 class="text-xl font-extrabold text-amber-950">⚠️ Yönetici İncelemesiyle Çıkarılan Firmalar (Hak Ediş Dışı)</h2>
+                    <p class="text-xs text-amber-800">Doğrudan ve uzun yıllara dayanan kurumsal ilişki nedeniyle komisyon/hak ediş kapsamı dışında tutulan satışlar</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs font-bold text-amber-800 block uppercase tracking-wider">Çıkarılan Toplam Satış Hacmi</span>
+                    <span class="text-xl font-extrabold text-amber-900">$411,000 USD (5 Makine)</span>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-600 border-collapse">
+                    <thead>
+                        <tr class="bg-amber-900 text-xs font-bold uppercase text-white">
+                            <th class="p-3.5 rounded-tl-xl">Firma / Müşteri Adı</th>
+                            <th class="p-3.5">Dönem / Ay</th>
+                            <th class="p-3.5">Satış Temsilcisi</th>
+                            <th class="p-3.5">Satılan Model & Güç</th>
+                            <th class="p-3.5 text-center">Satış Tutarı</th>
+                            <th class="p-3.5 text-center text-amber-300 font-extrabold">Hak Ediş Durumu</th>
+                            <th class="p-3.5 rounded-tr-xl">Yönetici Çıkarma Gerekçesi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-amber-200/60 font-medium">
+                        <tr class="hover:bg-amber-100/40 transition-colors">
+                            <td class="p-3.5 font-bold text-slate-900">ALKO PANO</td>
+                            <td class="p-3.5 text-xs text-slate-500">Ağustos 2026</td>
+                            <td class="p-3.5">Anıl Yerlikaya</td>
+                            <td class="p-3.5">Z3015 3KW (Plaka)</td>
+                            <td class="p-3.5 text-center font-semibold">$31,000</td>
+                            <td class="p-3.5 text-center font-bold text-amber-900 bg-amber-100/60">$0.00 USD</td>
+                            <td class="p-3.5 text-xs text-slate-600">Doğrudan ve uzun yıllara dayanan firma ilişkisi (Yönetici İncelemesi)</td>
+                        </tr>
+                        <tr class="hover:bg-amber-100/40 transition-colors">
+                            <td class="p-3.5 font-bold text-slate-900">İNGEÇ METAL</td>
+                            <td class="p-3.5 text-xs text-slate-500">Temmuz 2026</td>
+                            <td class="p-3.5">Batucan İşler</td>
+                            <td class="p-3.5">G3015T 6KW (Plaka)</td>
+                            <td class="p-3.5 text-center font-semibold">$87,000</td>
+                            <td class="p-3.5 text-center font-bold text-amber-900 bg-amber-100/60">$0.00 USD</td>
+                            <td class="p-3.5 text-xs text-slate-600">Doğrudan ve uzun yıllara dayanan firma ilişkisi (Yönetici İncelemesi)</td>
+                        </tr>
+                        <tr class="hover:bg-amber-100/40 transition-colors">
+                            <td class="p-3.5 font-bold text-slate-900">TUTON METAL</td>
+                            <td class="p-3.5 text-xs text-slate-500">Temmuz 2026</td>
+                            <td class="p-3.5">Batucan İşler</td>
+                            <td class="p-3.5">R1 3KW (Boru Lazer)</td>
+                            <td class="p-3.5 text-center font-semibold">$63,000</td>
+                            <td class="p-3.5 text-center font-bold text-amber-900 bg-amber-100/60">$0.00 USD</td>
+                            <td class="p-3.5 text-xs text-slate-600">Doğrudan ve uzun yıllara dayanan firma ilişkisi (Yönetici İncelemesi)</td>
+                        </tr>
+                        <tr class="hover:bg-amber-100/40 transition-colors">
+                            <td class="p-3.5 font-bold text-slate-900">AKSA MOTOR</td>
+                            <td class="p-3.5 text-xs text-slate-500">Temmuz 2026</td>
+                            <td class="p-3.5">Emre Bayrak</td>
+                            <td class="p-3.5">G3015X 6KW (Plaka)</td>
+                            <td class="p-3.5 text-center font-semibold">$37,000</td>
+                            <td class="p-3.5 text-center font-bold text-amber-900 bg-amber-100/60">$0.00 USD</td>
+                            <td class="p-3.5 text-xs text-slate-600">Doğrudan ve uzun yıllara dayanan firma ilişkisi (Yönetici İncelemesi)</td>
+                        </tr>
+                        <tr class="hover:bg-amber-100/40 transition-colors">
+                            <td class="p-3.5 font-bold text-slate-900">PARALEL DEMİR ÇELİK</td>
+                            <td class="p-3.5 text-xs text-slate-500">Temmuz 2026</td>
+                            <td class="p-3.5">Yunus Emre</td>
+                            <td class="p-3.5">TX3R 12-12 12KW (Boru)</td>
+                            <td class="p-3.5 text-center font-semibold">$193,000</td>
+                            <td class="p-3.5 text-center font-bold text-amber-900 bg-amber-100/60">$0.00 USD</td>
+                            <td class="p-3.5 text-xs text-slate-600">Doğrudan ve uzun yıllara dayanan firma ilişkisi (Yönetici İncelemesi)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Chart Scripts -->
+    <script>
+        const ctxPayout = document.getElementById('payoutBarChart').getContext('2d');
+        new Chart(ctxPayout, {
+            type: 'bar',
+            data: {
+                labels: ['Temmuz 2026', 'Ağustos 2026', 'Eylül 2026', 'Ekim 2026', 'Kasım 2026', 'Aralık 2026', 'Ocak 2027', 'Şubat 2027'],
+                datasets: [
+                    {
+                        label: 'O Ay %100 Kapanan Satışlardan Yatacak Para (USD)',
+                        data: [60.00, 50.00, 182.00, 412.00, 120.00, 540.00, 250.00, 360.00],
+                        backgroundColor: '#10B981',
+                        borderRadius: 8,
+                        hoverBackgroundColor: '#059669'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#334155', font: { family: 'Plus Jakarta Sans', weight: 'bold', size: 12 } } },
+                    tooltip: { 
+                        backgroundColor: '#0F172A', 
+                        titleColor: '#FFFFFF', 
+                        bodyColor: '#F8FAFC', 
+                        padding: 12, 
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                return ' Toplu Hak Ediş: $' + context.raw.toFixed(2) + ' USD';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { ticks: { color: '#334155', font: { weight: 'bold' } }, grid: { display: false } },
+                    y: { 
+                        ticks: { 
+                            color: '#64748B',
+                            callback: v => '$' + v
+                        }, 
+                        grid: { color: '#F1F5F9' }, 
+                        title: { display: true, text: 'Kazanılacak Tutar (USD)', color: '#64748B', font: { weight: 'bold' } } 
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
