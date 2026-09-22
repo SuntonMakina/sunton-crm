@@ -902,14 +902,12 @@ export default function WorkspacePage() {
   const filteredToplamYapilan = applySearch(toplamYapilanLeads)
   const filteredToplamUlasan = applySearch(toplamUlasanLeads)
 
-  // 1b. Script / Outbound Leadleri (Havuzdan Atanan 40 Firma)
+  // 1b. Script / Outbound Leadleri (Harita / Apify veya Manuel Script Atamaları)
   const scriptLeadsList = sortedLeads.filter(l => 
-    l.status_id === '22222222-0000-0000-0000-000000000020' ||
     l.source_id === '11111111-0000-0000-0000-000000000015' || 
     l.source_id === '11111111-0000-0000-0000-000000000001' ||
     (l.lead_sources?.code === 'APIFY') ||
-    (l.extra_notes && l.extra_notes.includes('Arama Havuz')) ||
-    (l.message && (l.message.includes('Arama Havuzu') || l.message.includes('Sitesi:')))
+    (l.message && l.message.includes('Sitesi:'))
   )
 
   const getSortedAndFilteredLeads = (list: any[]) => {

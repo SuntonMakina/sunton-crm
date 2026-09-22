@@ -379,12 +379,24 @@ export default function WhatsAppWorkspacePage() {
           '905070471333',
           '905379527983',
           '905345743401',
-          '905379527977'
+          '905379527977',
+          // Outbound script pool numbers
+          '905558780335', '902324799012', '902322575852', '905448601288', '905333570825',
+          '905558973563', '902323281938', '902323767699', '905323329191', '902323769991',
+          '905553735898', '902323250111', '905549421389', '902323281402', '905335406299',
+          '902323862122', '905326361261', '905364543874', '905495424545', '905461092344',
+          '905545292755', '902323253535', '905317212371', '905327833458', '905446761565',
+          '905427666178', '902362331091', '905304432438', '905067314592', '902362130644',
+          '902362220999', '902362130710', '902362130090', '902362338976', '905330191397',
+          '902362140211', '905544891755', '902362140242', '905382346971', '902362363131'
         ])
 
         const leadsList = initialLeadsList.filter((l: any) => {
           const cleanPhone = l.phone_normalized || (l.phone ? l.phone.replace(/\D/g, '') : '')
-          return !excludedSalesPhones.has(cleanPhone)
+          if (excludedSalesPhones.has(cleanPhone)) return false
+          if (l.extra_notes && l.extra_notes.includes('Arama Havuz')) return false
+          if (l.message && (l.message.includes('[Arama Havuz]') || l.message.includes('Arama Havuzu'))) return false
+          return true
         })
 
         // Fetch matching registered leads by phone for raw chats
