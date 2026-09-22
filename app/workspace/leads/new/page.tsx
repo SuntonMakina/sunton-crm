@@ -15,7 +15,7 @@ import {
   CheckCircle, 
   AlertTriangle 
 } from 'lucide-react'
-import { generateNextLeadNumber } from '@/lib/utils'
+import { generateNextLeadNumber, safeInsertLeadWithRetry } from '@/lib/utils'
 
 export default function AddLeadPage() {
   const supabase = createClient()
@@ -146,34 +146,26 @@ export default function AddLeadPage() {
         }
       }
 
-      // 2. Generate safe collision-proof lead number
-      const nextLeadNumber = await generateNextLeadNumber(supabase)
-
-      // 3. Insert Lead
-      const { data: newLead, error: insertError } = await supabase
-        .from('leads')
-        .insert({
-          first_name: firstName,
-          last_name: lastName,
-          full_name: `${firstName} ${lastName}`.trim(),
-          phone: phone,
-          phone_normalized: normPhone,
-          secondary_phone: secondaryPhone || null,
-          email: email || null,
-          company_name: companyName || null,
-          province: selectedProvince || null,
-          district: district || null,
-          source_id: sourceId || null,
-          requested_product: requestedProduct || null,
-          lead_number: nextLeadNumber,
-          status_id: '22222222-0000-0000-0000-000000000001', // Yeni Lead
-          assigned_call_center_user_id: profile.id, // Assign to current user (Ebru)
-          created_by: profile.id,
-          updated_by: profile.id,
-          is_active: true
-        })
-        .select()
-        .single()
+      // 2. Insert Lead with collision-proof auto-retry
+      const { data: newLead, error: insertError } = await safeInsertLeadWithRetry(supabase, {
+        first_name: firstName,
+        last_name: lastName,
+        full_name: `${firstName} ${lastName}`.trim(),
+        phone: phone,
+        phone_normalized: normPhone,
+        secondary_phone: secondaryPhone || null,
+        email: email || null,
+        company_name: companyName || null,
+        province: selectedProvince || null,
+        district: district || null,
+        source_id: sourceId || null,
+        requested_product: requestedProduct || null,
+        status_id: '22222222-0000-0000-0000-000000000001', // Yeni Lead
+        assigned_call_center_user_id: profile.id, // Assign to current user (Ebru)
+        created_by: profile.id,
+        updated_by: profile.id,
+        is_active: true
+      })
 
       if (insertError) throw insertError
 

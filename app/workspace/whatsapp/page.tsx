@@ -22,7 +22,7 @@ import {
   Check,
   UserPlus
 } from 'lucide-react'
-import { formatLeadId, getProgressiveCallSchedule, calculateNextWorkingTime, generateNextLeadNumber } from '@/lib/utils'
+import { formatLeadId, getProgressiveCallSchedule, calculateNextWorkingTime, generateNextLeadNumber, safeUpdateLeadWithRetry, safeInsertLeadWithRetry } from '@/lib/utils'
 
 function renderMessageContent(content: string) {
   if (!content) return null
@@ -608,25 +608,20 @@ export default function WhatsAppWorkspacePage() {
       if (callErr) throw callErr
 
       let leadNumber = lead.lead_number
-      if (!leadNumber && lead.status_id === '22222222-0000-0000-0000-000000000020') {
-        leadNumber = await generateNextLeadNumber(supabase)
-      }
 
       // 2. Update lead status to "Görüşme Yapıldı" (22222222-0000-0000-0000-000000000007)
-      await supabase
-        .from('leads')
-        .update({
-          status_id: '22222222-0000-0000-0000-000000000007',
-          last_contact_at: new Date().toISOString(),
-          whatsapp_step: 'called_1',
-          ...(leadNumber ? { lead_number: leadNumber } : {}),
-          ...(lead.status_id === '22222222-0000-0000-0000-000000000020' ? {
-            created_at: new Date().toISOString(),
-            created_by: profile.id,
-            updated_by: profile.id
-          } : {})
-        })
-        .eq('id', lead.id)
+      const { error: updateErr } = await safeUpdateLeadWithRetry(supabase, lead.id, {
+        status_id: '22222222-0000-0000-0000-000000000007',
+        last_contact_at: new Date().toISOString(),
+        whatsapp_step: 'called_1',
+        ...(leadNumber ? { lead_number: leadNumber } : {}),
+        ...(lead.status_id === '22222222-0000-0000-0000-000000000020' ? {
+          created_at: new Date().toISOString(),
+          created_by: profile.id,
+          updated_by: profile.id
+        } : {})
+      })
+      if (updateErr) throw updateErr
 
       // 3. Log activity
       await supabase.from('activities').insert({
@@ -675,28 +670,23 @@ export default function WhatsAppWorkspacePage() {
       if (callErr) throw callErr
 
       let leadNumber = lead.lead_number
-      if (!leadNumber && lead.status_id === '22222222-0000-0000-0000-000000000020') {
-        leadNumber = await generateNextLeadNumber(supabase)
-      }
 
       // 3. Update lead status to "Ulaşılamadı" (22222222-0000-0000-0000-000000000005)
-      await supabase
-        .from('leads')
-        .update({
-          status_id: '22222222-0000-0000-0000-000000000005',
-          last_contact_at: new Date().toISOString(),
-          next_contact_at: nextContactAt,
-          callback_status: callbackStatus,
-          whatsapp_step: 'no_answer',
-          extra_notes: finalNotes,
-          ...(leadNumber ? { lead_number: leadNumber } : {}),
-          ...(lead.status_id === '22222222-0000-0000-0000-000000000020' ? {
-            created_at: new Date().toISOString(),
-            created_by: profile.id,
-            updated_by: profile.id
-          } : {})
-        })
-        .eq('id', lead.id)
+      const { error: updateErr } = await safeUpdateLeadWithRetry(supabase, lead.id, {
+        status_id: '22222222-0000-0000-0000-000000000005',
+        last_contact_at: new Date().toISOString(),
+        next_contact_at: nextContactAt,
+        callback_status: callbackStatus,
+        whatsapp_step: 'no_answer',
+        extra_notes: finalNotes,
+        ...(leadNumber ? { lead_number: leadNumber } : {}),
+        ...(lead.status_id === '22222222-0000-0000-0000-000000000020' ? {
+          created_at: new Date().toISOString(),
+          created_by: profile.id,
+          updated_by: profile.id
+        } : {})
+      })
+      if (updateErr) throw updateErr
 
       // 3. Log activity
       await supabase.from('activities').insert({
@@ -721,26 +711,21 @@ export default function WhatsAppWorkspacePage() {
     const selectedRep = salesReps.find(r => r.id === salesRepId)
     try {
       let leadNumber = lead.lead_number
-      if (!leadNumber && lead.status_id === '22222222-0000-0000-0000-000000000020') {
-        leadNumber = await generateNextLeadNumber(supabase)
-      }
 
       // 1. Update lead status and assignee
-      await supabase
-        .from('leads')
-        .update({
-          assigned_sales_user_id: salesRepId,
-          status_id: '22222222-0000-0000-0000-000000000009', // Satış Uzmanına İletildi
-          whatsapp_step: 'completed',
-          extra_notes: lead.extra_notes ? lead.extra_notes + '\n(WhatsApp Panelinden Yönlendirildi)' : 'WhatsApp üzerinden yönlendirildi.',
-          ...(leadNumber ? { lead_number: leadNumber } : {}),
-          ...(lead.status_id === '22222222-0000-0000-0000-000000000020' ? {
-            created_at: new Date().toISOString(),
-            created_by: profile.id,
-            updated_by: profile.id
-          } : {})
-        })
-        .eq('id', lead.id)
+      const { error: updateErr } = await safeUpdateLeadWithRetry(supabase, lead.id, {
+        assigned_sales_user_id: salesRepId,
+        status_id: '22222222-0000-0000-0000-000000000009', // Satış Uzmanına İletildi
+        whatsapp_step: 'completed',
+        extra_notes: lead.extra_notes ? lead.extra_notes + '\n(WhatsApp Panelinden Yönlendirildi)' : 'WhatsApp üzerinden yönlendirildi.',
+        ...(leadNumber ? { lead_number: leadNumber } : {}),
+        ...(lead.status_id === '22222222-0000-0000-0000-000000000020' ? {
+          created_at: new Date().toISOString(),
+          created_by: profile.id,
+          updated_by: profile.id
+        } : {})
+      })
+      if (updateErr) throw updateErr
 
       // 2. Create notification for the Sales Specialist
       await supabase.from('notifications').insert({
@@ -917,32 +902,27 @@ export default function WhatsAppWorkspacePage() {
   }
 
   // Convert WhatsApp Chat to a New Lead with interactive fields
+  // Convert WhatsApp Chat to a New Lead with interactive fields
   const handleConvertSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!profile || !selectedLead) return
     try {
       let leadNumber = selectedLead.lead_number
-      if (!leadNumber) {
-        leadNumber = await generateNextLeadNumber(supabase)
-      }
 
-      const { error } = await supabase
-        .from('leads')
-        .update({
-          first_name: convertForm.firstName.trim() || 'WhatsApp',
-          last_name: convertForm.lastName.trim() || 'Müşterisi',
-          company_name: convertForm.companyName.trim() || null,
-          lead_number: leadNumber,
-          status_id: '22222222-0000-0000-0000-000000000001', // Yeni Lead
-          assigned_call_center_user_id: profile.id, // Assign to Ebru
-          whatsapp_step: 'viewed',
-          next_contact_at: null,
-          callback_status: 'none',
-          created_at: new Date().toISOString(),
-          created_by: profile.id,
-          updated_by: profile.id
-        })
-        .eq('id', selectedLead.id)
+      const { error } = await safeUpdateLeadWithRetry(supabase, selectedLead.id, {
+        first_name: convertForm.firstName.trim() || 'WhatsApp',
+        last_name: convertForm.lastName.trim() || 'Müşterisi',
+        company_name: convertForm.companyName.trim() || null,
+        ...(leadNumber ? { lead_number: leadNumber } : {}),
+        status_id: '22222222-0000-0000-0000-000000000001', // Yeni Lead
+        assigned_call_center_user_id: profile.id, // Assign to Ebru
+        whatsapp_step: 'viewed',
+        next_contact_at: null,
+        callback_status: 'none',
+        created_at: new Date().toISOString(),
+        created_by: profile.id,
+        updated_by: profile.id
+      })
 
       if (error) throw error
 
@@ -969,7 +949,8 @@ export default function WhatsAppWorkspacePage() {
         setQueueModalOpen(true)
       }
     } catch (err: any) {
-      alert('Aday kartı oluşturulamadı: ' + err.message)
+      console.error('Lead conversion error:', err)
+      alert('Aday kartı kaydedilirken bir sorun oluştu, lütfen sayfayı yenileyip tekrar deneyin.')
     }
   }
 

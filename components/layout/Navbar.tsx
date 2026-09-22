@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { safeInsertLeadWithRetry } from '@/lib/utils'
 import { useTheme } from '@/components/shared/ThemeProvider'
 import { Profile, Notification } from '@/types/crm'
 import {
@@ -187,7 +188,7 @@ export default function Navbar({ sidebarCollapsed, setSidebarCollapsed, profile 
     if (!leadForm.firstName || !leadForm.lastName || !leadForm.phone) return
     setActionLoading(true)
     try {
-      const { error } = await supabase.from('leads').insert({
+      const { error } = await safeInsertLeadWithRetry(supabase, {
         first_name: leadForm.firstName,
         last_name: leadForm.lastName,
         phone: leadForm.phone,
@@ -195,7 +196,7 @@ export default function Navbar({ sidebarCollapsed, setSidebarCollapsed, profile 
         company_name: leadForm.company || null,
         requested_product: leadForm.product || null,
         created_by: profile?.id,
-        status_id: 'ls000000-0000-0000-0000-000000000001' // Yeni Lead
+        status_id: '22222222-0000-0000-0000-000000000001' // Yeni Lead
       })
 
       if (!error) {
@@ -203,7 +204,7 @@ export default function Navbar({ sidebarCollapsed, setSidebarCollapsed, profile 
         setLeadForm({ firstName: '', lastName: '', phone: '', company: '', product: '' })
         router.refresh()
       } else {
-        alert(error.message)
+        alert('Lead eklenemedi: ' + error.message)
       }
     } catch (err: any) {
       console.error(err)

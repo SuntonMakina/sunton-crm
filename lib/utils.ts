@@ -97,9 +97,9 @@ export async function generateNextLeadNumber(supabase: any): Promise<string> {
       .select('lead_number')
       .not('lead_number', 'is', null)
       .order('lead_number', { ascending: false })
-      .limit(100)
+      .limit(200)
 
-    let maxSeq = 2999
+    let maxSeq = 3005
     if (leads && leads.length > 0) {
       for (const l of leads) {
         if (l.lead_number) {
@@ -132,6 +132,94 @@ export async function generateNextLeadNumber(supabase: any): Promise<string> {
     return candidateNum
   } catch (err) {
     console.error('Error generating next lead number:', err)
-    return `LD-${currYear}-${String(Date.now()).slice(-6)}`
+    const randomSalt = Math.floor(1000 + Math.random() * 9000)
+    return `LD-${currYear}-${String(Date.now()).slice(-4)}${randomSalt.toString().slice(-2)}`
   }
 }
+
+export async function safeUpdateLeadWithRetry(
+  supabase: any,
+  leadId: string,
+  payload: Record<string, any>,
+  maxRetries: number = 5
+): Promise<{ data: any; error: any }> {
+  let currentPayload = { ...payload }
+  let lastError: any = null
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    if (attempt > 0 || !currentPayload.lead_number) {
+      currentPayload.lead_number = await generateNextLeadNumber(supabase)
+    }
+
+    const { data, error } = await supabase
+      .from('leads')
+      .update(currentPayload)
+      .eq('id', leadId)
+      .select()
+      .maybeSingle()
+
+    if (!error) {
+      return { data, error: null }
+    }
+
+    lastError = error
+    const errMsg = String(error.message || error.details || error.hint || '')
+    const isLeadNumberCollision =
+      error.code === '23505' ||
+      errMsg.includes('leads_lead_number_key') ||
+      errMsg.includes('lead_number') ||
+      errMsg.includes('duplicate key')
+
+    if (isLeadNumberCollision) {
+      delete currentPayload.lead_number
+      continue
+    }
+
+    break
+  }
+
+  return { data: null, error: lastError }
+}
+
+export async function safeInsertLeadWithRetry(
+  supabase: any,
+  payload: Record<string, any>,
+  maxRetries: number = 5
+): Promise<{ data: any; error: any }> {
+  let currentPayload = { ...payload }
+  let lastError: any = null
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    if (attempt > 0 || !currentPayload.lead_number) {
+      currentPayload.lead_number = await generateNextLeadNumber(supabase)
+    }
+
+    const { data, error } = await supabase
+      .from('leads')
+      .insert(currentPayload)
+      .select()
+      .single()
+
+    if (!error) {
+      return { data, error: null }
+    }
+
+    lastError = error
+    const errMsg = String(error.message || error.details || error.hint || '')
+    const isLeadNumberCollision =
+      error.code === '23505' ||
+      errMsg.includes('leads_lead_number_key') ||
+      errMsg.includes('lead_number') ||
+      errMsg.includes('duplicate key')
+
+    if (isLeadNumberCollision) {
+      delete currentPayload.lead_number
+      continue
+    }
+
+    break
+  }
+
+  return { data: null, error: lastError }
+}
+
