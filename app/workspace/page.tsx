@@ -30,7 +30,13 @@ import {
   Shield,
   Clock3,
   Calendar,
-  Loader2
+  Loader2,
+  BookOpen,
+  Sparkles,
+  ChevronDown,
+  ChevronUp,
+  Copy,
+  Check
 } from 'lucide-react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { formatLeadId, getProgressiveCallSchedule, getNumericPart } from '@/lib/utils'
@@ -49,6 +55,17 @@ export default function WorkspacePage() {
   const [profile, setProfile] = useState<any>(layoutProfile || null)
   const [loadingProfile, setLoadingProfile] = useState(!layoutProfile)
   const [status, setStatus] = useState<string>(layoutProfile?.status || 'active') // active, inactive, away
+
+  // Script UI states
+  const [isScriptBannerOpen, setIsScriptBannerOpen] = useState(true)
+  const [isScriptModalOpen, setIsScriptModalOpen] = useState(false)
+  const [copiedStepIndex, setCopiedStepIndex] = useState<number | null>(null)
+
+  const copyScriptText = (text: string, index: number) => {
+    navigator.clipboard.writeText(text)
+    setCopiedStepIndex(index)
+    setTimeout(() => setCopiedStepIndex(null), 2000)
+  }
 
   // Leads and tasks states
   const [leads, setLeads] = useState<any[]>([])
@@ -1458,6 +1475,15 @@ export default function WorkspacePage() {
           </select>
           
           <button 
+            onClick={() => setIsScriptBannerOpen(!isScriptBannerOpen)}
+            className="h-9 px-3 bg-amber-500 hover:bg-amber-600 text-white rounded-lg flex items-center gap-1.5 text-xs font-bold shadow-xs transition-colors cursor-pointer"
+            title="Arama Scriptini Aç / Kapat"
+          >
+            <BookOpen className="h-4 w-4" />
+            <span>📖 Arama Scripti</span>
+          </button>
+
+          <button 
             onClick={() => router.push('/workspace/leads/new')}
             className="h-9 px-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg flex items-center gap-1.5 text-xs font-bold shadow-xs transition-colors cursor-pointer"
             title="Manuel Lead Ekle"
@@ -1542,6 +1568,84 @@ export default function WorkspacePage() {
           <span className="text-[9px] font-bold text-muted-foreground uppercase">Toplam Ulaşan</span>
           <h3 className="text-xl font-extrabold text-blue-500">{toplamUlasanLeads.length}</h3>
         </button>
+      </div>
+
+      {/* 2.5 Arama Scripti & Çağrı Rehberi Banner */}
+      <div className="bg-gradient-to-r from-amber-500/10 via-card to-primary/5 border border-amber-500/30 rounded-2xl shadow-xs overflow-hidden">
+        <div 
+          onClick={() => setIsScriptBannerOpen(!isScriptBannerOpen)}
+          className="p-4 flex items-center justify-between cursor-pointer hover:bg-amber-500/[0.04] transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-xl bg-amber-500/20 text-amber-600 flex items-center justify-center shrink-0 border border-amber-500/30 font-bold">
+              <BookOpen className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-bold text-foreground">Sunton Makina — Çağrı Merkezi Arama Scripti & Diyalog Rehberi</h3>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500/15 text-amber-600 border border-amber-500/20">
+                  5 Adım
+                </span>
+              </div>
+              <p className="text-[11px] text-muted-foreground mt-0.5">
+                CNC Fiber Lazer Kesim, Abkant Büküm & Sac İşleme potansiyel müşterileri için standart konuşma adımları
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-amber-600 hidden sm:inline">
+              {isScriptBannerOpen ? 'Scripti Gizle' : 'Scripti Göster'}
+            </span>
+            <div className="h-7 w-7 rounded-lg bg-muted flex items-center justify-center text-muted-foreground">
+              {isScriptBannerOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </div>
+          </div>
+        </div>
+
+        {isScriptBannerOpen && (
+          <div className="px-4 pb-4 pt-1 border-t border-border/50 grid grid-cols-1 md:grid-cols-5 gap-3">
+            {[
+              {
+                step: '1. Giriş & Selamlaşma',
+                text: '“Merhabalar [Firma Adı], ben Sunton Makina\'dan Ebru. Nasılsınız, iyi çalışmalar dilerim.”'
+              },
+              {
+                step: '2. Arama Amacı',
+                text: '“İzmir ve Ege Bölgesi sanayicilerimizle CNC Fiber Lazer Kesim ve Abkant makinelerimizin yeni nesil avantajları hakkında görüşüyoruz.”'
+              },
+              {
+                step: '3. İhtiyaç Tespiti',
+                text: '“Mevcut üretiminizde sac kesim/büküm işlerinizi kendi bünyenizde mi yapıyorsunuz yoksa dışarıya fasona mı veriyorsunuz?”'
+              },
+              {
+                step: '4. Değer Önerisi & Yönlendirme',
+                text: '“Teknik detaylar ve güncel yatırım/finansman kolaylıklarımız için Satış Uzmanımızın sizlere özel çalışma sunmasını isteriz.”'
+              },
+              {
+                step: '5. Kapanış & CRM Kaydı',
+                text: '“İlginiz için çok teşekkür ederim. Notlarımı aldım, uzmanımız en kısa sürede sizinle iletişime geçecektir. Bereketli günler!”'
+              }
+            ].map((item, idx) => (
+              <div key={idx} className="bg-card/90 border border-border/80 rounded-xl p-3 flex flex-col justify-between shadow-2xs hover:border-amber-500/40 transition-all">
+                <div>
+                  <div className="flex items-center justify-between gap-1 mb-1.5">
+                    <span className="text-[10px] font-extrabold uppercase text-amber-600 tracking-wider">{item.step}</span>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); copyScriptText(item.text, idx); }}
+                      className="text-muted-foreground hover:text-foreground transition-colors p-1 cursor-pointer"
+                      title="Metni Kopyala"
+                    >
+                      {copiedStepIndex === idx ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-foreground/90 font-medium leading-relaxed italic">
+                    {item.text}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* 3. Call priority calling list */}
