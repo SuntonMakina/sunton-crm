@@ -117,7 +117,7 @@ export default function WorkspacePage() {
   // Filter state for prioritized list
   const [searchQuery, setSearchQuery] = useState('')
   const [totalCalls, setTotalCalls] = useState(0)
-  const [activeTab, setActiveTab] = useState<'toCall' | 'neverCalled' | 'calledToday' | 'calledTotal' | 'totalIncoming'>('toCall')
+  const [activeTab, setActiveTab] = useState<'toCall' | 'scriptLeads' | 'neverCalled' | 'calledToday' | 'calledTotal' | 'totalIncoming'>('toCall')
   const [viewMode, setViewMode] = useState<'table' | 'card'>('table')
   const [calendarView, setCalendarView] = useState<'horizontal' | 'grid'>('horizontal')
   const [copiedForwardText, setCopiedForwardText] = useState(false)
@@ -491,11 +491,8 @@ export default function WorkspacePage() {
               if (l.assigned_call_center_user_id && l.assigned_call_center_user_id !== effectiveUserId && !isManager) {
                 return false
               }
-              if (l.source_id === '11111111-0000-0000-0000-000000000001' || l.source_id === '11111111-0000-0000-0000-000000000015') {
-                return false
-              }
-              const msg = (l.message || '').toLowerCase()
-              if (msg.includes('google maps') || msg.includes('google haritalar') || msg.includes('doğrudan arama')) {
+              // Only filter out Meryem's cold calling console leads
+              if (l.assigned_call_center_user_id === '1e07f9f9-058d-4437-824c-134255b87e3d') {
                 return false
               }
               return true
@@ -905,6 +902,16 @@ export default function WorkspacePage() {
   const filteredToplamYapilan = applySearch(toplamYapilanLeads)
   const filteredToplamUlasan = applySearch(toplamUlasanLeads)
 
+  // 1b. Script / Outbound Leadleri (Havuzdan Atanan 40 Firma)
+  const scriptLeadsList = sortedLeads.filter(l => 
+    l.status_id === '22222222-0000-0000-0000-000000000020' ||
+    l.source_id === '11111111-0000-0000-0000-000000000015' || 
+    l.source_id === '11111111-0000-0000-0000-000000000001' ||
+    (l.lead_sources?.code === 'APIFY') ||
+    (l.extra_notes && l.extra_notes.includes('Arama Havuz')) ||
+    (l.message && (l.message.includes('Arama Havuzu') || l.message.includes('Sitesi:')))
+  )
+
   const getSortedAndFilteredLeads = (list: any[]) => {
     const sorted = [...list]
     if (sortCriteria === 'id_desc') {
@@ -957,6 +964,7 @@ export default function WorkspacePage() {
 
   const getActiveLeads = () => {
     if (activeTab === 'toCall') return filteredBugunAranacak
+    if (activeTab === 'scriptLeads') return applySearch(scriptLeadsList)
     if (activeTab === 'neverCalled') return applySearch(hicAranmamisLeads)
     if (activeTab === 'calledToday') return filteredBugunYapilan
     if (activeTab === 'calledTotal') return getSortedAndFilteredLeads(filteredToplamYapilan)
@@ -1503,7 +1511,7 @@ export default function WorkspacePage() {
       </div>
 
       {/* 2. Operations Counters Area */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3.5">
         {/* Counter: Bugün Aranacak */}
         <button
           onClick={() => setActiveTab('toCall')}
@@ -1515,6 +1523,22 @@ export default function WorkspacePage() {
         >
           <span className="text-[9px] font-bold text-muted-foreground uppercase">Bugün Aranacaklar</span>
           <h3 className="text-xl font-extrabold text-amber-500">{bugunAranacakLeads.length}</h3>
+        </button>
+
+        {/* Counter: Script Leadleri (40 Firma Havuzu) */}
+        <button
+          onClick={() => setActiveTab('scriptLeads')}
+          className={`bg-card border rounded-xl p-4 shadow-xs flex flex-col justify-between h-20 text-left cursor-pointer transition-all ${
+            activeTab === 'scriptLeads'
+              ? 'border-amber-500 ring-2 ring-amber-500/30 bg-amber-500/10'
+              : 'border-amber-500/40 hover:border-amber-500/70 bg-amber-500/[0.02]'
+          }`}
+        >
+          <span className="text-[9px] font-extrabold text-amber-600 dark:text-amber-400 uppercase flex items-center gap-1">
+            <Sparkles className="h-3 w-3 text-amber-500" />
+            Script Leadleri
+          </span>
+          <h3 className="text-xl font-extrabold text-amber-600 dark:text-amber-400">{scriptLeadsList.length}</h3>
         </button>
 
         {/* Counter: Hiç Aranmamışlar */}
