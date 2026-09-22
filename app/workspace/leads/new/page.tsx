@@ -15,6 +15,7 @@ import {
   CheckCircle, 
   AlertTriangle 
 } from 'lucide-react'
+import { generateNextLeadNumber } from '@/lib/utils'
 
 export default function AddLeadPage() {
   const supabase = createClient()
@@ -145,7 +146,10 @@ export default function AddLeadPage() {
         }
       }
 
-      // 2. Insert Lead
+      // 2. Generate safe collision-proof lead number
+      const nextLeadNumber = await generateNextLeadNumber(supabase)
+
+      // 3. Insert Lead
       const { data: newLead, error: insertError } = await supabase
         .from('leads')
         .insert({
@@ -161,6 +165,7 @@ export default function AddLeadPage() {
           district: district || null,
           source_id: sourceId || null,
           requested_product: requestedProduct || null,
+          lead_number: nextLeadNumber,
           status_id: '22222222-0000-0000-0000-000000000001', // Yeni Lead
           assigned_call_center_user_id: profile.id, // Assign to current user (Ebru)
           created_by: profile.id,

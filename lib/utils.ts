@@ -87,3 +87,51 @@ export function getProgressiveCallSchedule(completedCallsCount: number, baseDate
 
   return { nextContactAt, callbackStatus, attemptInfo };
 }
+
+export async function generateNextLeadNumber(supabase: any): Promise<string> {
+  const currYear = new Date().getFullYear()
+
+  try {
+    const { data: leads } = await supabase
+      .from('leads')
+      .select('lead_number')
+      .not('lead_number', 'is', null)
+      .order('lead_number', { ascending: false })
+      .limit(100)
+
+    let maxSeq = 2999
+    if (leads && leads.length > 0) {
+      for (const l of leads) {
+        if (l.lead_number) {
+          const m = l.lead_number.match(/(\d+)$/)
+          if (m) {
+            const num = parseInt(m[1], 10)
+            if (num > maxSeq) maxSeq = num
+          }
+        }
+      }
+    }
+
+    let candidateSeq = maxSeq + 1
+    let candidateNum = `LD-${currYear}-${String(candidateSeq).padStart(6, '0')}`
+
+    for (let i = 0; i < 50; i++) {
+      const { data: exists } = await supabase
+        .from('leads')
+        .select('id')
+        .eq('lead_number', candidateNum)
+        .maybeSingle()
+
+      if (!exists) {
+        return candidateNum
+      }
+      candidateSeq++
+      candidateNum = `LD-${currYear}-${String(candidateSeq).padStart(6, '0')}`
+    }
+
+    return candidateNum
+  } catch (err) {
+    console.error('Error generating next lead number:', err)
+    return `LD-${currYear}-${String(Date.now()).slice(-6)}`
+  }
+}

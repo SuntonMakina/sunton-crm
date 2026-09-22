@@ -82,7 +82,7 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
       const todayStart = new Date()
       todayStart.setHours(0, 0, 0, 0)
 
-      // 1. Fetch leads actively assigned to Meryem (the 40 fresh leads for today)
+      // 1. Fetch leads actively assigned to Meryem for this week (21 - 25 Eylül)
       const { data: assignedData, error: leadsErr } = await supabase
         .from('leads')
         .select(`
@@ -98,7 +98,7 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
 
       if (leadsErr) throw leadsErr
 
-      // 2. Fetch all calls logged by Meryem with lead and sales info
+      // 2. Fetch calls logged by Meryem for this week (from 21 Eylül onwards)
       const { data: userCalls, error: callsErr } = await supabase
         .from('calls')
         .select(`
@@ -111,11 +111,12 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
           )
         `)
         .eq('user_id', profile.id)
+        .gte('created_at', '2026-09-21T00:00:00.000Z')
         .order('created_at', { ascending: false })
 
       if (callsErr) throw callsErr
 
-      // Build unified lead pool for Meryem workspace
+      // Build unified lead pool for Meryem workspace (21 - 25 Eylül 2026)
       const leadMap = new Map<string, any>()
 
       // Add freshly assigned leads
@@ -123,24 +124,13 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
         leadMap.set(l.id, l)
       })
 
-      // Add all previously called leads by Meryem
+      // Add any this-week calls
       ;(userCalls || []).forEach((c: any) => {
-        if (c.lead) {
-          if (!leadMap.has(c.lead.id)) {
-            const leadCalls = (userCalls || [])
-              .filter((uc: any) => uc.lead?.id === c.lead.id)
-              .map((uc: any) => ({
-                id: uc.id,
-                status: uc.status,
-                notes: uc.notes,
-                created_at: uc.created_at,
-                outcome_id: uc.outcome_id,
-                duration_seconds: uc.duration_seconds
-              }))
-            leadMap.set(c.lead.id, {
-              ...c.lead,
-              calls: leadCalls
-            })
+        if (c.lead && leadMap.has(c.lead.id)) {
+          const existing = leadMap.get(c.lead.id)
+          const currentCalls = existing.calls || []
+          if (!currentCalls.some((call: any) => call.id === c.id)) {
+            existing.calls = [c, ...currentCalls]
           }
         }
       })
@@ -251,14 +241,19 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
     todayStart.setHours(0, 0, 0, 0)
     const todayStartISO = todayStart.toISOString()
 
-    const weekStartISO = '2026-09-14T00:00:00.000Z'
+    const weekStartISO = '2026-09-21T00:00:00.000Z'
 
-    // 1. Bugün Aranacaklar (Günlük): Meryem'e atanan ve henüz aranmamış 40 sıfır lead
-    const toCall = leads.filter((l) => {
-      const isAssignedToMeryem = l.assigned_call_center_user_id === profile.id
+    // This week's active leads assigned to Meryem
+    const thisWeekAssigned = leads.filter(
+      (l) => l.assigned_call_center_user_id === profile.id && l.is_active
+    )
+
+    // 1. Bugün Aranacaklar (Günlük): Bugün planlanan ve henüz aranmamış taze leadler
+    const toCall = thisWeekAssigned.filter((l) => {
       const hasCalls = (l.calls || []).length > 0
       const hasContact = !!l.last_contact_at
-      return isAssignedToMeryem && !hasCalls && !hasContact
+      const isToday = l.next_contact_at?.startsWith('2026-09-21') || !l.next_contact_at
+      return !hasCalls && !hasContact && isToday
     })
 
     // 2. Bugün Arananlar (Günlük): Sadece bugün Meryem'in yaptığı aramalar veya temaslar
@@ -292,12 +287,14 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
     // 5. Toplam Script / Tüm Liste (Şu ana kadar aradıkları): Meryem'in temas ettiği tüm geçmiş kayıtlar
     const allScript = leads.filter((l) => (l.calls && l.calls.length > 0) || l.last_contact_at)
 
-    // Day groups in weekly plan
-    const mon = leads.filter(l => (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-14')))
-    const tue = leads.filter(l => (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-15')))
-    const wed = leads.filter(l => (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-16')))
-    const thu = leads.filter(l => (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-17')))
-    const fri = toCall
+    // Day groups in weekly plan (21 - 25 Eylül 2026)
+    const mon = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-21') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-21')))
+    const tue = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-22') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-22')))
+    const wed = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-23') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-23')))
+    const thu = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-24') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-24')))
+    const fri = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-25') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-25')))
+
+    const weeklyPlan = thisWeekAssigned.filter(l => l.next_contact_at && l.next_contact_at >= '2026-09-21T00:00:00.000Z' && l.next_contact_at <= '2026-09-25T23:59:59.999Z')
 
     return {
       toCallLeads: toCall,
@@ -305,7 +302,7 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
       forwardedLeads: forwarded,
       calledTodayLeads: calledToday,
       allLeads: allScript.length > 0 ? allScript : leads,
-      weeklyPlanLeads: leads,
+      weeklyPlanLeads: weeklyPlan.length > 0 ? weeklyPlan : thisWeekAssigned,
       allScriptLeads: allScript,
       mondayLeads: mon,
       tuesdayLeads: tue,
@@ -320,17 +317,18 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
   const currentList = useMemo(() => {
     let list: any[] = []
     if (activeTab === 'toCall') {
-      if (selectedPlanDay === '2026-09-14') list = mondayLeads
-      else if (selectedPlanDay === '2026-09-15') list = tuesdayLeads
-      else if (selectedPlanDay === '2026-09-16') list = wednesdayLeads
-      else if (selectedPlanDay === '2026-09-17') list = thursdayLeads
-      else if (selectedPlanDay === 'all_week') list = allScriptLeads
+      if (selectedPlanDay === '2026-09-21') list = mondayLeads
+      else if (selectedPlanDay === '2026-09-22') list = tuesdayLeads
+      else if (selectedPlanDay === '2026-09-23') list = wednesdayLeads
+      else if (selectedPlanDay === '2026-09-24') list = thursdayLeads
+      else if (selectedPlanDay === '2026-09-25') list = fridayLeads
+      else if (selectedPlanDay === 'all_week') list = weeklyPlanLeads
       else list = toCallLeads
     }
     else if (activeTab === 'followups') list = followupLeads
     else if (activeTab === 'forwarded') list = forwardedLeads
     else if (activeTab === 'calledToday') list = calledTodayLeads
-    else list = allScriptLeads
+    else list = weeklyPlanLeads
 
     // Apply search filter
     if (searchQuery.trim()) {
@@ -754,21 +752,21 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
           <p className="text-[11px] text-muted-foreground mt-0.5">Bugün tamamlanan (Günlük)</p>
         </div>
 
-        {/* Toplam Script (Şu Ana Kadar Aradıkları) */}
+        {/* Toplam Script (21-25 Eylül Toplam Havuz) */}
         <div
-          onClick={() => { setActiveTab('all'); setSelectedPlanDay('all_week'); }}
+          onClick={() => { setActiveTab('toCall'); setSelectedPlanDay('all_week'); }}
           className={`col-span-2 md:col-span-1 p-4 rounded-xl border transition-all cursor-pointer ${
-            activeTab === 'all'
+            (activeTab === 'all' || (activeTab === 'toCall' && selectedPlanDay === 'all_week'))
               ? 'bg-purple-500/10 border-purple-500 shadow-sm ring-2 ring-purple-500/20'
               : 'bg-card border-border hover:border-purple-500/50'
           }`}
         >
           <div className="flex items-center justify-between text-muted-foreground mb-1.5">
             <span className="text-xs font-bold uppercase tracking-wider">Toplam Script</span>
-            <Building className={`h-4 w-4 ${activeTab === 'all' ? 'text-purple-500' : ''}`} />
+            <Building className={`h-4 w-4 ${(activeTab === 'all' || (activeTab === 'toCall' && selectedPlanDay === 'all_week')) ? 'text-purple-500' : ''}`} />
           </div>
-          <div className="text-2xl font-black text-purple-500">{allScriptLeads.length}</div>
-          <p className="text-[11px] text-muted-foreground mt-0.5">Şu ana kadar arananlar (Genel)</p>
+          <div className="text-2xl font-black text-purple-500">{weeklyPlanLeads.length}</div>
+          <p className="text-[11px] text-muted-foreground mt-0.5">Atanan toplam havuz (21-25 Eyl)</p>
         </div>
 
       </div>
@@ -779,11 +777,11 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-primary" />
             <span className="text-xs font-bold uppercase tracking-wider text-foreground">
-              Haftalık Çağrı Planı (Günde 40 Arama • 14 - 18 Eylül 2026)
+              Haftalık Çağrı Planı (Günde 40 Arama • 21 - 25 Eylül 2026)
             </span>
           </div>
           <span className="text-[11px] font-semibold text-muted-foreground">
-            14 - 18 Eylül 2026 Dönemi
+            21 - 25 Eylül 2026 Dönemi (200 Lead)
           </span>
         </div>
 
@@ -802,77 +800,77 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
               <Sparkles className="h-3.5 w-3.5" />
               <span>Bugünün Planı</span>
             </div>
-            <span className="text-[11px] opacity-90 font-mono">Cuma ({todayQuotaLeads.length})</span>
+            <span className="text-[11px] opacity-90 font-mono">Pazartesi ({todayQuotaLeads.length})</span>
           </button>
 
           {/* Pazartesi */}
           <button
             type="button"
-            onClick={() => { setSelectedPlanDay('2026-09-14'); setActiveTab('toCall'); }}
+            onClick={() => { setSelectedPlanDay('2026-09-21'); setActiveTab('toCall'); }}
             className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
-              selectedPlanDay === '2026-09-14' && activeTab === 'toCall'
+              selectedPlanDay === '2026-09-21' && activeTab === 'toCall'
                 ? 'bg-primary text-primary-foreground border-primary shadow-sm ring-2 ring-primary/20'
                 : 'bg-background border-border text-foreground hover:border-primary/50'
             }`}
           >
-            <span>Pazartesi</span>
-            <span className="text-[11px] text-muted-foreground font-mono">14 Eyl ({mondayLeads.length})</span>
+            <span>Pazartesi (Bugün)</span>
+            <span className="text-[11px] text-muted-foreground font-mono">21 Eyl ({mondayLeads.length})</span>
           </button>
 
           {/* Salı */}
           <button
             type="button"
-            onClick={() => { setSelectedPlanDay('2026-09-15'); setActiveTab('toCall'); }}
+            onClick={() => { setSelectedPlanDay('2026-09-22'); setActiveTab('toCall'); }}
             className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
-              selectedPlanDay === '2026-09-15' && activeTab === 'toCall'
+              selectedPlanDay === '2026-09-22' && activeTab === 'toCall'
                 ? 'bg-primary text-primary-foreground border-primary shadow-sm ring-2 ring-primary/20'
                 : 'bg-background border-border text-foreground hover:border-primary/50'
             }`}
           >
             <span>Salı</span>
-            <span className="text-[11px] text-muted-foreground font-mono">15 Eyl ({tuesdayLeads.length})</span>
+            <span className="text-[11px] text-muted-foreground font-mono">22 Eyl ({tuesdayLeads.length})</span>
           </button>
 
           {/* Çarşamba */}
           <button
             type="button"
-            onClick={() => { setSelectedPlanDay('2026-09-16'); setActiveTab('toCall'); }}
+            onClick={() => { setSelectedPlanDay('2026-09-23'); setActiveTab('toCall'); }}
             className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
-              selectedPlanDay === '2026-09-16' && activeTab === 'toCall'
+              selectedPlanDay === '2026-09-23' && activeTab === 'toCall'
                 ? 'bg-primary text-primary-foreground border-primary shadow-sm ring-2 ring-primary/20'
                 : 'bg-background border-border text-foreground hover:border-primary/50'
             }`}
           >
             <span>Çarşamba</span>
-            <span className="text-[11px] text-muted-foreground font-mono">16 Eyl ({wednesdayLeads.length})</span>
+            <span className="text-[11px] text-muted-foreground font-mono">23 Eyl ({wednesdayLeads.length})</span>
           </button>
 
           {/* Perşembe */}
           <button
             type="button"
-            onClick={() => { setSelectedPlanDay('2026-09-17'); setActiveTab('toCall'); }}
+            onClick={() => { setSelectedPlanDay('2026-09-24'); setActiveTab('toCall'); }}
             className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
-              selectedPlanDay === '2026-09-17' && activeTab === 'toCall'
+              selectedPlanDay === '2026-09-24' && activeTab === 'toCall'
                 ? 'bg-primary text-primary-foreground border-primary shadow-sm ring-2 ring-primary/20'
                 : 'bg-background border-border text-foreground hover:border-primary/50'
             }`}
           >
             <span>Perşembe</span>
-            <span className="text-[11px] text-muted-foreground font-mono">17 Eyl ({thursdayLeads.length})</span>
+            <span className="text-[11px] text-muted-foreground font-mono">24 Eyl ({thursdayLeads.length})</span>
           </button>
 
           {/* Cuma */}
           <button
             type="button"
-            onClick={() => { setSelectedPlanDay('2026-09-18'); setActiveTab('toCall'); }}
+            onClick={() => { setSelectedPlanDay('2026-09-25'); setActiveTab('toCall'); }}
             className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
-              selectedPlanDay === '2026-09-18' && activeTab === 'toCall'
+              selectedPlanDay === '2026-09-25' && activeTab === 'toCall'
                 ? 'bg-primary text-primary-foreground border-primary shadow-sm ring-2 ring-primary/20'
                 : 'bg-background border-border text-foreground hover:border-primary/50'
             }`}
           >
-            <span>Cuma (Bugün)</span>
-            <span className="text-[11px] text-muted-foreground font-mono">18 Eyl ({fridayLeads.length})</span>
+            <span>Cuma</span>
+            <span className="text-[11px] text-muted-foreground font-mono">25 Eyl ({fridayLeads.length})</span>
           </button>
 
           {/* Tüm Hafta / Toplam Script */}
@@ -885,8 +883,8 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
                 : 'bg-background border-border text-foreground hover:border-purple-500/50'
             }`}
           >
-            <span>Toplam Script</span>
-            <span className="text-[11px] text-muted-foreground font-mono">Tüm Liste ({allScriptLeads.length})</span>
+            <span>Haftalık Plan</span>
+            <span className="text-[11px] text-muted-foreground font-mono">Tüm Hafta ({weeklyPlanLeads.length})</span>
           </button>
         </div>
       </div>

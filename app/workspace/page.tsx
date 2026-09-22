@@ -420,6 +420,9 @@ export default function WorkspacePage() {
 
       // Determine query filter based on role (call center rep or sales rep)
       const isSales = role === 'sales_specialist'
+      const isManager = role === 'admin' || role === 'super_admin'
+      const ebruId = 'b2b2b2b2-bbbb-cccc-dddd-eeeeeeeeeeee'
+      const effectiveUserId = isManager ? ebruId : userId
 
       // A. Fetch Assigned Leads (paginated to bypass Supabase 1000 row limit)
       const allLeads: any[] = []
@@ -441,7 +444,7 @@ export default function WorkspacePage() {
         if (isSales) {
           batchQuery = batchQuery.eq('assigned_sales_user_id', userId)
         } else {
-          batchQuery = batchQuery.or(`assigned_call_center_user_id.eq.${userId},legacy_source_file.not.is.null,source_id.eq.11111111-0000-0000-0000-000000000005`)
+          batchQuery = batchQuery.or(`assigned_call_center_user_id.eq.${effectiveUserId},legacy_source_file.not.is.null,source_id.eq.11111111-0000-0000-0000-000000000005`)
         }
 
         batchQuery = batchQuery
@@ -465,7 +468,22 @@ export default function WorkspacePage() {
       }
 
       if (allLeads.length > 0) {
-        setLeads(allLeads)
+        const filteredUserLeads = isSales
+          ? allLeads
+          : allLeads.filter((l) => {
+              if (l.assigned_call_center_user_id && l.assigned_call_center_user_id !== effectiveUserId && !isManager) {
+                return false
+              }
+              if (l.source_id === '11111111-0000-0000-0000-000000000001' || l.source_id === '11111111-0000-0000-0000-000000000015') {
+                return false
+              }
+              const msg = (l.message || '').toLowerCase()
+              if (msg.includes('google maps') || msg.includes('google haritalar') || msg.includes('doğrudan arama')) {
+                return false
+              }
+              return true
+            })
+        setLeads(filteredUserLeads)
       }      // B. Fetch Tasks
       const { data: userTasks } = await supabase
         .from('tasks')

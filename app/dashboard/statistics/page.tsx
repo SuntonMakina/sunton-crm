@@ -634,22 +634,26 @@ export default function StatisticsPage() {
   })
 
   // Representative matching helper functions
+  const isMeryemEntity = (repId: string | null | undefined, repName: string | null | undefined, sourceId?: string | null, message?: string | null, companyName?: string | null) => {
+    if (repId === '1e07f9f9-058d-4437-824c-134255b87e3d') return true
+    const name = (repName || '').toLowerCase()
+    if (name.includes('meryem')) return true
+    if (sourceId === '11111111-0000-0000-0000-000000000001' || sourceId === '11111111-0000-0000-0000-000000000015') return true
+    const msg = (message || '').toLowerCase()
+    if (msg.includes('google maps') || msg.includes('google haritalar') || msg.includes('google.com/maps') || msg.includes('doğrudan arama') || msg.includes('kategori/sektör:')) return true
+    return false
+  }
+
   const isLeadOfRep = (l: any, filter: string) => {
     if (!filter || filter === 'all') return true
-    const repId = l.assigned_call_center_user_id
-    const repName = (l.profiles?.full_name || '').toLowerCase()
+    const isMeryem = isMeryemEntity(l.assigned_call_center_user_id, l.profiles?.full_name, l.source_id, l.message, l.company_name)
     if (filter === 'ebru' || filter === 'b2b2b2b2-bbbb-cccc-dddd-eeeeeeeeeeee') {
-      if (repId === 'b2b2b2b2-bbbb-cccc-dddd-eeeeeeeeeeee') return true
-      if (repName.includes('ebru')) return true
-      if (l.legacy_source_file !== null && !repName.includes('meryem')) return true
-      return false
+      return !isMeryem
     }
     if (filter === 'meryem' || filter === '1e07f9f9-058d-4437-824c-134255b87e3d') {
-      if (repId === '1e07f9f9-058d-4437-824c-134255b87e3d') return true
-      if (repName.includes('meryem')) return true
-      return false
+      return isMeryem
     }
-    return repId === filter || l.profiles?.id === filter
+    return l.assigned_call_center_user_id === filter || l.profiles?.id === filter
   }
 
   const isConvOfRep = (c: any, lead: any, filter: string) => {
@@ -659,16 +663,12 @@ export default function StatisticsPage() {
     }
     const assignedUserId = c.assigned_user_id
     const assignedName = (c.profiles?.full_name || '').toLowerCase()
+    const isMeryem = isMeryemEntity(assignedUserId, assignedName)
     if (filter === 'ebru' || filter === 'b2b2b2b2-bbbb-cccc-dddd-eeeeeeeeeeee') {
-      if (assignedUserId === 'b2b2b2b2-bbbb-cccc-dddd-eeeeeeeeeeee') return true
-      if (assignedName.includes('ebru')) return true
-      if (!assignedUserId) return true
-      return false
+      return !isMeryem
     }
     if (filter === 'meryem' || filter === '1e07f9f9-058d-4437-824c-134255b87e3d') {
-      if (assignedUserId === '1e07f9f9-058d-4437-824c-134255b87e3d') return true
-      if (assignedName.includes('meryem')) return true
-      return false
+      return isMeryem
     }
     return assignedUserId === filter
   }
@@ -677,16 +677,12 @@ export default function StatisticsPage() {
     if (!filter || filter === 'all') return true
     const callerName = (call.profiles?.full_name || '').toLowerCase()
     const callerId = call.user_id
+    const isMeryem = isMeryemEntity(callerId, callerName)
     if (filter === 'ebru' || filter === 'b2b2b2b2-bbbb-cccc-dddd-eeeeeeeeeeee') {
-      if (callerId === 'b2b2b2b2-bbbb-cccc-dddd-eeeeeeeeeeee') return true
-      if (callerName.includes('ebru')) return true
-      if (call.id && String(call.id).startsWith('legacy-') && !callerName.includes('meryem')) return true
-      return false
+      return !isMeryem
     }
     if (filter === 'meryem' || filter === '1e07f9f9-058d-4437-824c-134255b87e3d') {
-      if (callerId === '1e07f9f9-058d-4437-824c-134255b87e3d') return true
-      if (callerName.includes('meryem')) return true
-      return false
+      return isMeryem
     }
     return callerId === filter
   }
@@ -715,6 +711,7 @@ export default function StatisticsPage() {
   const [allRawMessages, setAllRawMessages] = useState<any[]>([])
   const [allRawLeads, setAllRawLeads] = useState<any[]>([])
   const [allRawConversations, setAllRawConversations] = useState<any[]>([])
+  const cachedDataRef = React.useRef<{ rawLeads: any[]; rawCalls: any[]; rawConversations: any[]; rawMessages: any[] } | null>(null)
   
   // Debug leads list (First unrelated leads)
   const [debugUnrelatedLeads, setDebugUnrelatedLeads] = useState<any[]>([])
@@ -796,7 +793,12 @@ export default function StatisticsPage() {
 
       if (savedPeriod) setPeriodFilter(savedPeriod)
       if (savedChannel) setChannelFilter(savedChannel)
-      if (savedRep) setRepFilter(savedRep)
+      if (savedRep && savedRep !== 'all') {
+        setRepFilter(savedRep)
+      } else {
+        setRepFilter('ebru')
+        localStorage.setItem('stats_rep_filter', 'ebru')
+      }
       if (savedStart) setCustomStartDate(savedStart)
       if (savedEnd) setCustomEndDate(savedEnd)
     }
@@ -1185,124 +1187,13 @@ export default function StatisticsPage() {
     }
   }, [allRawConversations, allRawLeads, allRawMessages, resolvedDates])
 
-  // Fetch stats count data from get_lead_quality_stats RPC
-  const fetchStatsData = async () => {
-    setLoading(true)
-    setErrorMsg('')
-    setMigrationNeeded(false)
+  // Process and calculate report stats in memory instantaneously from cached datasets
+  const processData = (cache: { rawLeads: any[]; rawCalls: any[]; rawConversations: any[]; rawMessages: any[] }) => {
     try {
       const { start_date, end_date } = resolvedDates
+      const { rawLeads, rawCalls, rawConversations, rawMessages } = cache
 
-      let utcStart: string | null = null
-      let utcEnd: string | null = null
-      if (start_date) {
-        const d = new Date(start_date)
-        d.setDate(d.getDate() - 1)
-        const y = d.getFullYear()
-        const m = String(d.getMonth() + 1).padStart(2, '0')
-        const day = String(d.getDate()).padStart(2, '0')
-        utcStart = `${y}-${m}-${day}T14:30:00.000Z`
-      }
-      if (end_date) {
-        utcEnd = `${end_date}T14:30:00.000Z`
-      }
-
-      // Query calls matching active date filter with pagination
-      let activeCalls: any[] = []
-      let fromCallIdx = 0
-      const limitCallVal = 1000
-      let hasMoreCalls = true
-
-      while (hasMoreCalls) {
-        let callsQuery = supabase
-          .from('calls')
-          .select('*, profiles:user_id(full_name)')
-          .order('created_at', { ascending: false })
-          .range(fromCallIdx, fromCallIdx + limitCallVal - 1)
-        
-        if (utcStart) {
-          callsQuery = callsQuery.gte('created_at', utcStart)
-        }
-        if (utcEnd) {
-          callsQuery = callsQuery.lte('created_at', utcEnd)
-        }
-        
-        const { data: cData, error: cErr } = await callsQuery
-        if (cErr) throw cErr
-        
-        if (cData && cData.length > 0) {
-          activeCalls = [...activeCalls, ...cData]
-          if (cData.length < limitCallVal) {
-            hasMoreCalls = false
-          } else {
-            fromCallIdx += limitCallVal
-          }
-        } else {
-          hasMoreCalls = false
-        }
-      }
-
-      // Query conversations matching active date filter (for WhatsApp contacts) with pagination
-      let rawConversations: any[] = []
-      let fromConvIdx = 0
-      const limitConvVal = 1000
-      let hasMoreConvs = true
-
-      while (hasMoreConvs) {
-        let convQuery = supabase
-          .from('conversations')
-          .select('*, profiles:assigned_user_id(full_name)')
-          .eq('channel', 'whatsapp')
-          .order('created_at', { ascending: false })
-          .range(fromConvIdx, fromConvIdx + limitConvVal - 1)
-        
-        const { data: convData, error: convErr } = await convQuery
-        if (convErr) throw convErr
-        
-        if (convData && convData.length > 0) {
-          rawConversations = [...rawConversations, ...convData]
-          if (convData.length < limitConvVal) {
-            hasMoreConvs = false
-          } else {
-            fromConvIdx += limitConvVal
-          }
-        } else {
-          hasMoreConvs = false
-        }
-      }
-
-      // 1. Fetch all active leads from Supabase with pagination. We apply scopeFilter in-memory
-      // to ensure that the Manager Tracking Panel calculations and drawer lookups always have access
-      // to the full dataset.
-      let rawLeads: any[] = []
-      let fromLeadIdx = 0
-      const limitLeadVal = 1000
-      let hasMoreLeads = true
-
-      while (hasMoreLeads) {
-        let leadsQuery = supabase
-          .from('leads')
-          .select('*, communication_channels:communication_channel_id(name), lead_sources:source_id(name, code), calls(id), conversations(last_message_at, created_at), profiles:assigned_call_center_user_id(id, full_name), assigned_sales:assigned_sales_user_id(id, full_name)')
-          .eq('is_active', true)
-          .order('created_at', { ascending: false })
-          .range(fromLeadIdx, fromLeadIdx + limitLeadVal - 1)
-        
-        const { data: leadData, error: leadErr } = await leadsQuery
-        if (leadErr) throw leadErr
-        
-        if (leadData && leadData.length > 0) {
-          rawLeads = [...rawLeads, ...leadData]
-          if (leadData.length < limitLeadVal) {
-            hasMoreLeads = false
-          } else {
-            fromLeadIdx += limitLeadVal
-          }
-        } else {
-          hasMoreLeads = false
-        }
-      }
-
-      if (!rawLeads) {
+      if (!rawLeads || rawLeads.length === 0) {
         setAllRawLeads([])
         setAllRawConversations([])
         setAllRawMessages([])
@@ -1339,42 +1230,6 @@ export default function StatisticsPage() {
       })
       setAllRawConversations(filteredConversations)
 
-      // Query messages matching active date filter (for WhatsApp messaging statistics)
-      // Since Supabase REST API limits the response to max 1000 rows, we use a paginated range loop to fetch all messages.
-      let rawMessages: any[] = []
-      let fromIdx = 0
-      const limitVal = 1000
-      let hasMoreMsgs = true
-
-      while (hasMoreMsgs) {
-        let msgQuery = supabase
-          .from('messages')
-          .select('*, conversations(lead_id)')
-          .order('sent_at', { ascending: false })
-          .range(fromIdx, fromIdx + limitVal - 1)
-        
-        if (utcStart) {
-          msgQuery = msgQuery.gte('sent_at', utcStart)
-        }
-        if (utcEnd) {
-          msgQuery = msgQuery.lte('sent_at', utcEnd)
-        }
-        
-        const { data: chunk, error: msgErr } = await msgQuery
-        if (msgErr) throw msgErr
-        
-        if (chunk && chunk.length > 0) {
-          rawMessages = [...rawMessages, ...chunk]
-          if (chunk.length < limitVal) {
-            hasMoreMsgs = false
-          } else {
-            fromIdx += limitVal
-          }
-        } else {
-          hasMoreMsgs = false
-        }
-      }
-
       const cleanRawMessages = rawMessages.filter(msg => {
         const leadId = msg.conversations?.lead_id
         if (leadId) {
@@ -1390,27 +1245,13 @@ export default function StatisticsPage() {
       })
       setAllRawMessages(cleanRawMessages)
 
-      // No deduplication by lead ID (each Excel row is a separate lead)
       let uniqueRawLeads = cleanRawLeads
 
-      // Apply scope filter in memory for the legacy stats and quality report
       if (scopeFilter === 'legacy_only') {
         uniqueRawLeads = uniqueRawLeads.filter(lead => lead.legacy_source_file !== null)
       }
 
-      const isWaLead = (l: any) => {
-        return (
-          l.source_id === '474b7a22-c53f-43ba-a8bd-75ce0977a798' || 
-          l.source_id === '11111111-0000-0000-0000-000000000005' ||
-          l.status_id === '22222222-0000-0000-0000-000000000020' ||
-          l.lead_sources?.code === 'META_WA'
-        ) && l.legacy_source_file === null;
-      }
-
       // --- COMPUTATION FOR MANAGER STATS PANEL ---
-      // Calculate these metrics using rawLeads and rawConversations based on the active period (start_date/end_date).
-      // If start_date/end_date are null (Tüm Eski Veriler), we use the current date (today) as default
-      // because manager tracking is most relevant for "today's" or "daily" activity.
       const todayStr = getLocalDateStringWithShift(new Date().toISOString()) || ''
       const mStart = start_date || todayStr
       const mEnd = end_date || todayStr
@@ -1425,9 +1266,7 @@ export default function StatisticsPage() {
         unconvertedChatsCount: stats.unconvertedChatsCount
       })
 
-      // Filter out non-legacy (CRM) leads created before their respective official starts to prevent development test data and history sync from polluting lead stats:
-      // - Unregistered WhatsApp leads (status_id = '22222222-0000-0000-0000-000000000020') start from 2026-06-01.
-      // - Registered CRM leads start from 2026-06-01.
+      // Filter out non-legacy (CRM) leads created before 2026-06-01
       uniqueRawLeads = uniqueRawLeads.filter(lead => {
         if (lead.legacy_source_file === null) {
           const leadDate = getLeadDate(lead)
@@ -1444,7 +1283,7 @@ export default function StatisticsPage() {
         return true
       })
 
-      // 3. Filter by resolved date in JavaScript (Rule 1)
+      // Filter by resolved date in JavaScript (Rule 1)
       let filteredRawLeads = uniqueRawLeads
       if (start_date || end_date) {
         filteredRawLeads = uniqueRawLeads.filter(lead => {
@@ -1456,7 +1295,7 @@ export default function StatisticsPage() {
         })
       }
 
-      // 4. Channel Filter in frontend (matches rule 5)
+      // Channel Filter in frontend (matches rule 5)
       if (channelFilter !== 'all_channels') {
         filteredRawLeads = filteredRawLeads.filter(lead => {
           const ch = getLeadChannel(lead)
@@ -1464,7 +1303,7 @@ export default function StatisticsPage() {
         })
       }
 
-      // 5. Transform to adaptedLead (Rule 7)
+      // Transform to adaptedLead (Rule 7)
       const filteredForTotals = filteredRawLeads.filter(l => l.status_id !== '22222222-0000-0000-0000-000000000020')
 
       const adaptedLeads: LeadRecord[] = filteredForTotals.map(lead => ({
@@ -1477,23 +1316,18 @@ export default function StatisticsPage() {
         "Görüşme Özeti / Sonuç": lead.conversation_summary ?? lead.legacy_raw_data?.["Görüşme Özeti / Sonuç"],
         "Ek Notlar": lead.extra_notes ?? lead.legacy_raw_data?.["Ek Notlar"],
         "Sonraki Aksiyon": lead.next_action ?? lead.legacy_raw_data?.["Sonraki Aksiyon"],
-        "Satış Uzmanı": lead.assigned_sales?.full_name ?? lead.legacy_sales_specialist_name ?? lead.sales_representative_text ?? lead.legacy_raw_data?.["Satış Uzmanı"],
+        "Satış Uzmanı": lead.assigned_sales?.full_name ?? lead.sales_representative_text ?? lead.legacy_raw_data?.["Satış Uzmanı"],
         rawLead: lead
       }))
 
-      // 6. Run buildQualityReport (Rule 8)
       const report = buildQualityReport(adaptedLeads)
       setReportData(report)
 
-      // Filter conversations by rawLeads (to respect scopeFilter and other queries)
-      // Only count a WhatsApp conversation if the associated lead is queued (next_contact_at is not null or callback_status is pending) OR has logged calls.
       const rawLeadsMap = new Map(uniqueRawLeads ? uniqueRawLeads.map(l => [l.id, l]) : [])
       const activeConversations = rawConversations.filter(c => {
         const lead = rawLeadsMap.get(c.lead_id)
         if (!lead) return false
         
-        // Exclude legacy leads from WhatsApp conversation virtual calls count,
-        // as their completed calls are already tracked via legacyCalls
         if (lead.legacy_source_file !== null) {
           return false
         }
@@ -1513,7 +1347,6 @@ export default function StatisticsPage() {
         return true
       })
 
-      // Transform conversations to virtual calls
       const virtualCalls = activeConversations.map(c => ({
         id: `conv-${c.id}`,
         created_at: c.last_message_at || c.created_at,
@@ -1526,8 +1359,7 @@ export default function StatisticsPage() {
         channel: 'whatsapp'
       }))
 
-      // Apply channel filter to calls/conversations
-      let filteredActiveCalls = activeCalls.filter(c => isCallOfRep(c, repFilter))
+      let filteredActiveCalls = rawCalls.filter(c => isCallOfRep(c, repFilter))
       let filteredVirtualCalls = virtualCalls
 
       if (channelFilter === 'WhatsApp Mesajı') {
@@ -1535,12 +1367,10 @@ export default function StatisticsPage() {
       } else if (channelFilter === 'Telefon') {
         filteredVirtualCalls = []
       } else if (channelFilter !== 'all_channels') {
-        // Any other channel has no phone calls or whatsapp conversations
         filteredActiveCalls = []
         filteredVirtualCalls = []
       }
 
-      // Map legacy calls from adaptedLeads
       const legacyCalls = adaptedLeads
         .filter(l => l.rawLead.legacy_source_file !== null && l.rawLead.conversation_completed !== null)
         .map(l => ({
@@ -1580,7 +1410,6 @@ export default function StatisticsPage() {
 
       setCallsCount(customCallsCount)
 
-      // Set stats state so that we can render the UI without modifying existing UI bindings
       setStats({
         evaluated_total: report.evaluatedTotal,
         unrelated_count: report.unrelatedCount,
@@ -1597,43 +1426,6 @@ export default function StatisticsPage() {
         potential_not_forwarded_count: report.potentialNotForwardedCount
       })
 
-      // 6. Run console verifications exactly as requested
-      console.table({
-        total: report.evaluatedTotal,
-        potential: report.potentialTotal,
-        qualityTotal: report.qualityRows
-          .filter((row) => row.key !== "problematic_total")
-          .reduce((sum, row) => sum + row.count, 0),
-      })
-
-      const classified = report.classifiedLeads
-      console.log({
-        unrelated: classified
-          .filter(x => x.qualityCategory === "Alakasız / konu dışı lead")
-          .map(x => x.lead["Lead ID"]),
-
-        accidental: classified
-          .filter(x => x.qualityCategory === "Yanlışlıkla tıklayan / elim çarptı")
-          .map(x => x.lead["Lead ID"]),
-
-        unreachable: classified
-          .filter(x => x.qualityCategory === "Ulaşılamayan / açmayan / cevap vermeyen")
-          .map(x => x.lead["Lead ID"]),
-
-        notInterested: classified
-          .filter(x => x.qualityCategory === "İlgilenmeyen / vazgeçen / başka yerden alan")
-          .map(x => x.lead["Lead ID"]),
-
-        potential: classified
-          .filter(x => x.qualityCategory === "Potansiyel kayıt")
-          .map(x => x.lead["Lead ID"]),
-
-        pending: classified
-          .filter(x => x.qualityCategory === "Değerlendirme bekliyor")
-          .map(x => x.lead["Lead ID"]),
-      })
-
-      // 7. Update classification audit debug section (unrelated leads list)
       const unrelatedLeadsList = report.classifiedLeads
         .filter(x => x.qualityCategoryKey === 'unrelated')
         .map(x => ({
@@ -1649,7 +1441,69 @@ export default function StatisticsPage() {
           lead_quality_manually_overridden: x.rawLead.lead_quality_manually_overridden
         }))
       setDebugUnrelatedLeads(unrelatedLeadsList)
+    } catch (err: any) {
+      console.error('Error in processData:', err)
+      setErrorMsg(err.message || 'Veriler işlenirken hata oluştu.')
+    }
+  }
 
+  // Fetch stats count data from Supabase in fast parallel requests
+  const fetchStatsData = async (forceRefresh = false) => {
+    setErrorMsg('')
+    setMigrationNeeded(false)
+    try {
+      if (!cachedDataRef.current || forceRefresh) {
+        setLoading(true)
+
+        const selectLeadFields = `id, lead_number, full_name, first_name, last_name, company_name, phone, phone_normalized, requested_product, message, first_message_note, conversation_summary, extra_notes, next_action, status_id, source_id, assigned_call_center_user_id, assigned_sales_user_id, first_contact_date, first_contact_at, last_contact_at, next_contact_at, callback_status, created_at, legacy_source_file, legacy_lead_id, legacy_raw_data, sales_representative_text, lead_quality_category, communication_channels:communication_channel_id(name), lead_sources:source_id(name, code), calls(id), profiles:assigned_call_center_user_id(id, full_name), assigned_sales:assigned_sales_user_id(id, full_name)`
+
+        const [
+          leadsChunk1, leadsChunk2, leadsChunk3, leadsChunk4,
+          callsChunk1, callsChunk2, callsChunk3,
+          convsChunk1, convsChunk2,
+          msgsChunk1, msgsChunk2, msgsChunk3
+        ] = await Promise.all([
+          supabase.from('leads').select(selectLeadFields).eq('is_active', true).order('created_at', { ascending: false }).range(0, 999),
+          supabase.from('leads').select(selectLeadFields).eq('is_active', true).order('created_at', { ascending: false }).range(1000, 1999),
+          supabase.from('leads').select(selectLeadFields).eq('is_active', true).order('created_at', { ascending: false }).range(2000, 2999),
+          supabase.from('leads').select(selectLeadFields).eq('is_active', true).order('created_at', { ascending: false }).range(3000, 3999),
+          supabase.from('calls').select('*, profiles:user_id(full_name)').order('created_at', { ascending: false }).range(0, 999),
+          supabase.from('calls').select('*, profiles:user_id(full_name)').order('created_at', { ascending: false }).range(1000, 1999),
+          supabase.from('calls').select('*, profiles:user_id(full_name)').order('created_at', { ascending: false }).range(2000, 2999),
+          supabase.from('conversations').select('*, profiles:assigned_user_id(full_name)').eq('channel', 'whatsapp').order('created_at', { ascending: false }).range(0, 999),
+          supabase.from('conversations').select('*, profiles:assigned_user_id(full_name)').eq('channel', 'whatsapp').order('created_at', { ascending: false }).range(1000, 1999),
+          supabase.from('messages').select('*, conversations(lead_id)').order('sent_at', { ascending: false }).range(0, 999),
+          supabase.from('messages').select('*, conversations(lead_id)').order('sent_at', { ascending: false }).range(1000, 1999),
+          supabase.from('messages').select('*, conversations(lead_id)').order('sent_at', { ascending: false }).range(2000, 2999)
+        ])
+
+        const rawLeads = [
+          ...(leadsChunk1.data || []),
+          ...(leadsChunk2.data || []),
+          ...(leadsChunk3.data || []),
+          ...(leadsChunk4.data || [])
+        ]
+        const rawCalls = [
+          ...(callsChunk1.data || []),
+          ...(callsChunk2.data || []),
+          ...(callsChunk3.data || [])
+        ]
+        const rawConversations = [
+          ...(convsChunk1.data || []),
+          ...(convsChunk2.data || [])
+        ]
+        const rawMessages = [
+          ...(msgsChunk1.data || []),
+          ...(msgsChunk2.data || []),
+          ...(msgsChunk3.data || [])
+        ]
+
+        cachedDataRef.current = { rawLeads, rawCalls, rawConversations, rawMessages }
+      }
+
+      if (cachedDataRef.current) {
+        processData(cachedDataRef.current)
+      }
     } catch (err: any) {
       console.error('Error fetching statistics:', err)
       setErrorMsg(err.message || 'İstatistikler yüklenirken bir hata oluştu.')
@@ -1874,10 +1728,19 @@ export default function StatisticsPage() {
     }
   }
 
-  // Load stats and debug list whenever filters or refresh trigger changes
+  // Network fetch on initial mount or when user clicks refresh button
   useEffect(() => {
-    fetchStatsData()
-  }, [periodFilter, channelFilter, scopeFilter, repFilter, customStartDate, customEndDate, refreshTrigger])
+    fetchStatsData(true)
+  }, [refreshTrigger])
+
+  // Instant in-memory calculation when dropdown filters or representative pills change
+  useEffect(() => {
+    if (cachedDataRef.current) {
+      processData(cachedDataRef.current)
+    } else {
+      fetchStatsData(false)
+    }
+  }, [periodFilter, channelFilter, scopeFilter, repFilter, customStartDate, customEndDate])
 
   // Load drawer leads whenever activeMetric or active filters change
   useEffect(() => {
@@ -2161,24 +2024,45 @@ export default function StatisticsPage() {
         {/* Action Controls & Filters bar */}
         <div className="flex flex-wrap items-center gap-3 bg-card border border-border/85 p-2 rounded-xl shadow-sm">
           
-          {/* Representative Filter */}
-          <div className="flex items-center gap-1">
-            <span className="text-[10px] text-muted-foreground font-semibold px-1 uppercase tracking-wider">Temsilci:</span>
-            <select
-              value={repFilter}
-              onChange={(e) => setRepFilter(e.target.value)}
-              className="h-8 text-xs bg-background border border-primary/40 text-foreground font-bold rounded-lg px-2.5 focus:outline-none cursor-pointer hover:border-primary transition-colors shadow-2xs"
+          {/* Representative Filter Group */}
+          <div className="flex items-center gap-1.5 bg-muted/60 p-1 rounded-xl border border-primary/20 shadow-xs">
+            <span className="text-[10px] text-muted-foreground font-black px-2 uppercase tracking-wider flex items-center gap-1">
+              <Users className="h-3 w-3 text-primary" />
+              Temsilci:
+            </span>
+            <button
+              type="button"
+              onClick={() => setRepFilter('ebru')}
+              className={`px-3.5 py-1.5 text-xs font-black rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                repFilter === 'ebru'
+                  ? 'bg-primary text-white shadow-sm ring-2 ring-primary/30'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-background/80'
+              }`}
             >
-              <option value="ebru">Ebru Şimşek</option>
-              {callCenterReps
-                .filter(r => !r.full_name?.toLowerCase().includes('ebru'))
-                .map(r => (
-                  <option key={r.id} value={r.id}>
-                    {r.full_name}
-                  </option>
-                ))}
-              <option value="all">Tüm Temsilciler</option>
-            </select>
+              👩‍💼 Ebru Şimşek
+            </button>
+            <button
+              type="button"
+              onClick={() => setRepFilter('1e07f9f9-058d-4437-824c-134255b87e3d')}
+              className={`px-3.5 py-1.5 text-xs font-black rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                repFilter === '1e07f9f9-058d-4437-824c-134255b87e3d' || repFilter === 'meryem'
+                  ? 'bg-primary text-white shadow-sm ring-2 ring-primary/30'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-background/80'
+              }`}
+            >
+              📞 Meryem (Outbound)
+            </button>
+            <button
+              type="button"
+              onClick={() => setRepFilter('all')}
+              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
+                repFilter === 'all'
+                  ? 'bg-primary text-white shadow-sm ring-2 ring-primary/30'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-background/80'
+              }`}
+            >
+              🌐 Tümü (Konsolide)
+            </button>
           </div>
 
           {/* Period Filter */}
@@ -2286,6 +2170,37 @@ export default function StatisticsPage() {
               {reanalyzing ? `Analiz ediliyor... (${reanalysisProgress})` : 'Eski Leadleri Yeniden Analiz Et'}
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* Active Representative Filter Notification Banner */}
+      <div className={`p-3 rounded-xl border flex items-center justify-between gap-3 text-xs font-semibold shadow-xs ${
+        repFilter === 'ebru'
+          ? 'bg-blue-500/10 border-blue-500/20 text-blue-700 dark:text-blue-300'
+          : repFilter === '1e07f9f9-058d-4437-824c-134255b87e3d' || repFilter === 'meryem'
+          ? 'bg-purple-500/10 border-purple-500/20 text-purple-700 dark:text-purple-300'
+          : 'bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-300'
+      }`}>
+        <div className="flex items-center gap-2">
+          {repFilter === 'ebru' && <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />}
+          {repFilter !== 'ebru' && <span className="h-2 w-2 rounded-full bg-amber-500" />}
+          <span>
+            {repFilter === 'ebru'
+              ? '👩‍💼 Aktif Görünüm: Ebru Şimşek (Sadece Ebru\'ya ait Inbound, Meta WhatsApp ve Web leadleri listelenmektedir. Meryem\'in soğuk arama/harita verileri bu ekranda yer almaz.)'
+              : repFilter === '1e07f9f9-058d-4437-824c-134255b87e3d' || repFilter === 'meryem'
+              ? '📞 Aktif Görünüm: Meryem (Sadece Google Haritalar / Dış Arama portföyü listelenmektedir.)'
+              : '🌐 Aktif Görünüm: Konsolide Ortak Rapor (Tüm temsilcilerin verileri birleşik gösterilmektedir.)'}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          {repFilter !== 'ebru' && (
+            <button
+              onClick={() => setRepFilter('ebru')}
+              className="px-2.5 py-1 bg-background hover:bg-muted text-foreground border border-border rounded-lg text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
+            >
+              👩‍💼 Ebru Paneline Dön
+            </button>
+          )}
         </div>
       </div>
 
