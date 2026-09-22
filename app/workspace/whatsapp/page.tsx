@@ -1497,7 +1497,7 @@ export default function WhatsAppWorkspacePage() {
                   {gatewayStatus.qr ? (
                     <div className="flex flex-col items-center gap-3">
                       <p className="text-[10px] font-bold text-muted-foreground text-center uppercase tracking-wider">
-                        Lütfen Ebru\'nun telefonundan bu QR kodu okutun:
+                        Lütfen Ebru&apos;nun telefonundan bu QR kodu okutun:
                       </p>
                       <img src={gatewayStatus.qr} alt="WhatsApp QR" width={220} height={220} className="border border-border p-2 rounded-lg bg-white" />
                       <p className="text-[9px] text-muted-foreground text-center">

@@ -2570,8 +2570,8 @@ export default function WorkspacePage() {
 
                 {quickStatus === 'missed' && (
                   <div className="p-3.5 bg-rose-500/5 border border-rose-500/10 rounded-xl text-rose-600 text-xs leading-relaxed animate-in fade-in slide-in-from-top-1 duration-150">
-                    <p className="font-bold">Müşteri "Ulaşılamadı (Cevap Vermedi / Açmadı)" olarak loglanacaktır.</p>
-                    <p className="text-[10px] text-rose-500/80 mt-1 font-semibold">Bu işlem, lead'i bugünün aranacaklar listesinden çıkaracak ve bir cevapsız arama kaydı ekleyecektir.</p>
+                    <p className="font-bold">Müşteri &quot;Ulaşılamadı (Cevap Vermedi / Açmadı)&quot; olarak loglanacaktır.</p>
+                    <p className="text-[10px] text-rose-500/80 mt-1 font-semibold">Bu işlem, lead&apos;i bugünün aranacaklar listesinden çıkaracak ve bir cevapsız arama kaydı ekleyecektir.</p>
                   </div>
                 )}
 
@@ -2858,7 +2858,7 @@ export default function WorkspacePage() {
                 >
                   <option value="">Belirtilmemiş (Veri Yok)</option>
                   <option value="unrelated">Alakasız / Konu Dışı Lead</option>
-                  <option value="accidental_click">Yanlışlıkla Tıklayan / "Elim Çarptı"</option>
+                  <option value="accidental_click">Yanlışlıkla Tıklayan / &quot;Elim Çarptı&quot;</option>
                   <option value="unreachable">Ulaşılamayan / Açmayan / Cevap Vermeyen</option>
                   <option value="not_interested">İlgilenmeyen / Vazgeçen / Başka Yerden Alan</option>
                   <option value="callback">Geri Aranacak / Bizi Arayacak (Callback)</option>
