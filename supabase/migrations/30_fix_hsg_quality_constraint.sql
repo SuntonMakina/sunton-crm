@@ -1,6 +1,24 @@
--- Migration 30: Fix check constraints, sync document sequences, and update trigger generators
+-- Migration 30: Complete Fix for HSG Müşterisi Status, Quality Constraints, Document Sequences & Triggers
 
--- 1. Alter check constraints on public.leads for quality categories to include 'hsg_customer'
+-- 1. Ensure 'HSG Müşterisi' exists in lead_statuses table
+INSERT INTO public.lead_statuses (id, name, color, sort_order, is_final, is_won, is_lost, is_active)
+VALUES (
+    '22222222-0000-0000-0000-000000000030',
+    'HSG Müşterisi',
+    '#8B5CF6',
+    16,
+    true,
+    false,
+    false,
+    true
+)
+ON CONFLICT (id) DO UPDATE SET 
+    name = 'HSG Müşterisi',
+    color = '#8B5CF6',
+    is_final = true,
+    is_active = true;
+
+-- 2. Alter check constraints on public.leads for quality categories to include 'hsg_customer'
 ALTER TABLE public.leads DROP CONSTRAINT IF EXISTS chk_automatic_quality_category;
 ALTER TABLE public.leads ADD CONSTRAINT chk_automatic_quality_category 
 CHECK (automatic_quality_category IN ('unrelated', 'accidental_click', 'unreachable', 'not_interested', 'potential', 'pending_review', 'callback', 'hsg_customer'));
@@ -13,7 +31,7 @@ ALTER TABLE public.leads DROP CONSTRAINT IF EXISTS chk_lead_quality_category;
 ALTER TABLE public.leads ADD CONSTRAINT chk_lead_quality_category 
 CHECK (lead_quality_category IN ('unrelated', 'accidental_click', 'unreachable', 'not_interested', 'potential', 'pending_review', 'callback', 'hsg_customer'));
 
--- 2. Synchronize all sequences to prevent unique constraint collisions (e.g. leads_lead_number_key)
+-- 3. Synchronize all sequences to prevent unique constraint collisions (e.g. leads_lead_number_key)
 DO $$
 DECLARE
     max_num bigint := 0;
@@ -43,7 +61,7 @@ BEGIN
     END IF;
 END $$;
 
--- 3. Update generate_document_number() to guarantee uniqueness even in edge cases
+-- 4. Update generate_document_number() to guarantee uniqueness even in edge cases
 CREATE OR REPLACE FUNCTION generate_document_number()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -98,7 +116,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- 4. Update trigger function to handle 'hsg_customer'
+-- 5. Update trigger function to handle 'hsg_customer'
 CREATE OR REPLACE FUNCTION public.trg_leads_lead_quality_classifier_hybrid()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -249,7 +267,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- 5. Update the lead with phone 5458742804 if it exists
+-- 6. Update the lead with phone 5458742804 if it exists
 UPDATE public.leads
 SET 
     status_id = '22222222-0000-0000-0000-000000000030',
