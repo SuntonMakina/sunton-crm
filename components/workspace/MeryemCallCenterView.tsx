@@ -221,6 +221,30 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
     return Array.from(set).sort((a, b) => a.localeCompare(b, 'tr'))
   }, [leads])
 
+  // Fixed weekly period configuration (21 - 25 Eylül 2026)
+  const WEEKLY_PLAN_CONFIG = [
+    { date: '2026-09-21', dayName: 'Pazartesi', label: '21 Eyl' },
+    { date: '2026-09-22', dayName: 'Salı', label: '22 Eyl' },
+    { date: '2026-09-23', dayName: 'Çarşamba', label: '23 Eyl' },
+    { date: '2026-09-24', dayName: 'Perşembe', label: '24 Eyl' },
+    { date: '2026-09-25', dayName: 'Cuma', label: '25 Eyl' },
+  ]
+
+  // Detect current date in Turkey Timezone (e.g. '2026-09-23')
+  const todayStr = useMemo(() => {
+    try {
+      return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Istanbul' }).format(new Date())
+    } catch {
+      return new Date().toISOString().split('T')[0]
+    }
+  }, [])
+
+  const currentPlanDay = useMemo(() => {
+    return WEEKLY_PLAN_CONFIG.find(d => d.date === todayStr) || WEEKLY_PLAN_CONFIG[2]
+  }, [todayStr])
+
+  const currentDayName = currentPlanDay.dayName
+
   // Categorize leads
   const {
     toCallLeads,
@@ -248,22 +272,56 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
       (l) => l.assigned_call_center_user_id === profile.id && l.is_active
     )
 
-    // 1. Bugün Aranacaklar (Günlük): Bugün planlanan ve henüz aranmamış taze leadler
-    const toCall = thisWeekAssigned.filter((l) => {
-      const hasCalls = (l.calls || []).length > 0
-      const hasContact = !!l.last_contact_at
-      const isToday = l.next_contact_at?.startsWith('2026-09-21') || !l.next_contact_at
-      return !hasCalls && !hasContact && isToday
+    // Day groups in weekly plan (21 - 25 Eylül 2026)
+    const mon = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-21') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-21')))
+    const tue = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-22') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-22')))
+    const wed = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-23') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-23')))
+    const thu = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-24') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-24')))
+    const fri = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-25') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-25')))
+
+    // 1. Bugünün 40 Arama Kotasından Kalanlar (Bugün planlanan ve henüz bugün aranmamış leadler)
+    const todayAssigned = thisWeekAssigned.filter((l) => {
+      const isToday = l.next_contact_at?.startsWith(todayStr) || (!l.next_contact_at && todayStr === '2026-09-21')
+      const calledToday = (l.calls || []).some((c: any) => c.created_at >= todayStartISO)
+      const contactToday = l.last_contact_at && l.last_contact_at >= todayStartISO
+      return isToday && !calledToday && !contactToday
     })
 
-    // 2. Bugün Arananlar (Günlük): Sadece bugün Meryem'in yaptığı aramalar veya temaslar
+    // 2. Bugünün Takipleri & Randevuları (Pending callbacks / followups due today or overdue)
+    const todayCallbacks = leads.filter((l) => {
+      const isPendingCallback = l.callback_status === 'pending' || (l.next_contact_at && l.next_contact_at >= weekStartISO)
+      if (!isPendingCallback) return false
+
+      const isDueToday =
+        l.callback_date === todayStr ||
+        l.next_contact_at?.startsWith(todayStr) ||
+        (l.callback_date && l.callback_date <= todayStr) ||
+        (l.next_contact_at && l.next_contact_at <= `${todayStr}T23:59:59.999Z`)
+
+      const calledToday = (l.calls || []).some((c: any) => c.created_at >= todayStartISO)
+      const contactToday = l.last_contact_at && l.last_contact_at >= todayStartISO
+
+      return isDueToday && !calledToday && !contactToday
+    })
+
+    // 3. Bugünün Planı (Kombine Liste: Takipler/Randevular + Günlük 40 Kotasından Kalanlar)
+    const todayPlanMap = new Map<string, any>()
+    todayCallbacks.forEach(l => todayPlanMap.set(l.id, l))
+    todayAssigned.forEach(l => {
+      if (!todayPlanMap.has(l.id)) {
+        todayPlanMap.set(l.id, l)
+      }
+    })
+    const todayPlanCombined = Array.from(todayPlanMap.values())
+
+    // 4. Bugün Arananlar (Günlük): Sadece bugün Meryem'in yaptığı aramalar veya temaslar
     const calledToday = leads.filter((l) => {
       const calledInList = (l.calls || []).some((c: any) => c.created_at >= todayStartISO)
       const contactToday = l.last_contact_at && l.last_contact_at >= todayStartISO
       return calledInList || contactToday
     })
 
-    // 3. Takipler & Randevular (Haftalık): Bu haftanın 2., 3., 4. arama takipleri ve randevuları
+    // 5. Takipler & Randevular (Haftalık): Bu haftanın 2., 3., 4. arama takipleri ve randevuları
     const followups = leads.filter((l) => {
       const hasWeeklyCall = (l.calls || []).some((c: any) => c.created_at >= weekStartISO)
       const hasWeeklyContact = l.last_contact_at && l.last_contact_at >= weekStartISO
@@ -271,7 +329,7 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
       return (hasWeeklyCall || hasWeeklyContact) && isPendingCallback
     })
 
-    // 4. Satışa İletilenler (Haftalık): Bu hafta başarıyla satış uzmanına yönlendirilenler
+    // 6. Satışa İletilenler (Haftalık): Bu hafta başarıyla satış uzmanına yönlendirilenler
     const forwarded = leads.filter((l) => {
       const isForwardedStatus =
         l.status_id === '22222222-0000-0000-0000-000000000009' ||
@@ -284,20 +342,13 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
       return isForwardedStatus && isThisWeek
     })
 
-    // 5. Toplam Script / Tüm Liste (Şu ana kadar aradıkları): Meryem'in temas ettiği tüm geçmiş kayıtlar
+    // 7. Toplam Script / Tüm Liste (Şu ana kadar aradıkları): Meryem'in temas ettiği tüm geçmiş kayıtlar
     const allScript = leads.filter((l) => (l.calls && l.calls.length > 0) || l.last_contact_at)
-
-    // Day groups in weekly plan (21 - 25 Eylül 2026)
-    const mon = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-21') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-21')))
-    const tue = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-22') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-22')))
-    const wed = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-23') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-23')))
-    const thu = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-24') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-24')))
-    const fri = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-25') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-25')))
 
     const weeklyPlan = thisWeekAssigned.filter(l => l.next_contact_at && l.next_contact_at >= '2026-09-21T00:00:00.000Z' && l.next_contact_at <= '2026-09-25T23:59:59.999Z')
 
     return {
-      toCallLeads: toCall,
+      toCallLeads: todayPlanCombined,
       followupLeads: followups,
       forwardedLeads: forwarded,
       calledTodayLeads: calledToday,
@@ -309,9 +360,9 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
       wednesdayLeads: wed,
       thursdayLeads: thu,
       fridayLeads: fri,
-      todayQuotaLeads: toCall
+      todayQuotaLeads: todayPlanCombined
     }
-  }, [leads, profile.id])
+  }, [leads, profile.id, todayStr])
 
   // Filter current active list by search and province
   const currentList = useMemo(() => {
@@ -323,7 +374,7 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
       else if (selectedPlanDay === '2026-09-24') list = thursdayLeads
       else if (selectedPlanDay === '2026-09-25') list = fridayLeads
       else if (selectedPlanDay === 'all_week') list = weeklyPlanLeads
-      else list = toCallLeads
+      else list = todayQuotaLeads
     }
     else if (activeTab === 'followups') list = followupLeads
     else if (activeTab === 'forwarded') list = forwardedLeads
@@ -375,7 +426,7 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
       if (b.next_contact_at) return 1
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     })
-  }, [activeTab, selectedPlanDay, toCallLeads, followupLeads, forwardedLeads, calledTodayLeads, allScriptLeads, mondayLeads, tuesdayLeads, wednesdayLeads, thursdayLeads, searchQuery, selectedProvince, sortBy])
+  }, [activeTab, selectedPlanDay, todayQuotaLeads, followupLeads, forwardedLeads, calledTodayLeads, weeklyPlanLeads, mondayLeads, tuesdayLeads, wednesdayLeads, thursdayLeads, fridayLeads, searchQuery, selectedProvince, sortBy])
 
   // Open action modal for a lead
   const handleOpenAction = (lead: any, defaultType: 'reached' | 'missed' | 'forward' | 'uninterested' = 'reached') => {
@@ -695,10 +746,10 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
         >
           <div className="flex items-center justify-between text-muted-foreground mb-1.5">
             <span className="text-xs font-bold uppercase tracking-wider">Bugün Aranacaklar</span>
-            <PhoneCall className={`h-4 w-4 ${activeTab === 'toCall' ? 'text-primary' : ''}`} />
+            <PhoneCall className={`h-4 w-4 ${activeTab === 'toCall' && selectedPlanDay === 'today' ? 'text-primary' : ''}`} />
           </div>
           <div className="text-2xl font-black text-foreground">{todayQuotaLeads.length}</div>
-          <p className="text-[11px] text-muted-foreground mt-0.5">Bugünün 40 arama kotası (Günlük)</p>
+          <p className="text-[11px] text-muted-foreground mt-0.5">Bugün aranacak kota + randevular ({currentDayName})</p>
         </div>
 
         {/* Kademeli Takipler (Haftalık) */}
@@ -800,78 +851,49 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
               <Sparkles className="h-3.5 w-3.5" />
               <span>Bugünün Planı</span>
             </div>
-            <span className="text-[11px] opacity-90 font-mono">Pazartesi ({todayQuotaLeads.length})</span>
+            <span className="text-[11px] opacity-90 font-mono">{currentDayName} ({todayQuotaLeads.length})</span>
           </button>
 
-          {/* Pazartesi */}
-          <button
-            type="button"
-            onClick={() => { setSelectedPlanDay('2026-09-21'); setActiveTab('toCall'); }}
-            className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
-              selectedPlanDay === '2026-09-21' && activeTab === 'toCall'
-                ? 'bg-primary text-primary-foreground border-primary shadow-sm ring-2 ring-primary/20'
-                : 'bg-background border-border text-foreground hover:border-primary/50'
-            }`}
-          >
-            <span>Pazartesi (Bugün)</span>
-            <span className="text-[11px] text-muted-foreground font-mono">21 Eyl ({mondayLeads.length})</span>
-          </button>
+          {/* Gün Gün Plan Butonları */}
+          {WEEKLY_PLAN_CONFIG.map((d) => {
+            const isToday = d.date === todayStr
+            const isPast = d.date < todayStr
+            const count =
+              d.date === '2026-09-21' ? mondayLeads.length :
+              d.date === '2026-09-22' ? tuesdayLeads.length :
+              d.date === '2026-09-23' ? wednesdayLeads.length :
+              d.date === '2026-09-24' ? thursdayLeads.length :
+              fridayLeads.length
 
-          {/* Salı */}
-          <button
-            type="button"
-            onClick={() => { setSelectedPlanDay('2026-09-22'); setActiveTab('toCall'); }}
-            className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
-              selectedPlanDay === '2026-09-22' && activeTab === 'toCall'
-                ? 'bg-primary text-primary-foreground border-primary shadow-sm ring-2 ring-primary/20'
-                : 'bg-background border-border text-foreground hover:border-primary/50'
-            }`}
-          >
-            <span>Salı</span>
-            <span className="text-[11px] text-muted-foreground font-mono">22 Eyl ({tuesdayLeads.length})</span>
-          </button>
-
-          {/* Çarşamba */}
-          <button
-            type="button"
-            onClick={() => { setSelectedPlanDay('2026-09-23'); setActiveTab('toCall'); }}
-            className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
-              selectedPlanDay === '2026-09-23' && activeTab === 'toCall'
-                ? 'bg-primary text-primary-foreground border-primary shadow-sm ring-2 ring-primary/20'
-                : 'bg-background border-border text-foreground hover:border-primary/50'
-            }`}
-          >
-            <span>Çarşamba</span>
-            <span className="text-[11px] text-muted-foreground font-mono">23 Eyl ({wednesdayLeads.length})</span>
-          </button>
-
-          {/* Perşembe */}
-          <button
-            type="button"
-            onClick={() => { setSelectedPlanDay('2026-09-24'); setActiveTab('toCall'); }}
-            className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
-              selectedPlanDay === '2026-09-24' && activeTab === 'toCall'
-                ? 'bg-primary text-primary-foreground border-primary shadow-sm ring-2 ring-primary/20'
-                : 'bg-background border-border text-foreground hover:border-primary/50'
-            }`}
-          >
-            <span>Perşembe</span>
-            <span className="text-[11px] text-muted-foreground font-mono">24 Eyl ({thursdayLeads.length})</span>
-          </button>
-
-          {/* Cuma */}
-          <button
-            type="button"
-            onClick={() => { setSelectedPlanDay('2026-09-25'); setActiveTab('toCall'); }}
-            className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${
-              selectedPlanDay === '2026-09-25' && activeTab === 'toCall'
-                ? 'bg-primary text-primary-foreground border-primary shadow-sm ring-2 ring-primary/20'
-                : 'bg-background border-border text-foreground hover:border-primary/50'
-            }`}
-          >
-            <span>Cuma</span>
-            <span className="text-[11px] text-muted-foreground font-mono">25 Eyl ({fridayLeads.length})</span>
-          </button>
+            return (
+              <button
+                key={d.date}
+                type="button"
+                disabled={isPast}
+                onClick={() => {
+                  if (!isPast) {
+                    setSelectedPlanDay(d.date)
+                    setActiveTab('toCall')
+                  }
+                }}
+                title={isPast ? `${d.dayName} günü geçti` : undefined}
+                className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition-all ${
+                  isPast
+                    ? 'opacity-40 cursor-not-allowed bg-muted/20 border-dashed border-border/60 text-muted-foreground select-none pointer-events-none'
+                    : selectedPlanDay === d.date && activeTab === 'toCall'
+                      ? 'bg-primary text-primary-foreground border-primary shadow-sm ring-2 ring-primary/20 cursor-pointer'
+                      : 'bg-background border-border text-foreground hover:border-primary/50 cursor-pointer'
+                }`}
+              >
+                <span>
+                  {d.dayName} {isToday ? '(Bugün)' : isPast ? '(Geçti)' : ''}
+                </span>
+                <span className="text-[11px] text-muted-foreground font-mono">
+                  {d.label} ({count})
+                </span>
+              </button>
+            )
+          })}
 
           {/* Tüm Hafta / Toplam Script */}
           <button
