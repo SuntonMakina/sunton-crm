@@ -1,4 +1,4 @@
--- Migration 30: Fix check constraints and triggers on public.leads for 'hsg_customer' category
+-- Migration 30: Fix check constraints, sync document sequences, and update trigger generators
 
 -- 1. Alter check constraints on public.leads for quality categories to include 'hsg_customer'
 ALTER TABLE public.leads DROP CONSTRAINT IF EXISTS chk_automatic_quality_category;
@@ -13,7 +13,92 @@ ALTER TABLE public.leads DROP CONSTRAINT IF EXISTS chk_lead_quality_category;
 ALTER TABLE public.leads ADD CONSTRAINT chk_lead_quality_category 
 CHECK (lead_quality_category IN ('unrelated', 'accidental_click', 'unreachable', 'not_interested', 'potential', 'pending_review', 'callback', 'hsg_customer'));
 
--- 2. Update trigger function to handle 'hsg_customer'
+-- 2. Synchronize all sequences to prevent unique constraint collisions (e.g. leads_lead_number_key)
+DO $$
+DECLARE
+    max_num bigint := 0;
+BEGIN
+    -- Sync lead_number_seq
+    SELECT COALESCE(MAX(CASE WHEN lead_number ~ '^LD-[0-9]{4}-[0-9]+$' THEN substring(lead_number from 'LD-[0-9]{4}-([0-9]+)')::bigint ELSE 0 END), 0) INTO max_num FROM public.leads;
+    IF max_num > 0 THEN
+        PERFORM setval('public.lead_number_seq', max_num + 1, false);
+    END IF;
+
+    -- Sync customer_number_seq
+    SELECT COALESCE(MAX(CASE WHEN customer_number ~ '^MS-[0-9]{4}-[0-9]+$' THEN substring(customer_number from 'MS-[0-9]{4}-([0-9]+)')::bigint ELSE 0 END), 0) INTO max_num FROM public.customers;
+    IF max_num > 0 THEN
+        PERFORM setval('public.customer_number_seq', max_num + 1, false);
+    END IF;
+
+    -- Sync opportunity_number_seq
+    SELECT COALESCE(MAX(CASE WHEN opportunity_number ~ '^FR-[0-9]{4}-[0-9]+$' THEN substring(opportunity_number from 'FR-[0-9]{4}-([0-9]+)')::bigint ELSE 0 END), 0) INTO max_num FROM public.opportunities;
+    IF max_num > 0 THEN
+        PERFORM setval('public.opportunity_number_seq', max_num + 1, false);
+    END IF;
+
+    -- Sync task_number_seq
+    SELECT COALESCE(MAX(CASE WHEN task_number ~ '^TS-[0-9]{4}-[0-9]+$' THEN substring(task_number from 'TS-[0-9]{4}-([0-9]+)')::bigint ELSE 0 END), 0) INTO max_num FROM public.tasks;
+    IF max_num > 0 THEN
+        PERFORM setval('public.task_number_seq', max_num + 1, false);
+    END IF;
+END $$;
+
+-- 3. Update generate_document_number() to guarantee uniqueness even in edge cases
+CREATE OR REPLACE FUNCTION generate_document_number()
+RETURNS TRIGGER AS $$
+DECLARE
+    curr_year text := to_char(now(), 'YYYY');
+    seq_val bigint;
+    candidate text;
+BEGIN
+    IF TG_TABLE_NAME = 'leads' THEN
+        -- If status is raw WhatsApp chat, do not generate lead_number. Keep it NULL.
+        IF NEW.status_id = '22222222-0000-0000-0000-000000000020' THEN
+            NEW.lead_number := NULL;
+        ELSE
+            -- Generate lead number only if it doesn't already have one
+            IF NEW.lead_number IS NULL THEN
+                LOOP
+                    seq_val := nextval('public.lead_number_seq');
+                    candidate := 'LD-' || curr_year || '-' || lpad(seq_val::text, 6, '0');
+                    EXIT WHEN NOT EXISTS (SELECT 1 FROM public.leads WHERE lead_number = candidate);
+                END LOOP;
+                NEW.lead_number := candidate;
+            END IF;
+        END IF;
+    ELSIF TG_TABLE_NAME = 'customers' THEN
+        IF NEW.customer_number IS NULL THEN
+            LOOP
+                seq_val := nextval('public.customer_number_seq');
+                candidate := 'MS-' || curr_year || '-' || lpad(seq_val::text, 6, '0');
+                EXIT WHEN NOT EXISTS (SELECT 1 FROM public.customers WHERE customer_number = candidate);
+            END LOOP;
+            NEW.customer_number := candidate;
+        END IF;
+    ELSIF TG_TABLE_NAME = 'opportunities' THEN
+        IF NEW.opportunity_number IS NULL THEN
+            LOOP
+                seq_val := nextval('public.opportunity_number_seq');
+                candidate := 'FR-' || curr_year || '-' || lpad(seq_val::text, 6, '0');
+                EXIT WHEN NOT EXISTS (SELECT 1 FROM public.opportunities WHERE opportunity_number = candidate);
+            END LOOP;
+            NEW.opportunity_number := candidate;
+        END IF;
+    ELSIF TG_TABLE_NAME = 'tasks' THEN
+        IF NEW.task_number IS NULL THEN
+            LOOP
+                seq_val := nextval('public.task_number_seq');
+                candidate := 'TS-' || curr_year || '-' || lpad(seq_val::text, 6, '0');
+                EXIT WHEN NOT EXISTS (SELECT 1 FROM public.tasks WHERE task_number = candidate);
+            END LOOP;
+            NEW.task_number := candidate;
+        END IF;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 4. Update trigger function to handle 'hsg_customer'
 CREATE OR REPLACE FUNCTION public.trg_leads_lead_quality_classifier_hybrid()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -164,7 +249,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- 3. Update the lead with phone 5458742804 if it exists
+-- 5. Update the lead with phone 5458742804 if it exists
 UPDATE public.leads
 SET 
     status_id = '22222222-0000-0000-0000-000000000030',
