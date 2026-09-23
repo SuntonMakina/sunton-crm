@@ -18,7 +18,20 @@ ON CONFLICT (id) DO UPDATE SET
     is_final = true,
     is_active = true;
 
--- 2. Update existing lead with phone 5458742804 if present
+-- 2. Alter check constraints to allow 'hsg_customer'
+ALTER TABLE public.leads DROP CONSTRAINT IF EXISTS chk_automatic_quality_category;
+ALTER TABLE public.leads ADD CONSTRAINT chk_automatic_quality_category 
+CHECK (automatic_quality_category IN ('unrelated', 'accidental_click', 'unreachable', 'not_interested', 'potential', 'pending_review', 'callback', 'hsg_customer'));
+
+ALTER TABLE public.leads DROP CONSTRAINT IF EXISTS chk_final_quality_category;
+ALTER TABLE public.leads ADD CONSTRAINT chk_final_quality_category 
+CHECK (final_quality_category IN ('unrelated', 'accidental_click', 'unreachable', 'not_interested', 'potential', 'pending_review', 'callback', 'hsg_customer'));
+
+ALTER TABLE public.leads DROP CONSTRAINT IF EXISTS chk_lead_quality_category;
+ALTER TABLE public.leads ADD CONSTRAINT chk_lead_quality_category 
+CHECK (lead_quality_category IN ('unrelated', 'accidental_click', 'unreachable', 'not_interested', 'potential', 'pending_review', 'callback', 'hsg_customer'));
+
+-- 3. Update existing lead with phone 5458742804 if present
 UPDATE public.leads
 SET 
     status_id = '22222222-0000-0000-0000-000000000030',
