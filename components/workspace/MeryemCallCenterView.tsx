@@ -279,34 +279,33 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
     const thu = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-24') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-24')))
     const fri = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-25') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-25')))
 
-    // 1. Bugünün 40 Arama Kotasından Kalanlar (Bugün planlanan ve henüz bugün aranmamış leadler)
-    const todayAssigned = thisWeekAssigned.filter((l) => {
-      const isToday = l.next_contact_at?.startsWith(todayStr) || (!l.next_contact_at && todayStr === '2026-09-21')
-      const calledToday = (l.calls || []).some((c: any) => c.created_at >= todayStartISO)
-      const contactToday = l.last_contact_at && l.last_contact_at >= todayStartISO
-      return isToday && !calledToday && !contactToday
-    })
-
-    // 2. Bugünün Takipleri & Randevuları (Pending callbacks / followups due today or overdue)
-    const todayCallbacks = leads.filter((l) => {
+    // 1. Takipler & Randevular (Haftalık): Bu haftanın 2., 3., 4. arama takipleri ve randevuları
+    const followups = leads.filter((l) => {
+      const hasWeeklyCall = (l.calls || []).some((c: any) => c.created_at >= weekStartISO)
+      const hasWeeklyContact = l.last_contact_at && l.last_contact_at >= weekStartISO
       const isPendingCallback = l.callback_status === 'pending' || (l.next_contact_at && l.next_contact_at >= weekStartISO)
-      if (!isPendingCallback) return false
-
-      const isDueToday =
-        l.callback_date === todayStr ||
-        l.next_contact_at?.startsWith(todayStr) ||
-        (l.callback_date && l.callback_date <= todayStr) ||
-        (l.next_contact_at && l.next_contact_at <= `${todayStr}T23:59:59.999Z`)
-
-      const calledToday = (l.calls || []).some((c: any) => c.created_at >= todayStartISO)
-      const contactToday = l.last_contact_at && l.last_contact_at >= todayStartISO
-
-      return isDueToday && !calledToday && !contactToday
+      return (hasWeeklyCall || hasWeeklyContact) && isPendingCallback
     })
 
-    // 3. Bugünün Planı (Kombine Liste: Takipler/Randevular + Günlük 40 Kotasından Kalanlar)
+    // 2. Bugünün Takipleri & Randevuları (Bugün aranacak aktif takipler)
+    const todayDueFollowups = followups.filter((l) => {
+      const calledToday = (l.calls || []).some((c: any) => c.created_at >= todayStartISO)
+      const contactToday = l.last_contact_at && l.last_contact_at >= todayStartISO
+      return !calledToday && !contactToday
+    })
+
+    // 3. Bugünün 40 Arama Kotasından Kalanlar (Bugüne atanmış taze leadler)
+    const todayAssigned = thisWeekAssigned.filter((l) => {
+      const isTodayAssigned = l.next_contact_at?.startsWith(todayStr) || (!l.next_contact_at && todayStr === '2026-09-21')
+      const isFollowup = followups.some((f) => f.id === l.id)
+      const calledToday = (l.calls || []).some((c: any) => c.created_at >= todayStartISO)
+      const contactToday = l.last_contact_at && l.last_contact_at >= todayStartISO
+      return isTodayAssigned && !isFollowup && !calledToday && !contactToday
+    })
+
+    // 4. Bugünün Planı (Kombine Liste: 7 Takip/Randevu + 40 Günlük Kota = 47 Toplam)
     const todayPlanMap = new Map<string, any>()
-    todayCallbacks.forEach(l => todayPlanMap.set(l.id, l))
+    todayDueFollowups.forEach(l => todayPlanMap.set(l.id, l))
     todayAssigned.forEach(l => {
       if (!todayPlanMap.has(l.id)) {
         todayPlanMap.set(l.id, l)
@@ -314,19 +313,11 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
     })
     const todayPlanCombined = Array.from(todayPlanMap.values())
 
-    // 4. Bugün Arananlar (Günlük): Sadece bugün Meryem'in yaptığı aramalar veya temaslar
+    // 5. Bugün Arananlar (Günlük): Sadece bugün Meryem'in yaptığı aramalar veya temaslar
     const calledToday = leads.filter((l) => {
       const calledInList = (l.calls || []).some((c: any) => c.created_at >= todayStartISO)
       const contactToday = l.last_contact_at && l.last_contact_at >= todayStartISO
       return calledInList || contactToday
-    })
-
-    // 5. Takipler & Randevular (Haftalık): Bu haftanın 2., 3., 4. arama takipleri ve randevuları
-    const followups = leads.filter((l) => {
-      const hasWeeklyCall = (l.calls || []).some((c: any) => c.created_at >= weekStartISO)
-      const hasWeeklyContact = l.last_contact_at && l.last_contact_at >= weekStartISO
-      const isPendingCallback = l.callback_status === 'pending' || (l.next_contact_at && l.next_contact_at >= weekStartISO)
-      return (hasWeeklyCall || hasWeeklyContact) && isPendingCallback
     })
 
     // 6. Satışa İletilenler (Haftalık): Bu hafta başarıyla satış uzmanına yönlendirilenler
