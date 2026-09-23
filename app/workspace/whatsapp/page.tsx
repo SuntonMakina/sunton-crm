@@ -38,7 +38,6 @@ function renderMessageContent(content: string) {
     }
     return (
       <div className="space-y-1.5 max-w-full">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img 
           src={url} 
           alt="WhatsApp Görsel" 
