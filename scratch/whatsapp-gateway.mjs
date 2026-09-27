@@ -12,6 +12,10 @@ import { createClient } from '@supabase/supabase-js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+if (!process.env.PATH?.includes('/opt/homebrew/bin')) {
+  process.env.PATH = `/opt/homebrew/bin:/usr/local/bin:${process.env.PATH || ''}`;
+}
+
 // Load env variables from .env.local manually if it exists (without overwriting existing shell env vars)
 const envPath = path.resolve(__dirname, '../.env.local');
 if (fs.existsSync(envPath)) {
