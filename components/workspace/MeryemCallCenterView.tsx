@@ -82,7 +82,7 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
       const todayStart = new Date()
       todayStart.setHours(0, 0, 0, 0)
 
-      // 1. Fetch leads actively assigned to Meryem for this week (21 - 25 Eylül)
+      // 1. Fetch leads actively assigned to Meryem for this week (28 Eylül - 02 Ekim)
       const { data: assignedData, error: leadsErr } = await supabase
         .from('leads')
         .select(`
@@ -94,11 +94,12 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
         `)
         .eq('assigned_call_center_user_id', profile.id)
         .eq('is_active', true)
+        .gte('assigned_at', '2026-09-28T00:00:00.000Z')
         .order('created_at', { ascending: false })
 
       if (leadsErr) throw leadsErr
 
-      // 2. Fetch calls logged by Meryem for this week (from 21 Eylül onwards)
+      // 2. Fetch calls logged by Meryem for this week (from 28 Eylül onwards)
       const { data: userCalls, error: callsErr } = await supabase
         .from('calls')
         .select(`
@@ -111,12 +112,12 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
           )
         `)
         .eq('user_id', profile.id)
-        .gte('created_at', '2026-09-21T00:00:00.000Z')
+        .gte('created_at', '2026-09-28T00:00:00.000Z')
         .order('created_at', { ascending: false })
 
       if (callsErr) throw callsErr
 
-      // Build unified lead pool for Meryem workspace (21 - 25 Eylül 2026)
+      // Build unified lead pool for Meryem workspace (28 Eylül - 02 Ekim 2026)
       const leadMap = new Map<string, any>()
 
       // Add freshly assigned leads
@@ -221,16 +222,16 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
     return Array.from(set).sort((a, b) => a.localeCompare(b, 'tr'))
   }, [leads])
 
-  // Fixed weekly period configuration (21 - 25 Eylül 2026)
+  // Fixed weekly period configuration (28 Eylül - 02 Ekim 2026)
   const WEEKLY_PLAN_CONFIG = [
-    { date: '2026-09-21', dayName: 'Pazartesi', label: '21 Eyl' },
-    { date: '2026-09-22', dayName: 'Salı', label: '22 Eyl' },
-    { date: '2026-09-23', dayName: 'Çarşamba', label: '23 Eyl' },
-    { date: '2026-09-24', dayName: 'Perşembe', label: '24 Eyl' },
-    { date: '2026-09-25', dayName: 'Cuma', label: '25 Eyl' },
+    { date: '2026-09-28', dayName: 'Pazartesi', label: '28 Eyl' },
+    { date: '2026-09-29', dayName: 'Salı', label: '29 Eyl' },
+    { date: '2026-09-30', dayName: 'Çarşamba', label: '30 Eyl' },
+    { date: '2026-10-01', dayName: 'Perşembe', label: '01 Eki' },
+    { date: '2026-10-02', dayName: 'Cuma', label: '02 Eki' },
   ]
 
-  // Detect current date in Turkey Timezone (e.g. '2026-09-23')
+  // Detect current date in Turkey Timezone (e.g. '2026-09-28')
   const todayStr = useMemo(() => {
     try {
       return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Istanbul' }).format(new Date())
@@ -240,7 +241,7 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
   }, [])
 
   const currentPlanDay = useMemo(() => {
-    return WEEKLY_PLAN_CONFIG.find(d => d.date === todayStr) || WEEKLY_PLAN_CONFIG[2]
+    return WEEKLY_PLAN_CONFIG.find(d => d.date === todayStr) || WEEKLY_PLAN_CONFIG[0]
   }, [todayStr])
 
   const currentDayName = currentPlanDay.dayName
@@ -265,19 +266,21 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
     todayStart.setHours(0, 0, 0, 0)
     const todayStartISO = todayStart.toISOString()
 
-    const weekStartISO = '2026-09-21T00:00:00.000Z'
+    const weekStartISO = '2026-09-28T00:00:00.000Z'
 
     // This week's active leads assigned to Meryem
     const thisWeekAssigned = leads.filter(
-      (l) => l.assigned_call_center_user_id === profile.id && l.is_active
+      (l) => l.assigned_call_center_user_id === profile.id && l.is_active &&
+             ((l.next_contact_at && l.next_contact_at >= '2026-09-28T00:00:00.000Z' && l.next_contact_at <= '2026-10-02T23:59:59.999Z') ||
+              (l.created_at && l.created_at >= '2026-09-28T00:00:00.000Z'))
     )
 
-    // Day groups in weekly plan (21 - 25 Eylül 2026)
-    const mon = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-21') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-21')))
-    const tue = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-22') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-22')))
-    const wed = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-23') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-23')))
-    const thu = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-24') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-24')))
-    const fri = thisWeekAssigned.filter(l => l.next_contact_at?.startsWith('2026-09-25') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-25')))
+    // Day groups in weekly plan (28 Eylül - 02 Ekim 2026)
+    const mon = thisWeekAssigned.filter(l => (l.assigned_at?.startsWith('2026-09-28') || l.next_contact_at?.startsWith('2026-09-28') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-28'))))
+    const tue = thisWeekAssigned.filter(l => (l.assigned_at?.startsWith('2026-09-29') || l.next_contact_at?.startsWith('2026-09-29') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-29'))))
+    const wed = thisWeekAssigned.filter(l => (l.assigned_at?.startsWith('2026-09-30') || l.next_contact_at?.startsWith('2026-09-30') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-09-30'))))
+    const thu = thisWeekAssigned.filter(l => (l.assigned_at?.startsWith('2026-10-01') || l.next_contact_at?.startsWith('2026-10-01') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-10-01'))))
+    const fri = thisWeekAssigned.filter(l => (l.assigned_at?.startsWith('2026-10-02') || l.next_contact_at?.startsWith('2026-10-02') || (l.calls || []).some((c: any) => c.created_at?.startsWith('2026-10-02'))))
 
     // 1. Takipler & Randevular (Haftalık): Bu haftanın 2., 3., 4. arama takipleri ve randevuları
     const followups = leads.filter((l) => {
@@ -296,14 +299,16 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
 
     // 3. Bugünün 40 Arama Kotasından Kalanlar (Bugüne atanmış taze leadler)
     const todayAssigned = thisWeekAssigned.filter((l) => {
-      const isTodayAssigned = l.next_contact_at?.startsWith(todayStr) || (!l.next_contact_at && todayStr === '2026-09-21')
+      const isTodayAssigned = l.next_contact_at?.startsWith(todayStr) ||
+                              (!l.next_contact_at && todayStr === '2026-09-28') ||
+                              (todayStr < '2026-09-28' && (l.assigned_at?.startsWith('2026-09-28') || l.next_contact_at?.startsWith('2026-09-28')))
       const isFollowup = followups.some((f) => f.id === l.id)
       const calledToday = (l.calls || []).some((c: any) => c.created_at >= todayStartISO)
       const contactToday = l.last_contact_at && l.last_contact_at >= todayStartISO
       return isTodayAssigned && !isFollowup && !calledToday && !contactToday
     })
 
-    // 4. Bugünün Planı (Kombine Liste: 7 Takip/Randevu + 40 Günlük Kota = 47 Toplam)
+    // 4. Bugünün Planı (Kombine Liste: Takip/Randevu + Günlük Kota)
     const todayPlanMap = new Map<string, any>()
     todayDueFollowups.forEach(l => todayPlanMap.set(l.id, l))
     todayAssigned.forEach(l => {
@@ -336,14 +341,14 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
     // 7. Toplam Script / Tüm Liste (Şu ana kadar aradıkları): Meryem'in temas ettiği tüm geçmiş kayıtlar
     const allScript = leads.filter((l) => (l.calls && l.calls.length > 0) || l.last_contact_at)
 
-    const weeklyPlan = thisWeekAssigned.filter(l => l.next_contact_at && l.next_contact_at >= '2026-09-21T00:00:00.000Z' && l.next_contact_at <= '2026-09-25T23:59:59.999Z')
+    const weeklyPlan = thisWeekAssigned.filter(l => l.next_contact_at && l.next_contact_at >= '2026-09-28T00:00:00.000Z' && l.next_contact_at <= '2026-10-02T23:59:59.999Z')
 
     return {
       toCallLeads: todayPlanCombined,
       followupLeads: followups,
       forwardedLeads: forwarded,
       calledTodayLeads: calledToday,
-      allLeads: allScript.length > 0 ? allScript : leads,
+      allLeads: allScript.length > 0 ? allScript : thisWeekAssigned,
       weeklyPlanLeads: weeklyPlan.length > 0 ? weeklyPlan : thisWeekAssigned,
       allScriptLeads: allScript,
       mondayLeads: mon,
@@ -359,11 +364,11 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
   const currentList = useMemo(() => {
     let list: any[] = []
     if (activeTab === 'toCall') {
-      if (selectedPlanDay === '2026-09-21') list = mondayLeads
-      else if (selectedPlanDay === '2026-09-22') list = tuesdayLeads
-      else if (selectedPlanDay === '2026-09-23') list = wednesdayLeads
-      else if (selectedPlanDay === '2026-09-24') list = thursdayLeads
-      else if (selectedPlanDay === '2026-09-25') list = fridayLeads
+      if (selectedPlanDay === '2026-09-28') list = mondayLeads
+      else if (selectedPlanDay === '2026-09-29') list = tuesdayLeads
+      else if (selectedPlanDay === '2026-09-30') list = wednesdayLeads
+      else if (selectedPlanDay === '2026-10-01') list = thursdayLeads
+      else if (selectedPlanDay === '2026-10-02') list = fridayLeads
       else if (selectedPlanDay === 'all_week') list = weeklyPlanLeads
       else list = todayQuotaLeads
     }
@@ -808,7 +813,7 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
             <Building className={`h-4 w-4 ${(activeTab === 'all' || (activeTab === 'toCall' && selectedPlanDay === 'all_week')) ? 'text-purple-500' : ''}`} />
           </div>
           <div className="text-2xl font-black text-purple-500">{weeklyPlanLeads.length}</div>
-          <p className="text-[11px] text-muted-foreground mt-0.5">Atanan toplam havuz (21-25 Eyl)</p>
+          <p className="text-[11px] text-muted-foreground mt-0.5">Atanan toplam havuz (28 Eyl - 02 Eki)</p>
         </div>
 
       </div>
@@ -819,11 +824,11 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-primary" />
             <span className="text-xs font-bold uppercase tracking-wider text-foreground">
-              Haftalık Çağrı Planı (Günde 40 Arama • 21 - 25 Eylül 2026)
+              Haftalık Çağrı Planı (Günde 40 Arama • 28 Eylül - 02 Ekim 2026)
             </span>
           </div>
           <span className="text-[11px] font-semibold text-muted-foreground">
-            21 - 25 Eylül 2026 Dönemi (200 Lead)
+            28 Eylül - 02 Ekim 2026 Dönemi ({weeklyPlanLeads.length} Hazır Lead • {Math.max(0, 200 - weeklyPlanLeads.length)} Boş/Eksik)
           </span>
         </div>
 
@@ -847,13 +852,13 @@ export default function MeryemCallCenterView({ profile }: MeryemCallCenterViewPr
 
           {/* Gün Gün Plan Butonları */}
           {WEEKLY_PLAN_CONFIG.map((d) => {
-            const isToday = d.date === todayStr
-            const isPast = d.date < todayStr
+            const isToday = d.date === todayStr || (todayStr < '2026-09-28' && d.date === '2026-09-28')
+            const isPast = d.date < todayStr && d.date < '2026-09-28'
             const count =
-              d.date === '2026-09-21' ? mondayLeads.length :
-              d.date === '2026-09-22' ? tuesdayLeads.length :
-              d.date === '2026-09-23' ? wednesdayLeads.length :
-              d.date === '2026-09-24' ? thursdayLeads.length :
+              d.date === '2026-09-28' ? mondayLeads.length :
+              d.date === '2026-09-29' ? tuesdayLeads.length :
+              d.date === '2026-09-30' ? wednesdayLeads.length :
+              d.date === '2026-10-01' ? thursdayLeads.length :
               fridayLeads.length
 
             return (
