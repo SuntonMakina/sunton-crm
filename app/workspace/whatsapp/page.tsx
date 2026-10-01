@@ -913,39 +913,27 @@ export default function WhatsAppWorkspacePage() {
   }
 
   // Convert WhatsApp Chat to a New Lead with interactive fields
-  // Convert WhatsApp Chat to a New Lead with interactive fields
   const handleConvertSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!profile || !selectedLead) return
     try {
-      let leadNumber = selectedLead.lead_number
-
-      const { error } = await safeUpdateLeadWithRetry(supabase, selectedLead.id, {
-        first_name: convertForm.firstName.trim() || 'WhatsApp',
-        last_name: convertForm.lastName.trim() || 'Müşterisi',
-        company_name: convertForm.companyName.trim() || null,
-        ...(leadNumber ? { lead_number: leadNumber } : {}),
-        status_id: '22222222-0000-0000-0000-000000000001', // Yeni Lead
-        assigned_call_center_user_id: profile.id, // Assign to Ebru
-        whatsapp_step: 'viewed',
-        next_contact_at: null,
-        callback_status: 'none',
-        created_at: new Date().toISOString(),
-        created_by: profile.id,
-        updated_by: profile.id
+      const res = await fetch('/api/leads/convert', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          leadId: selectedLead.id,
+          firstName: convertForm.firstName,
+          lastName: convertForm.lastName,
+          companyName: convertForm.companyName
+        })
       })
 
-      if (error) throw error
-
-      // Log activity
-      await supabase.from('activities').insert({
-        entity_type: 'lead',
-        entity_id: selectedLead.id,
-        activity_type: 'status_changed',
-        title: 'WhatsApp Sohbeti Adaya Dönüştürüldü',
-        description: `${profile.full_name} bu sohbeti yeni aday (${convertForm.firstName} ${convertForm.lastName}) olarak kaydetti.`,
-        user_id: profile.id
-      })
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}))
+        throw new Error(errData.error || 'Aday kartı kaydedilirken bir sorun oluştu.')
+      }
 
       alert('Aday kartı başarıyla oluşturuldu!')
       setConvertModalOpen(false)
@@ -961,7 +949,7 @@ export default function WhatsAppWorkspacePage() {
       }
     } catch (err: any) {
       console.error('Lead conversion error:', err)
-      alert('Aday kartı kaydedilirken bir sorun oluştu, lütfen sayfayı yenileyip tekrar deneyin.')
+      alert(err.message || 'Aday kartı kaydedilirken bir sorun oluştu, lütfen tekrar deneyin.')
     }
   }
 

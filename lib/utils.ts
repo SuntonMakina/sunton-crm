@@ -91,6 +91,21 @@ export function getProgressiveCallSchedule(completedCallsCount: number, baseDate
 export async function generateNextLeadNumber(supabase: any): Promise<string> {
   const currYear = new Date().getFullYear()
 
+  // 1. Try fetching global next-number from API endpoint if available in browser
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/leads/next-number', { cache: 'no-store' })
+      if (res.ok) {
+        const json = await res.json()
+        if (json.lead_number) {
+          return json.lead_number
+        }
+      }
+    } catch (e) {
+      // Fallback to direct supabase query
+    }
+  }
+
   try {
     const { data: leads } = await supabase
       .from('leads')
@@ -99,7 +114,7 @@ export async function generateNextLeadNumber(supabase: any): Promise<string> {
       .order('lead_number', { ascending: false })
       .limit(200)
 
-    let maxSeq = 3005
+    let maxSeq = 3213
     if (leads && leads.length > 0) {
       for (const l of leads) {
         if (l.lead_number) {
@@ -148,7 +163,15 @@ export async function safeUpdateLeadWithRetry(
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     if (attempt > 0 || !currentPayload.lead_number) {
-      currentPayload.lead_number = await generateNextLeadNumber(supabase)
+      const baseNum = await generateNextLeadNumber(supabase)
+      if (attempt > 0) {
+        const currYear = new Date().getFullYear()
+        const m = baseNum.match(/(\d+)$/)
+        const nextVal = m ? parseInt(m[1], 10) + attempt : 3215 + attempt
+        currentPayload.lead_number = `LD-${currYear}-${String(nextVal).padStart(6, '0')}`
+      } else {
+        currentPayload.lead_number = baseNum
+      }
     }
 
     const { data, error } = await supabase
@@ -191,7 +214,15 @@ export async function safeInsertLeadWithRetry(
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     if (attempt > 0 || !currentPayload.lead_number) {
-      currentPayload.lead_number = await generateNextLeadNumber(supabase)
+      const baseNum = await generateNextLeadNumber(supabase)
+      if (attempt > 0) {
+        const currYear = new Date().getFullYear()
+        const m = baseNum.match(/(\d+)$/)
+        const nextVal = m ? parseInt(m[1], 10) + attempt : 3215 + attempt
+        currentPayload.lead_number = `LD-${currYear}-${String(nextVal).padStart(6, '0')}`
+      } else {
+        currentPayload.lead_number = baseNum
+      }
     }
 
     const { data, error } = await supabase
@@ -222,4 +253,5 @@ export async function safeInsertLeadWithRetry(
 
   return { data: null, error: lastError }
 }
+
 
