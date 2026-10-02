@@ -102,7 +102,7 @@ export async function generateNextLeadNumber(supabase: any): Promise<string> {
         }
       }
     } catch (e) {
-      // Fallback to direct supabase query
+      // Fallback to direct query or timestamp
     }
   }
 
@@ -114,7 +114,7 @@ export async function generateNextLeadNumber(supabase: any): Promise<string> {
       .order('lead_number', { ascending: false })
       .limit(200)
 
-    let maxSeq = 3213
+    let maxSeq = 3533
     if (leads && leads.length > 0) {
       for (const l of leads) {
         if (l.lead_number) {
@@ -127,24 +127,8 @@ export async function generateNextLeadNumber(supabase: any): Promise<string> {
       }
     }
 
-    let candidateSeq = maxSeq + 1
-    let candidateNum = `LD-${currYear}-${String(candidateSeq).padStart(6, '0')}`
-
-    for (let i = 0; i < 50; i++) {
-      const { data: exists } = await supabase
-        .from('leads')
-        .select('id')
-        .eq('lead_number', candidateNum)
-        .maybeSingle()
-
-      if (!exists) {
-        return candidateNum
-      }
-      candidateSeq++
-      candidateNum = `LD-${currYear}-${String(candidateSeq).padStart(6, '0')}`
-    }
-
-    return candidateNum
+    const candidateSeq = maxSeq + 1
+    return `LD-${currYear}-${String(candidateSeq).padStart(6, '0')}`
   } catch (err) {
     console.error('Error generating next lead number:', err)
     const randomSalt = Math.floor(1000 + Math.random() * 9000)
@@ -156,7 +140,7 @@ export async function safeUpdateLeadWithRetry(
   supabase: any,
   leadId: string,
   payload: Record<string, any>,
-  maxRetries: number = 5
+  maxRetries: number = 10
 ): Promise<{ data: any; error: any }> {
   let currentPayload = { ...payload }
   let lastError: any = null
@@ -164,10 +148,13 @@ export async function safeUpdateLeadWithRetry(
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     if (attempt > 0 || !currentPayload.lead_number) {
       const baseNum = await generateNextLeadNumber(supabase)
-      if (attempt > 0) {
-        const currYear = new Date().getFullYear()
+      const currYear = new Date().getFullYear()
+      if (attempt > 3) {
+        const randomSalt = Math.floor(1000 + Math.random() * 9000)
+        currentPayload.lead_number = `LD-${currYear}-${String(Date.now()).slice(-5)}${randomSalt.toString().slice(-2)}`
+      } else if (attempt > 0) {
         const m = baseNum.match(/(\d+)$/)
-        const nextVal = m ? parseInt(m[1], 10) + attempt : 3215 + attempt
+        const nextVal = m ? parseInt(m[1], 10) + attempt : 3535 + attempt
         currentPayload.lead_number = `LD-${currYear}-${String(nextVal).padStart(6, '0')}`
       } else {
         currentPayload.lead_number = baseNum
@@ -207,7 +194,7 @@ export async function safeUpdateLeadWithRetry(
 export async function safeInsertLeadWithRetry(
   supabase: any,
   payload: Record<string, any>,
-  maxRetries: number = 5
+  maxRetries: number = 10
 ): Promise<{ data: any; error: any }> {
   let currentPayload = { ...payload }
   let lastError: any = null
@@ -215,10 +202,13 @@ export async function safeInsertLeadWithRetry(
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     if (attempt > 0 || !currentPayload.lead_number) {
       const baseNum = await generateNextLeadNumber(supabase)
-      if (attempt > 0) {
-        const currYear = new Date().getFullYear()
+      const currYear = new Date().getFullYear()
+      if (attempt > 3) {
+        const randomSalt = Math.floor(1000 + Math.random() * 9000)
+        currentPayload.lead_number = `LD-${currYear}-${String(Date.now()).slice(-5)}${randomSalt.toString().slice(-2)}`
+      } else if (attempt > 0) {
         const m = baseNum.match(/(\d+)$/)
-        const nextVal = m ? parseInt(m[1], 10) + attempt : 3215 + attempt
+        const nextVal = m ? parseInt(m[1], 10) + attempt : 3535 + attempt
         currentPayload.lead_number = `LD-${currYear}-${String(nextVal).padStart(6, '0')}`
       } else {
         currentPayload.lead_number = baseNum

@@ -58,7 +58,7 @@ export async function POST(request: Request) {
         .order('created_at', { ascending: false })
         .limit(200)
 
-      let maxSeq = 3213
+      let maxSeq = 3533
       if (maxLeads && maxLeads.length > 0) {
         for (const l of maxLeads) {
           if (l.lead_number) {
