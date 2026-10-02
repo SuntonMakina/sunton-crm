@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const userName = profile?.full_name || 'Temsilci'
 
     const body = await request.json()
-    const { leadId, firstName, lastName, companyName } = body
+    const { leadId, firstName, lastName, companyName, product, note, addToQueue } = body
 
     if (!leadId) {
       return NextResponse.json({ error: 'leadId parametresi zorunludur.' }, { status: 400 })
@@ -30,11 +30,13 @@ export async function POST(request: Request) {
     const cleanFirstName = (firstName || '').trim() || 'WhatsApp'
     const cleanLastName = (lastName || '').trim() || 'Müşterisi'
     const cleanCompanyName = (companyName || '').trim() || null
+    const cleanProduct = (product || '').trim() || null
+    const cleanNote = (note || '').trim() || null
 
     // 3. Find target lead
     const { data: currentLead, error: fetchErr } = await supabase
       .from('leads')
-      .select('id, lead_number, status_id')
+      .select('id, lead_number, status_id, extra_notes')
       .eq('id', leadId)
       .single()
 
@@ -94,6 +96,13 @@ export async function POST(request: Request) {
       }
     }
 
+    // Prepare extra notes
+    let finalNotes = currentLead.extra_notes || ''
+    if (cleanNote) {
+      const timeStr = new Date().toLocaleString('tr-TR')
+      finalNotes = `[${timeStr}] - ${cleanNote}\n` + finalNotes
+    }
+
     // 5. Update lead in Supabase
     let updateResult: any = null
     let lastUpdateErr: any = null
@@ -104,7 +113,8 @@ export async function POST(request: Request) {
         finalLeadNumber = `LD-${currYear}-${String(candidateSeq).padStart(6, '0')}`
       }
 
-      const payload = {
+      const now = new Date()
+      const payload: any = {
         first_name: cleanFirstName,
         last_name: cleanLastName,
         company_name: cleanCompanyName,
@@ -112,11 +122,23 @@ export async function POST(request: Request) {
         status_id: '22222222-0000-0000-0000-000000000001', // Yeni Lead
         assigned_call_center_user_id: user.id,
         whatsapp_step: 'viewed',
-        next_contact_at: null,
-        callback_status: 'none',
         created_at: new Date().toISOString(),
         created_by: user.id,
         updated_by: user.id
+      }
+
+      if (cleanProduct) {
+        payload.requested_product = cleanProduct
+      }
+      if (finalNotes) {
+        payload.extra_notes = finalNotes
+      }
+      if (addToQueue) {
+        payload.callback_status = 'pending'
+        payload.next_contact_at = now.toISOString()
+      } else {
+        payload.callback_status = 'none'
+        payload.next_contact_at = null
       }
 
       const { data: updatedLead, error: updateErr } = await supabase

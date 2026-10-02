@@ -183,7 +183,10 @@ export default function WhatsAppWorkspacePage() {
   const [convertForm, setConvertForm] = useState({
     firstName: '',
     lastName: '',
-    companyName: ''
+    companyName: '',
+    product: '',
+    note: '',
+    addToQueue: true
   })
   const [autoOpenQueueAfterConvert, setAutoOpenQueueAfterConvert] = useState(false)
 
@@ -785,9 +788,12 @@ export default function WhatsAppWorkspacePage() {
       setConvertForm({
         firstName: '',
         lastName: '',
-        companyName: ''
+        companyName: '',
+        product: selectedLead.requested_product || '',
+        note: '',
+        addToQueue: true
       })
-      setAutoOpenQueueAfterConvert(true)
+      setAutoOpenQueueAfterConvert(false)
       setConvertModalOpen(true)
     } else {
       handleOpenQueueModal()
@@ -926,7 +932,10 @@ export default function WhatsAppWorkspacePage() {
           leadId: selectedLead.id,
           firstName: convertForm.firstName,
           lastName: convertForm.lastName,
-          companyName: convertForm.companyName
+          companyName: convertForm.companyName,
+          product: convertForm.product,
+          note: convertForm.note,
+          addToQueue: convertForm.addToQueue
         })
       })
 
@@ -935,18 +944,8 @@ export default function WhatsAppWorkspacePage() {
         throw new Error(errData.error || 'Aday kartı kaydedilirken bir sorun oluştu.')
       }
 
-      alert('Aday kartı başarıyla oluşturuldu!')
       setConvertModalOpen(false)
       await fetchData(profile.id)
-
-      if (autoOpenQueueAfterConvert) {
-        setAutoOpenQueueAfterConvert(false)
-        setQueueForm({
-          product: '',
-          note: ''
-        })
-        setQueueModalOpen(true)
-      }
     } catch (err: any) {
       console.error('Lead conversion error:', err)
       alert(err.message || 'Aday kartı kaydedilirken bir sorun oluştu, lütfen tekrar deneyin.')
@@ -1186,8 +1185,12 @@ export default function WhatsAppWorkspacePage() {
                             setConvertForm({
                               firstName: '',
                               lastName: '',
-                              companyName: ''
+                              companyName: '',
+                              product: selectedLead.requested_product || '',
+                              note: '',
+                              addToQueue: false
                             })
+                            setAutoOpenQueueAfterConvert(false)
                             setConvertModalOpen(true)
                           }}
                           className="h-7 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[10px] font-bold shadow-xs transition-colors cursor-pointer"
@@ -1417,6 +1420,41 @@ export default function WhatsAppWorkspacePage() {
                 />
               </div>
 
+              <div>
+                <label className="block text-[10px] font-bold text-muted-foreground mb-1 uppercase tracking-wider">Talep Edilen Cihaz / Ürün (Opsiyonel)</label>
+                <input
+                  type="text"
+                  value={convertForm.product}
+                  onChange={(e) => setConvertForm({ ...convertForm, product: e.target.value })}
+                  placeholder="Örn: CNC Router, Fiber Lazer..."
+                  className="w-full h-10 px-3 bg-background border border-border rounded-lg text-xs focus:ring-1 focus:ring-emerald-500 focus:outline-none font-semibold"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-muted-foreground mb-1 uppercase tracking-wider">Ön Görüşme / Arama Notu (Opsiyonel)</label>
+                <textarea
+                  rows={2}
+                  value={convertForm.note}
+                  onChange={(e) => setConvertForm({ ...convertForm, note: e.target.value })}
+                  placeholder="Müşteri talebi ve görüşme notları..."
+                  className="w-full p-2.5 bg-background border border-border rounded-lg text-xs focus:ring-1 focus:ring-emerald-500 focus:outline-none font-medium resize-none"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 pt-1 pb-1">
+                <input
+                  type="checkbox"
+                  id="add-to-queue-check"
+                  checked={convertForm.addToQueue}
+                  onChange={(e) => setConvertForm({ ...convertForm, addToQueue: e.target.checked })}
+                  className="h-4 w-4 rounded border-border text-emerald-600 focus:ring-emerald-500 cursor-pointer"
+                />
+                <label htmlFor="add-to-queue-check" className="text-xs font-bold text-foreground cursor-pointer select-none">
+                  Doğrudan Bugün Aranacaklar Listeme Ekle
+                </label>
+              </div>
+
               <div className="flex justify-end gap-2 border-t border-border pt-4">
                 <Dialog.Close asChild>
                   <button type="button" className="px-4 py-2 border border-border hover:bg-accent rounded-lg text-xs font-bold cursor-pointer">
@@ -1425,9 +1463,10 @@ export default function WhatsAppWorkspacePage() {
                 </Dialog.Close>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-emerald-600 text-white hover:bg-emerald-500 rounded-lg text-xs font-bold cursor-pointer transition-colors shadow-sm"
+                  className="px-4 py-2 bg-emerald-600 text-white hover:bg-emerald-500 rounded-lg text-xs font-bold cursor-pointer transition-colors shadow-sm flex items-center gap-1.5"
                 >
-                  Oluştur
+                  <CheckCircle className="h-3.5 w-3.5" />
+                  <span>Adayı Kaydet</span>
                 </button>
               </div>
             </form>
